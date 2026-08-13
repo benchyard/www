@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img">
+  <rect width="1200" height="630" fill="#09090b"/>
+  <g fill="#fafafa" transform="translate(80 80) scale(1.6)">
+    <path d="M39 19.8612H41V31.4523L39 33.501V19.8612Z"/>
+    <path d="M30.0665 8.92773H28V24.1771H30.0665V8.92773Z"/>
+    <path d="M19.1054 8.92773H30.046L13.9405 20.5189H3L19.1054 8.92773Z"/>
+    <path d="M30.0595 19.8612H41L26.5387 31.4523H15.5982L30.0595 19.8612Z"/>
+  </g>
+  <text x="80" y="280" fill="#fafafa" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="28" font-weight="500">Benchyard</text>
+  <text x="80" y="400" fill="#fafafa" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="64" font-weight="560">Automated fixes</text>
+  <text x="80" y="478" fill="#fafafa" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="64" font-weight="560">until verified.</text>
+  <text x="80" y="560" fill="#a1a1aa" font-family="ui-sans-serif, system-ui, Inter, sans-serif" font-size="24">Self-hosted · not a SaaS</text>
+</svg>

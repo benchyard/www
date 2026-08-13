@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Benchyard — Automated fixes until verified</title>
+    <meta
+      name="description"
+      content="Self-hosted workbench for humans and coding agents. File a ticket; an agent on your machine patches, gates, pushes, and retests. A human closes it. Not a SaaS."
+    />
+    <meta property="og:title" content="Benchyard — Automated fixes until verified" />
+    <meta
+      property="og:description"
+      content="Humans file tickets. Agents fix them on your machines. You verify before anything is closed. Self-hosted, not a SaaS."
+    />
+    <meta property="og:url" content="https://benchyard.com/" />
+    <meta property="og:image" content="https://benchyard.com/og.svg" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href="https://benchyard.com/" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="nav">
+      <div class="wrap nav-inner">
+        <a class="brand" href="/">
+          <svg viewBox="0 0 44 44" fill="currentColor" aria-hidden="true">
+            <path d="M39 19.8612H41V31.4523L39 33.501V19.8612Z" />
+            <path d="M30.0665 8.92773H28V24.1771H30.0665V8.92773Z" />
+            <path d="M19.1054 8.92773H30.046L13.9405 20.5189H3L19.1054 8.92773Z" />
+            <path d="M30.0595 19.8612H41L26.5387 31.4523H15.5982L30.0595 19.8612Z" />
+          </svg>
+          Benchyard
+        </a>
+        <nav class="nav-links">
+          <a href="#how">Product</a>
+          <a href="#self-host">Self-host</a>
+          <a href="#custom">Custom</a>
+          <a class="nav-cta" href="#self-host">Install</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero wrap">
+        <p class="eyebrow"><i></i> Self-hosted · not a SaaS</p>
+        <h1>Automated fixes until verified.</h1>
+        <p class="lede">
+          Engineers file tickets. A coding agent on <em>your</em> machine patches,
+          gates, pushes, and retests. A human still has to close the ticket.
+        </p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#self-host">Self-host</a>
+          <a class="btn btn-ghost" href="#custom">Custom install</a>
+        </div>
+        <p class="trust">
+          <span><b>Your git</b> never leaves the worker host</span>
+          <span><b>Human verify</b> before close</span>
+          <span><b>Cursor</b> default · others coming online</span>
+        </p>
+
+        <figure class="stage" aria-label="Product preview: a ticket moving from running to verify">
+          <div class="stage-bar">
+            <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+            instance · tickets
+          </div>
+          <div class="app">
+            <aside class="side">
+              <div class="mark">
+                <svg viewBox="0 0 44 44" fill="currentColor" width="16" height="16" aria-hidden="true">
+                  <path d="M39 19.8612H41V31.4523L39 33.501V19.8612Z" />
+                  <path d="M30.0665 8.92773H28V24.1771H30.0665V8.92773Z" />
+                  <path d="M19.1054 8.92773H30.046L13.9405 20.5189H3L19.1054 8.92773Z" />
+                  <path d="M30.0595 19.8612H41L26.5387 31.4523H15.5982L30.0595 19.8612Z" />
+                </svg>
+                Benchyard
+              </div>
+              <span class="on">Tickets</span>
+              <span>TODOs</span>
+              <span>Docs</span>
+              <span>Chat</span>
+            </aside>
+            <div class="list">
+              <h2>Tickets</h2>
+              <div class="row">
+                <span class="id">#41</span>
+                <span class="title">PATCH storage object 404</span>
+                <span class="pill pill-warn" data-list-status>running</span>
+              </div>
+              <div class="row">
+                <span class="id">#40</span>
+                <span class="title">Sign-in by code</span>
+                <span class="pill pill-info">verify</span>
+              </div>
+              <div class="row">
+                <span class="id">#38</span>
+                <span class="title">Apps deploy dialog</span>
+                <span class="pill pill-ok">closed</span>
+              </div>
+              <div class="row">
+                <span class="id">#36</span>
+                <span class="title">Meeting notes → TODOs</span>
+                <span class="pill pill-ok">closed</span>
+              </div>
+            </div>
+            <article class="detail">
+              <div class="detail-head">
+                <div>
+                  <h3>PATCH storage object 404</h3>
+                  <div class="meta">#41 · turbomesh-storage · @agent</div>
+                </div>
+                <span class="pill pill-warn" id="status-pill">running</span>
+              </div>
+              <div class="agent">
+                <strong>@agent</strong>
+                <p id="agent-line">Editing worktree on origin/dev. Will not commit.</p>
+              </div>
+              <ol class="timeline" id="timeline">
+                <li class="t-step done"><i></i> created</li>
+                <li class="t-step now" data-k="running"><i></i> run_started</li>
+                <li class="t-step" data-k="gating"><i></i> gate_ok</li>
+                <li class="t-step" data-k="pushed"><i></i> pushed</li>
+                <li class="t-step" data-k="retesting"><i></i> retesting</li>
+                <li class="t-step" data-k="verify"><i></i> awaiting_verify</li>
+              </ol>
+              <div class="detail-foot">
+                <span class="meta" id="foot-line">You can interrupt and comment anytime.</span>
+                <button class="ghost-btn" type="button" tabindex="-1">Interrupt</button>
+              </div>
+            </article>
+          </div>
+        </figure>
+      </section>
+
+      <section class="section" id="how">
+        <div class="wrap">
+          <h2>How a ticket actually finishes</h2>
+          <p class="sub">
+            Not a chat that forgets. A queue with git discipline, a deploy wait,
+            a retest, and a person on the close button.
+          </p>
+          <div class="steps">
+            <article class="step">
+              <h3>File it</h3>
+              <p>Open a ticket. Plan first if you want a draft; Agent if you want it done.</p>
+            </article>
+            <article class="step">
+              <h3>Claimed</h3>
+              <p>The worker takes it. Same repo serial, other repos can run in parallel.</p>
+            </article>
+            <article class="step">
+              <h3>Patched</h3>
+              <p>Edits land in a worktree on latest origin/dev. Agent never commits.</p>
+            </article>
+            <article class="step">
+              <h3>Shipped</h3>
+              <p>Worker gates, pushes dev, waits for deploy, then retests the live path.</p>
+            </article>
+            <article class="step">
+              <h3>Verified</h3>
+              <p>You close it — or send it back. Nothing closes itself.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap">
+          <h2>Not Slack. Not an IDE session.</h2>
+          <p class="sub">
+            Chat tools don’t execute. Personal agents don’t hold a team queue
+            or a human sign-off. Benchyard is the missing loop.
+          </p>
+          <table class="compare">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Slack / IM</th>
+                <th>Cursor / Codex</th>
+                <th class="hi">Benchyard</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Team queue</td>
+                <td class="no">No</td>
+                <td class="no">Personal</td>
+                <td class="hi yes">Yes</td>
+              </tr>
+              <tr>
+                <td>Runs on your git</td>
+                <td class="no">No</td>
+                <td class="no">Laptop or vendor cloud</td>
+                <td class="hi yes">Worker beside the repos</td>
+              </tr>
+              <tr>
+                <td>Gate + push</td>
+                <td class="no">No</td>
+                <td class="no">You do it</td>
+                <td class="hi yes">Worker, as benchyard</td>
+              </tr>
+              <tr>
+                <td>Retest after deploy</td>
+                <td class="no">No</td>
+                <td class="no">No</td>
+                <td class="hi yes">Read-only agent turn</td>
+              </tr>
+              <tr>
+                <td>Must a human close</td>
+                <td class="no">n/a</td>
+                <td class="no">n/a</td>
+                <td class="hi yes">Always</td>
+              </tr>
+              <tr>
+                <td>SaaS</td>
+                <td class="no">Yes</td>
+                <td class="no">Usually</td>
+                <td class="hi yes">No — your Docker</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap">
+          <h2>Two planes. Keys stay home.</h2>
+          <p class="sub">
+            Control is the product UI. The worker is the hand on your source.
+            Same split you already run in a serious shop: app host vs build host.
+          </p>
+          <div class="planes">
+            <article class="plane">
+              <h3>Control</h3>
+              <p>Web, API, Postgres, MinIO. People, tickets, TODOs, IM, admin.</p>
+              <ul>
+                <li>Your domain and ports</li>
+                <li>First visit creates the admin — no default password</li>
+                <li>Rules, skills, and secrets live here, encrypted</li>
+              </ul>
+            </article>
+            <article class="plane">
+              <h3>Worker</h3>
+              <p>One process per machine. Workspaces at /benchyard/&lt;slug&gt;.</p>
+              <ul>
+                <li>Join with API URL + job token only</li>
+                <li>Agent keys injected at job start, never written to disk</li>
+                <li>Sandbox cannot leave the workspace folder</li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap">
+          <h2>Already in the loop</h2>
+          <p class="sub">Shipped capabilities — not a roadmap dressed as a homepage.</p>
+          <div class="bento">
+            <article class="card wide">
+              <h3>Steer, interrupt, continue</h3>
+              <p>
+                Comment on a running ticket. The worker soft-stops the current
+                turn and keeps the same job. No requeue, no lost thread.
+              </p>
+            </article>
+            <article class="card">
+              <h3>Tickets vs TODOs</h3>
+              <p>Agents take tickets. People take TODOs. Meeting notes can draft the latter.</p>
+            </article>
+            <article class="card">
+              <h3>Rules &amp; skills</h3>
+              <p>Admin overlay writes .cursor into the worktree. Repo rules still apply.</p>
+            </article>
+            <article class="card">
+              <h3>Revert from the ledger</h3>
+              <p>git revert as benchyard, push dev. No force-push.</p>
+            </article>
+            <article class="card">
+              <h3>Many workspaces</h3>
+              <p>One worker, many /benchyard/&lt;slug&gt; trees. Membership is per workspace.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="wrap">
+          <h2>One @agent. Pluggable providers.</h2>
+          <p class="sub">
+            The UI is a single participant. Behind it, cursor is wired today.
+            Other vendors are listed as coming online — we will not pretend they run.
+          </p>
+          <div class="providers">
+            <span class="tag">Cursor <em>default</em></span>
+            <span class="tag">Claude <em>coming online</em></span>
+            <span class="tag">Codex <em>coming online</em></span>
+            <span class="tag">Kimi <em>coming online</em></span>
+            <span class="tag">GLM <em>coming online</em></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="self-host">
+        <div class="wrap">
+          <h2>Self-host on your metal</h2>
+          <p class="sub">
+            GHCR images. No git clone on the server. Existing .env is never overwritten.
+          </p>
+          <div class="install">
+            <div class="install-row">
+              <code class="cmd" id="install-cmd">curl -fsSL https://benchyard.com/install.sh | sh -s -- control</code>
+              <button class="copy" type="button" data-copy="#install-cmd">Copy</button>
+            </div>
+          </div>
+          <p class="sub" style="margin: 18px 0 0">
+            Then install a worker (same host or another), paste the join snippet from
+            Admin → Secrets, create a workspace. Source and images:
+            <a href="https://github.com/benchyard/benchyard-control">benchyard-control</a>.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="custom">
+        <div class="wrap">
+          <h2>Custom install</h2>
+          <p class="sub">
+            Private rollout, SSO/OIDC, extra agent adapters, gate policy, training.
+            We install it with you. This is not a hosted product and there is no billing console.
+          </p>
+          <a class="btn btn-primary" href="mailto:hello@benchyard.com?subject=Custom%20install">Email us</a>
+        </div>
+      </section>
+
+      <section class="section faq">
+        <div class="wrap">
+          <h2>FAQ</h2>
+          <p class="sub">The questions Product Hunt comments usually ask first.</p>
+          <details open>
+            <summary>Is this a SaaS?</summary>
+            <p>No. You run Docker on machines you control. benchyard.com is this site, not your instance.</p>
+          </details>
+          <details>
+            <summary>Where do Cursor keys live?</summary>
+            <p>
+              Admin → Secrets, encrypted in your Postgres. The worker pulls them into
+              process environment when a job starts. They are not in worker.env and not in the git tree.
+            </p>
+          </details>
+          <details>
+            <summary>Can the agent read the rest of the host?</summary>
+            <p>
+              No. The jail is the workspace realpath. Sibling slugs, /etc, home, and
+              /opt/benchyard are refused. Cursor sandbox is fail-closed.
+            </p>
+          </details>
+          <details>
+            <summary>Do I have to use Cursor?</summary>
+            <p>Today yes — it is the required default. Other providers are coming online, not silently stubbed as working.</p>
+          </details>
+        </div>
+      </section>
+
+      <section class="final wrap">
+        <h2>Your metal. Your close button.</h2>
+        <p class="lede">Install control, join a worker, file a ticket.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#self-host">Self-host</a>
+          <a class="btn btn-ghost" href="https://github.com/benchyard/benchyard-control">GitHub</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap footer-inner">
+        <span>© Benchyard. Self-hosted workbench.</span>
+        <span>
+          <a href="https://github.com/benchyard/benchyard-control">Control</a>
+          ·
+          <a href="mailto:hello@benchyard.com">hello@benchyard.com</a>
+        </span>
+      </div>
+    </footer>
+    <script src="/app.js"></script>
+  </body>
+</html>
