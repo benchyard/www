@@ -1,6 +1,6 @@
 #!/bin/sh
 # Bootstrap: pull ghcr.io/benchyard/benchyard-cli, then install.
-# Example: curl -fsSL https://benchyard.com/install.sh | sh -s -- control
+# Example: curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- control
 set -eu
 
 OPT_ROOT=/opt/benchyard
