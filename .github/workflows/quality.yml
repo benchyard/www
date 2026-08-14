@@ -25,7 +25,10 @@ jobs:
       - name: Check external links
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2
         with:
-          args: --no-progress --accept 200,429 "**/*.html" "**/*.md"
+          args: >-
+            --no-progress --accept 200,429 --root-dir .
+            --exclude '^https://github\.com/benchyard/benchyard-console(?:/|$)'
+            "**/*.html" "**/*.md"
           fail: true
           failIfEmpty: true
 
