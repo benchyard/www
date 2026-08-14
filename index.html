@@ -11,12 +11,16 @@
     <meta property="og:title" content="Benchyard — The workbench for your team and their agents" />
     <meta
       property="og:description"
-      content="People and agents share one workspace. The agent runs on your metal, inside a jail, with your rules and skills. Not a SaaS."
+      content="People and agents share one workspace. Jobs run on your self-hosted Worker in an isolated process scoped to the assigned workspace. Not a SaaS."
     />
     <meta property="og:url" content="https://hero.benchyard.com/" />
-    <meta property="og:image" content="https://hero.benchyard.com/og.svg" />
+    <meta property="og:image" content="https://hero.benchyard.com/assets/og/benchyard.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Benchyard — the workbench for your team and their agents" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://hero.benchyard.com/assets/og/benchyard.png" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href="https://hero.benchyard.com/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -45,6 +49,7 @@
           <a href="#how">How it works</a>
           <a href="#surfaces">Surfaces</a>
           <a href="#agents">Agents</a>
+          <a href="security/">Security</a>
           <a class="nav-cta" href="#install">Install</a>
         </nav>
       </div>
@@ -56,7 +61,7 @@
         <h1>The workbench for your team and their agents.</h1>
         <p class="lede">
           People and <em>@agent</em> share one workspace. No app to install — the browser
-          feels native. The agent runs on your metal, inside a jail.
+          feels native. Jobs run on your self-hosted Worker, scoped to the assigned workspace.
         </p>
         <div class="ctas">
           <a class="btn btn-primary" href="#install">Install</a>
@@ -64,8 +69,8 @@
         </div>
         <p class="trust">
           <span><b>No App Store</b> · Home Screen · native feel</span>
-          <span><b>Workspace jail</b> at /benchyard/&lt;slug&gt;</span>
-          <span><b>Cursor</b> default · others coming online</span>
+          <span><b>Workspace scope</b> at /benchyard/&lt;slug&gt;</span>
+          <span><b>Cursor</b> is the currently supported provider</span>
         </p>
 
         <div class="mac-scene" aria-label="Benchyard on Mac, iPad, and iPhone">
@@ -182,10 +187,10 @@
 
       <section class="section" id="how">
         <div class="wrap">
-          <h2>Control · Worker · workspace · host</h2>
-          <p class="sub">Two planes, one jail. Same box or two. Keys never leave the Worker.</p>
+          <h2>Console · Worker · workspace · host</h2>
+          <p class="sub">Two planes, layered isolation. Same box or two. Secrets are encrypted in your Console and injected only into the assigned Worker while a job runs.</p>
           <figure class="flow">
-            <svg viewBox="0 0 980 360" role="img" aria-label="Control sends a config pack to the Worker. The Worker claims jobs and reads the workspace jail. Host paths are blocked.">
+            <svg viewBox="0 0 980 360" role="img" aria-label="Console sends a config pack to the Worker. The Worker claims fenced jobs and validates paths against the assigned workspace.">
               <defs>
                 <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
                   <path d="M0 0 L8 4 L0 8 Z" fill="#a1a1aa" />
@@ -199,7 +204,7 @@
               </defs>
 
               <rect x="16" y="16" width="268" height="220" rx="14" fill="#141416" stroke="#3f3f46" />
-              <text x="150" y="40" text-anchor="middle" fill="#a1a1aa" font-size="13" font-weight="600">Control</text>
+              <text x="150" y="40" text-anchor="middle" fill="#a1a1aa" font-size="13" font-weight="600">Console</text>
               <rect x="36" y="58" width="228" height="72" rx="10" fill="#27272a" stroke="#3f3f46" />
               <text x="150" y="88" text-anchor="middle" fill="#fafafa" font-size="15" font-weight="600">Web · API · Admin</text>
               <text x="150" y="110" text-anchor="middle" fill="#71717a" font-size="12">no agent process</text>
@@ -219,7 +224,7 @@
               <text x="480" y="110" text-anchor="middle" fill="#71717a" font-size="12">claim · heartbeat · finish</text>
               <rect x="366" y="144" width="228" height="72" rx="10" fill="#27272a" stroke="#3f3f46" />
               <text x="480" y="174" text-anchor="middle" fill="#fafafa" font-size="15" font-weight="600">Harness</text>
-              <text x="480" y="196" text-anchor="middle" fill="#71717a" font-size="12">overlay · sandbox · keys stay</text>
+              <text x="480" y="196" text-anchor="middle" fill="#71717a" font-size="12">overlay · sandbox · scoped secrets</text>
 
               <path d="M614 180 H668" stroke="#4ade80" stroke-width="1.6" marker-end="url(#arr-ok)" />
               <text x="641" y="170" text-anchor="middle" fill="#4ade80" font-size="11">RW</text>
@@ -237,7 +242,7 @@
               <text x="480" y="302" text-anchor="middle" fill="#a1a1aa" font-size="13" font-weight="600">Host</text>
               <text x="480" y="322" text-anchor="middle" fill="#71717a" font-size="12">/etc · ~/.ssh · sibling slugs</text>
             </svg>
-            <figcaption>Control never runs the agent. Worker never leaves the jail.</figcaption>
+            <figcaption>Console does not run the agent. Worker jobs are sandboxed to their assigned workspace; Console and Worker hosts remain trusted.</figcaption>
           </figure>
         </div>
       </section>
@@ -265,7 +270,7 @@
             <div>
               <p class="kicker">Agents</p>
               <h2>One @agent. Harness on the Worker.</h2>
-              <p class="sub">Comment, @, steer, queue. Cursor is wired. Claude, Codex, Kimi, GLM — coming online.</p>
+              <p class="sub">Comment, @, steer, and queue. Cursor is the currently supported agent provider.</p>
               <div class="rail sm">
                 <span>Rules</span>
                 <span>Skills</span>
@@ -310,11 +315,11 @@
           <p class="sub">Root + Docker. Existing .env is never overwritten.</p>
           <div class="brew">
             <article>
-              <h3>Control</h3>
+              <h3>Console</h3>
               <p>Web, API, Postgres. First visit creates the admin. No agent process.</p>
               <div class="term">
-                <code id="cmd-control">curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- control</code>
-                <button class="copy" type="button" data-copy="#cmd-control">Copy</button>
+                <code id="cmd-console">curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- console</code>
+                <button class="copy" type="button" data-copy="#cmd-console">Copy</button>
               </div>
             </article>
             <article>
@@ -327,10 +332,13 @@
             </article>
           </div>
           <p class="fine">
+            Console is <a href="https://github.com/benchyard/benchyard-console">Apache-2.0 open source</a>.
+            Worker is a <a href="legal/worker-license/">free, closed-source binary</a> distributed from public GHCR.
+            ·
             Custom rollout (SSO, extra adapters) —
             <a href="mailto:hello@benchyard.com?subject=Custom%20install">hello@benchyard.com</a>
             ·
-            <a href="https://github.com/benchyard/benchyard-control">GitHub</a>
+            <a href="https://github.com/benchyard/benchyard-console">GitHub</a>
           </p>
         </div>
       </section>
@@ -340,7 +348,7 @@
           <h2>FAQ</h2>
           <details>
             <summary>Is this a SaaS?</summary>
-            <p>No. You run Docker on machines you control. This site is not your instance. Domain and TLS are yours.</p>
+            <p>No. You run Docker on machines you operate. This site is not your instance. Domain and TLS are yours.</p>
           </details>
           <details>
             <summary>How is this different from Cursor on a laptop?</summary>
@@ -350,11 +358,15 @@
           </details>
           <details>
             <summary>Where do agent keys live?</summary>
-            <p>Admin → Secrets, encrypted in your Postgres. Injected when a job starts. Not in worker.env, not in git.</p>
+            <p>Admin → Secrets, encrypted in your Console database with a dedicated master key. They are injected only into the assigned Worker while a job runs. Console administrators and the Console host are trusted and can decrypt them.</p>
           </details>
           <details>
             <summary>Can the agent read the host?</summary>
-            <p>No. Jail is the workspace realpath. Cursor sandbox is required; if it will not open, the job is refused.</p>
+            <p>The agent is constrained to the assigned workspace by path checks, the Cursor sandbox, and container hardening. A Worker host administrator remains trusted. If the sandbox cannot start, the job is refused.</p>
+          </details>
+          <details>
+            <summary>Is Benchyard open source?</summary>
+            <p>Benchyard Console and its Worker protocol are Apache-2.0 open source. The Worker implementation is closed source, with free official images available from public GHCR.</p>
           </details>
         </div>
       </section>
@@ -363,7 +375,7 @@
         <h2>Your team. Your agents. Your machines.</h2>
         <div class="ctas">
           <a class="btn btn-primary" href="#install">Install</a>
-          <a class="btn btn-ghost" href="https://github.com/benchyard/benchyard-control">GitHub</a>
+          <a class="btn btn-ghost" href="https://github.com/benchyard/benchyard-console">GitHub</a>
         </div>
       </section>
     </main>
@@ -372,7 +384,11 @@
       <div class="wrap footer-inner">
         <span>© Benchyard. Self-hosted workbench.</span>
         <span>
-          <a href="https://github.com/benchyard/benchyard-control">Control</a>
+          <a href="https://github.com/benchyard/benchyard-console">Console</a>
+          ·
+          <a href="security/">Security</a>
+          ·
+          <a href="legal/privacy/">Privacy</a>
           ·
           <a href="mailto:hello@benchyard.com">hello@benchyard.com</a>
         </span>

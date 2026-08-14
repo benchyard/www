@@ -5,8 +5,19 @@ Public Hero for [Benchyard](https://hero.benchyard.com). Static HTML on **GitHub
 Apex `benchyard.com` / `www` are not pointed at this site. A user instance home is their workbench, not this page.
 
 ```bash
-curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- control
+curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- console
 curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- worker
 ```
 
-Canonical install script source: `benchyard-control/cli/install.sh` (copied here so the documented URL works).
+`install.sh` is the public verified bootstrap. It downloads a signed release manifest and the matching CLI artifact; it is not copied from the Console CLI implementation.
+
+## Product boundary
+
+- Benchyard Console and the public Worker protocol are Apache-2.0 open source.
+- Benchyard Worker source is private; official images are free binaries under
+  the Benchyard Worker Binary License and are public on GHCR.
+- Secrets are encrypted by Console and injected into the assigned Worker for a
+  job. Console administrators are part of the trusted boundary.
+
+Security and product claims on this site must match the public threat model.
+Use fictional Acme data in every screenshot and fixture.

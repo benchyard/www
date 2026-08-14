@@ -1,121 +1,158 @@
 #!/bin/sh
-# Bootstrap: pull ghcr.io/benchyard/benchyard-cli, then install.
-# Example: curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- control
+# Verified bootstrap for the Benchyard CLI. This script never installs floating tags.
 set -eu
 
-OPT_ROOT=/opt/benchyard
-REG="$OPT_ROOT/registry.env"
-GHCR="${BENCHYARD_GHCR:-ghcr.io/benchyard}"
-TAG="${BENCHYARD_VERSION:-latest}"
-ROLE="${1:-}"
-NO_PULL=0
-for arg in "$@"; do
-  case "$arg" in
-    --no-pull) NO_PULL=1 ;;
+REPOSITORY="${BENCHYARD_RELEASE_REPOSITORY:-benchyard/benchyard-console}"
+VERSION="${BENCHYARD_VERSION:-latest}"
+ROLE=""
+DRY_RUN=0
+WORK_DIR="${TMPDIR:-/tmp}/benchyard-install-$$"
+
+usage() {
+  printf '%s\n' "Usage: install.sh [--version X.Y.Z] [--dry-run] [console|worker]"
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --version)
+      [ "$#" -ge 2 ] || { usage >&2; exit 2; }
+      VERSION="$2"
+      shift 2
+      ;;
+    --dry-run)
+      DRY_RUN=1
+      shift
+      ;;
+    console|worker)
+      ROLE="$1"
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      printf 'install.sh: unknown argument: %s\n' "$1" >&2
+      usage >&2
+      exit 2
+      ;;
   esac
 done
-case "$ROLE" in
-  --no-pull) ROLE="${2:-}" ;;
+
+case "$(uname -s)" in
+  Linux) OS=linux ;;
+  *) printf 'install.sh: only Linux is supported\n' >&2; exit 1 ;;
+esac
+case "$(uname -m)" in
+  x86_64|amd64) ARCH=amd64 ;;
+  aarch64|arm64) ARCH=arm64 ;;
+  *) printf 'install.sh: unsupported architecture: %s\n' "$(uname -m)" >&2; exit 1 ;;
 esac
 
-if [ "$(id -u)" -ne 0 ]; then
-  echo "install.sh: run as root (needs docker + /opt/benchyard + /usr/local/bin)" >&2
-  exit 1
+if [ "$VERSION" = latest ]; then
+  RELEASE_BASE="https://github.com/${REPOSITORY}/releases/latest/download"
+else
+  case "$VERSION" in
+    *[!0-9A-Za-z.-]*) printf 'install.sh: invalid version\n' >&2; exit 2 ;;
+  esac
+  RELEASE_BASE="https://github.com/${REPOSITORY}/releases/download/${VERSION}"
 fi
 
-if ! command -v docker >/dev/null 2>&1; then
-  echo "install.sh: docker is required" >&2
-  exit 1
-fi
+printf 'benchyard-install: release %s, target %s/%s, role %s\n' \
+  "$VERSION" "$OS" "$ARCH" "${ROLE:-interactive}"
+printf 'benchyard-install: manifest %s/release-manifest.json\n' "$RELEASE_BASE"
+[ "$DRY_RUN" -eq 0 ] || exit 0
 
-log() { printf 'benchyard-install: %s\n' "$*"; }
-
-relay_hint() {
-  cat >&2 <<EOF
-install.sh: could not pull $CLI_IMAGE
-
-If this host cannot reach ghcr.io, on a machine that can:
-
-  ./cli/relay-images.sh control|worker $(hostname -f 2>/dev/null || hostname)
-
-docker login ghcr.io first if the pull returned 401 (GitHub PAT with read:packages).
-EOF
-}
-
-try_pull() {
-  img="$1"
-  log "pull $img"
-  if command -v timeout >/dev/null 2>&1; then
-    if timeout 45 docker pull "$img"; then
-      log "pull ok $img"
-      return 0
-    fi
-  else
-    if docker pull "$img"; then
-      log "pull ok $img"
-      return 0
-    fi
-  fi
-  log "pull fail $img"
-  return 1
-}
-
-CLI_IMAGE="${GHCR}/benchyard-cli:${TAG}"
-
-if [ "$NO_PULL" = 1 ]; then
-  if ! docker image inspect "$CLI_IMAGE" >/dev/null 2>&1; then
-    relay_hint
+for command in curl python3 cosign docker; do
+  command -v "$command" >/dev/null 2>&1 || {
+    printf 'install.sh: %s is required\n' "$command" >&2
     exit 1
-  fi
-elif ! try_pull "$CLI_IMAGE"; then
-  relay_hint
+  }
+done
+
+trap 'rm -rf "$WORK_DIR"' EXIT HUP INT TERM
+mkdir -m 700 "$WORK_DIR"
+MANIFEST="$WORK_DIR/release-manifest.json"
+BUNDLE="$WORK_DIR/release-manifest.sigstore.json"
+
+curl --proto '=https' --tlsv1.2 -fsSLo "$MANIFEST" "$RELEASE_BASE/release-manifest.json"
+curl --proto '=https' --tlsv1.2 -fsSLo "$BUNDLE" "$RELEASE_BASE/release-manifest.sigstore.json"
+
+cosign verify-blob \
+  --bundle "$BUNDLE" \
+  --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+  --certificate-identity-regexp "^https://github.com/benchyard/benchyard-console/.github/workflows/release\\.yml@refs/tags/" \
+  "$MANIFEST" >/dev/null
+
+set -- $(python3 - "$MANIFEST" "$OS" "$ARCH" "$VERSION" <<'PY'
+import json, re, sys
+manifest = json.load(open(sys.argv[1], encoding="utf-8"))
+if manifest.get("schema_version") != 1:
+    raise SystemExit("unsupported release manifest schema")
+if sys.argv[4] != "latest" and manifest.get("version") != sys.argv[4]:
+    raise SystemExit("release manifest version mismatch")
+artifact = manifest["artifacts"]["cli"][f"{sys.argv[2]}-{sys.argv[3]}"]
+url, digest = artifact["url"], artifact["sha256"]
+if not url.startswith("https://github.com/benchyard/benchyard-console/releases/download/"):
+    raise SystemExit("untrusted CLI URL in release manifest")
+if not re.fullmatch(r"[0-9a-f]{64}", digest):
+    raise SystemExit("invalid CLI digest in release manifest")
+images = manifest["images"]
+required_images = {"api", "web", "cli", "worker"}
+if set(images) != required_images:
+    raise SystemExit("invalid image set in release manifest")
+image_pattern = re.compile(
+    r"ghcr\.io/benchyard/benchyard-[a-z]+@sha256:[0-9a-f]{64}"
+)
+if any(not image_pattern.fullmatch(images[name]) for name in required_images):
+    raise SystemExit("mutable or untrusted image reference in release manifest")
+version = manifest.get("version")
+if not isinstance(version, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-[0-9A-Za-z.-]+)?", version):
+    raise SystemExit("invalid release version in manifest")
+print(version, url, digest, images["api"], images["web"], images["cli"], images["worker"])
+PY
+)
+RESOLVED_VERSION="$1"
+CLI_URL="$2"
+EXPECTED_SHA="$3"
+export BENCHYARD_API_IMAGE="$4"
+export BENCHYARD_WEB_IMAGE="$5"
+export BENCHYARD_CLI_IMAGE="$6"
+export BENCHYARD_WORKER_IMAGE="$7"
+CLI="$WORK_DIR/benchyard"
+curl --proto '=https' --tlsv1.2 -fsSLo "$CLI" "$CLI_URL"
+ACTUAL_SHA="$(python3 - "$CLI" <<'PY'
+import hashlib, sys
+h = hashlib.sha256()
+with open(sys.argv[1], "rb") as stream:
+    for block in iter(lambda: stream.read(1024 * 1024), b""):
+        h.update(block)
+print(h.hexdigest())
+PY
+)"
+[ "$ACTUAL_SHA" = "$EXPECTED_SHA" ] || {
+  printf 'install.sh: CLI checksum mismatch\n' >&2
+  exit 1
+}
+chmod 700 "$CLI"
+
+if [ "$(id -u)" -ne 0 ]; then
+  printf 'install.sh: run the verified installation as root\n' >&2
   exit 1
 fi
+mkdir -p /opt/benchyard /usr/local/bin
+umask 022
+{
+  printf 'BENCHYARD_VERSION=%s\n' "$RESOLVED_VERSION"
+  printf 'BENCHYARD_CLI_IMAGE=%s\n' "$BENCHYARD_CLI_IMAGE"
+  printf 'BENCHYARD_API_IMAGE=%s\n' "$BENCHYARD_API_IMAGE"
+  printf 'BENCHYARD_WEB_IMAGE=%s\n' "$BENCHYARD_WEB_IMAGE"
+  printf 'BENCHYARD_WORKER_IMAGE=%s\n' "$BENCHYARD_WORKER_IMAGE"
+} > /opt/benchyard/registry.env
+docker pull "$BENCHYARD_CLI_IMAGE"
+install -m 0755 "$CLI" /usr/local/bin/benchyard
 
-mkdir -p "$OPT_ROOT" /benchyard
-cat > "$REG" <<EOF
-BENCHYARD_GHCR=${GHCR}
-BENCHYARD_VERSION=${TAG}
-BENCHYARD_CLI_IMAGE=${CLI_IMAGE}
-EOF
-log "wrote $REG"
-
-TTY_FLAGS=
-if [ -t 0 ] && [ -t 1 ]; then
-  TTY_FLAGS="-it"
+if [ -n "$ROLE" ]; then
+  exec /usr/local/bin/benchyard install "$ROLE"
 fi
-
-INSTALL_ARGS="install"
-if [ -n "$ROLE" ] && [ "$ROLE" != "--no-pull" ]; then
-  INSTALL_ARGS="install $ROLE"
-fi
-if [ "$NO_PULL" = 1 ]; then
-  INSTALL_ARGS="$INSTALL_ARGS --no-pull"
-fi
-
-OWNER="${BENCHYARD_OWNER:-${SUDO_USER:-}}"
-OWNER_UID=0
-OWNER_GID=0
-if [ -n "$OWNER" ] && [ "$OWNER" != "root" ] && id "$OWNER" >/dev/null 2>&1; then
-  OWNER_UID="$(id -u "$OWNER")"
-  OWNER_GID="$(id -g "$OWNER")"
-  chown "$OWNER_UID:$OWNER_GID" "$OPT_ROOT" "$REG" 2>/dev/null || true
-elif [ -d /benchyard ]; then
-  OWNER_UID="$(stat -c %u /benchyard 2>/dev/null || echo 0)"
-  OWNER_GID="$(stat -c %g /benchyard 2>/dev/null || echo 0)"
-  if [ "$OWNER_UID" != 0 ]; then
-    chown "$OWNER_UID:$OWNER_GID" "$OPT_ROOT" "$REG" 2>/dev/null || true
-  fi
-fi
-
-# shellcheck disable=SC2086
-exec docker run --rm $TTY_FLAGS \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /opt/benchyard:/opt/benchyard \
-  -v /benchyard:/benchyard \
-  -v /usr/local/bin:/host-bin \
-  -e BENCHYARD_IN_CONTAINER=1 \
-  -e BENCHYARD_OWNER="$OWNER" \
-  -e BENCHYARD_OWNER_UID="$OWNER_UID" \
-  -e BENCHYARD_OWNER_GID="$OWNER_GID" \
-  "$CLI_IMAGE" $INSTALL_ARGS
+exec /usr/local/bin/benchyard install

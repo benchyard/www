@@ -453,7 +453,7 @@ svg {
   place-items: center;
 }
 
-/* In-device product chrome — match by.saidc.ai / app-shell */
+/* In-device product chrome — mirrors the Console app shell. */
 .product {
   display: flex;
   flex-direction: column;
@@ -1540,4 +1540,26 @@ svg {
   html {
     scroll-behavior: auto;
   }
+}
+
+.legal-page {
+  max-width: 760px;
+}
+.legal-page h1 {
+  margin: 32px 0 20px;
+  font-size: clamp(38px, 7vw, 68px);
+  letter-spacing: -0.045em;
+}
+.legal-page h2 { margin-top: 44px; }
+.legal-page p, .legal-page li {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.7;
+}
+.legal-page pre {
+  overflow-x: auto;
+  padding: 18px;
+  border: 1px solid var(--line-2);
+  border-radius: 12px;
+  background: var(--fill);
 }
