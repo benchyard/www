@@ -228,55 +228,22 @@ svg {
 
 .n-float {
   position: absolute;
-  top: 18px;
-  left: 54%;
-  width: 260px;
+  top: 36px;
+  right: 10px;
+  left: auto;
+  width: 228px;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  z-index: 5;
-  text-align: left;
+  z-index: 3;
+  pointer-events: none;
 }
 
-.n-banner {
-  display: flex;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: color-mix(in srgb, #fafafa 88%, transparent);
-  backdrop-filter: blur(16px);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 18%);
-  color: #171717;
-}
-
-.n-banner header {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.n-banner header b {
-  font-size: 12px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.n-banner time {
-  color: #a3a3a3;
-  font-size: 11px;
-  flex-shrink: 0;
-}
-
-.n-banner p {
-  margin: 2px 0 0;
-  color: #525252;
-  font-size: 12px;
-}
-
-.n-banner > div {
-  min-width: 0;
-  flex: 1;
+.n-float img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 22%);
 }
 
 .app-icon {
@@ -311,10 +278,11 @@ svg {
   height: 560px;
 }
 
+/* PNG tops share Y=72 after bezel+border: pad 29×0.5, mac 11×0.98, phone 19×0.42. */
 .hero-pad {
   position: absolute;
   left: 0;
-  top: 48px;
+  top: 57.5px;
   width: 560px;
   height: 778px;
   transform: scale(0.5);
@@ -325,7 +293,7 @@ svg {
 .hero-mac {
   position: absolute;
   left: 268px;
-  top: 36px;
+  top: 62.2px;
   width: 740px;
   height: 434px;
   margin-left: 0;
@@ -337,7 +305,7 @@ svg {
 .hero-phone {
   position: absolute;
   right: 4px;
-  top: 56px;
+  top: 62.6px;
   width: 428px;
   height: 868px;
   transform: scale(0.42);
@@ -359,28 +327,6 @@ svg {
   max-width: none;
   object-fit: fill;
   object-position: center;
-}
-
-.ios-status {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2;
-  height: 54px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: 0 22px 11px;
-  color: #111;
-  font: 600 15px/1 Inter, -apple-system, system-ui, sans-serif;
-  pointer-events: none;
-}
-
-.ios-sig {
-  display: flex;
-  align-items: center;
-  gap: 5px;
 }
 
 .os-dock {
@@ -987,6 +933,80 @@ svg {
   text-transform: uppercase;
 }
 
+.shift {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.shift article {
+  padding: 20px 20px 18px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--fill);
+}
+
+.shift article.on {
+  background: #fafafa;
+  color: #171717;
+  border-color: #fafafa;
+}
+
+.shift .kicker {
+  margin-bottom: 14px;
+}
+
+.shift ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.shift li {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #111113;
+  border: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 550;
+}
+
+.shift li.sep {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dim);
+  font-weight: 450;
+}
+
+.shift article.on li {
+  background: #ececec;
+  border-color: #e5e5e5;
+  color: #171717;
+}
+
+.shift article.on li.sep {
+  background: transparent;
+  border: 0;
+  color: #a3a3a3;
+}
+
+.shift p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.shift article.on p {
+  color: #525252;
+}
+
 .compare {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1352,6 +1372,7 @@ svg {
     min-height: 500px;
     height: auto;
   }
+  .shift,
   .compare,
   .split,
   .brew {
