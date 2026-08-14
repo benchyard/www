@@ -222,7 +222,7 @@ svg {
   border-radius: 20px;
   overflow: hidden;
   background: radial-gradient(1200px 420px at 50% -10%, #3f3f46, #18181b 58%);
-  min-height: 680px;
+  min-height: 720px;
   padding: 28px 12px 0;
 }
 
@@ -308,53 +308,57 @@ svg {
 
 .hero-devices {
   position: relative;
-  height: 620px;
+  height: 640px;
 }
 
 .hero-pad {
   position: absolute;
-  left: 8px;
-  top: 48px;
+  left: 0;
+  top: 64px;
   width: 560px;
   height: 778px;
-  transform: scale(0.5);
+  transform: scale(0.48);
   transform-origin: top left;
-  z-index: 2;
+  z-index: 1;
 }
 
 .hero-mac {
   position: absolute;
-  left: 36%;
-  top: 28px;
+  left: 50%;
+  top: 32px;
   width: 740px;
   height: 434px;
-  margin-left: 0;
-  transform: scale(1.02);
-  transform-origin: top left;
+  margin-left: -370px;
+  transform: scale(1.06);
+  transform-origin: top center;
   z-index: 3;
 }
 
 .hero-phone {
   position: absolute;
-  right: 12px;
-  bottom: 8px;
+  right: 4px;
+  bottom: 4px;
   width: 428px;
   height: 868px;
-  transform: scale(0.46);
+  transform: scale(0.44);
   transform-origin: bottom right;
   z-index: 4;
 }
 
 .device-screen {
+  position: relative;
   overflow: hidden;
   background: var(--app-bg) !important;
 }
 
 .device-screen .shot {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top left;
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none;
+  object-fit: fill;
+  object-position: center;
 }
 
 .os-dock {
