@@ -228,9 +228,9 @@ svg {
 
 .n-float {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 280px;
+  top: 18px;
+  left: 54%;
+  width: 260px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -308,40 +308,40 @@ svg {
 
 .hero-devices {
   position: relative;
-  height: 640px;
+  height: 560px;
 }
 
 .hero-pad {
   position: absolute;
   left: 0;
-  top: 64px;
+  top: 48px;
   width: 560px;
   height: 778px;
-  transform: scale(0.48);
+  transform: scale(0.5);
   transform-origin: top left;
-  z-index: 1;
+  z-index: 2;
 }
 
 .hero-mac {
   position: absolute;
-  left: 50%;
-  top: 32px;
+  left: 268px;
+  top: 36px;
   width: 740px;
   height: 434px;
-  margin-left: -370px;
-  transform: scale(1.06);
-  transform-origin: top center;
+  margin-left: 0;
+  transform: scale(0.98);
+  transform-origin: top left;
   z-index: 3;
 }
 
 .hero-phone {
   position: absolute;
   right: 4px;
-  bottom: 4px;
+  top: 56px;
   width: 428px;
   height: 868px;
-  transform: scale(0.44);
-  transform-origin: bottom right;
+  transform: scale(0.42);
+  transform-origin: top right;
   z-index: 4;
 }
 
@@ -359,6 +359,28 @@ svg {
   max-width: none;
   object-fit: fill;
   object-position: center;
+}
+
+.ios-status {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  height: 54px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 22px 11px;
+  color: #111;
+  font: 600 15px/1 Inter, -apple-system, system-ui, sans-serif;
+  pointer-events: none;
+}
+
+.ios-sig {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .os-dock {
@@ -1065,8 +1087,7 @@ svg {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
+  object-fit: contain;
   object-position: top left;
 }
 
@@ -1321,7 +1342,10 @@ svg {
     display: none;
   }
   .hero-mac {
+    left: 50%;
+    margin-left: -370px;
     transform: scale(0.92);
+    transform-origin: top center;
   }
   .hero-devices,
   .mac-scene {
