@@ -23,12 +23,7 @@
     <meta name="twitter:image" content="https://hero.benchyard.com/assets/og/benchyard.png" />
     <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="canonical" href="https://hero.benchyard.com/" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" as="image" href="shots/mac-ticket.avif" type="image/avif" fetchpriority="high" />
     <link rel="stylesheet" href="vendor/devices.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -73,7 +68,7 @@
           <span><b>Cursor</b> is the currently supported provider</span>
         </p>
 
-        <div class="mac-scene" aria-label="Benchyard on Mac, iPad, and iPhone">
+        <div class="mac-scene" role="img" aria-label="Benchyard on Mac, iPad, and iPhone">
           <div class="hero-devices">
             <div class="hero-pad">
               <div class="device device-ipad-pro">
@@ -86,7 +81,7 @@
                         <svg class="ios-ic-battery" viewBox="0 0 27 13" aria-hidden="true"><rect x="0.6" y="0.6" width="21.2" height="11.8" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="2.2" y="2.2" width="18" height="8.6" rx="1.3"/><path d="M23.2 4.2h1.1c.9 0 1.6.7 1.6 1.6v1.4c0 .9-.7 1.6-1.6 1.6h-1.1" opacity=".45"/></svg>
                       </span>
                     </div>
-                    <img class="shot" src="shots/ipad-tickets.png" alt="" />
+                    <img class="shot" src="shots/ipad-tickets.avif" width="960" height="646" loading="lazy" alt="" />
                   </div>
                 </div>
                 <div class="device-btns"></div>
@@ -97,7 +92,7 @@
               <div class="device device-macbook-pro">
                 <div class="device-frame">
                   <div class="device-screen">
-                    <img class="shot" src="shots/mac-ticket.png" alt="" />
+                    <img class="shot" src="shots/mac-ticket.avif" width="1280" height="800" fetchpriority="high" alt="" />
                   </div>
                 </div>
                 <div class="device-stripe"></div>
@@ -119,7 +114,7 @@
                         <svg class="ios-ic-battery" viewBox="0 0 27 13" aria-hidden="true"><rect x="0.6" y="0.6" width="21.2" height="11.8" rx="2.6" fill="none" stroke="currentColor" stroke-width="1.2"/><rect x="2.2" y="2.2" width="18" height="8.6" rx="1.3"/><path d="M23.2 4.2h1.1c.9 0 1.6.7 1.6 1.6v1.4c0 .9-.7 1.6-1.6 1.6h-1.1" opacity=".45"/></svg>
                       </span>
                     </div>
-                    <img class="shot" src="shots/iphone-chat.png" alt="" />
+                    <img class="shot" src="shots/iphone-chat.avif" width="480" height="984" loading="lazy" alt="" />
                   </div>
                 </div>
                 <div class="device-stripe"></div>
@@ -259,7 +254,7 @@
             <span class="dim">Tickets</span>
           </div>
           <figure class="shot-frame">
-            <img src="shots/desktop-surfaces.png" alt="Desktop workspace with TODOs and IM" />
+            <img src="shots/desktop-surfaces.avif" width="1600" height="1000" loading="lazy" alt="Desktop workspace with TODOs and IM" />
           </figure>
         </div>
       </section>
