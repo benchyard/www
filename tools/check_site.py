@@ -24,8 +24,10 @@ class Document(html.parser.HTMLParser):
         data = dict(attrs)
         if tag in {"a", "link"} and data.get("href"):
             self.links.append(str(data["href"]))
-        if tag in {"img", "script"} and data.get("src"):
+        if tag in {"img", "script", "source", "track"} and data.get("src"):
             self.links.append(str(data["src"]))
+        if tag == "video" and data.get("poster"):
+            self.links.append(str(data["poster"]))
         if tag == "link" and data.get("rel") == "canonical" and data.get("href"):
             self.canonicals.append(str(data["href"]))
         if tag == "meta":

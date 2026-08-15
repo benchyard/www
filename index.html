@@ -41,8 +41,8 @@
           Benchyard
         </a>
         <nav class="nav-links">
+          <a href="#demo">Demo</a>
           <a href="#how">How it works</a>
-          <a href="#surfaces">Surfaces</a>
           <a href="#agents">Agents</a>
           <a href="security/">Security</a>
           <a class="nav-cta" href="#install">Install</a>
@@ -52,20 +52,20 @@
 
     <main id="main">
       <section class="hero wrap">
-        <p class="eyebrow"><i></i> Self-hosted · not a SaaS</p>
+        <p class="eyebrow"><i></i> Apache-2.0 Console · self-hosted · not a SaaS</p>
         <h1>The workbench for your team and their agents.</h1>
         <p class="lede">
-          People and <em>@agent</em> share one workspace. No app to install — the browser
-          feels native. Jobs run on your self-hosted Worker, scoped to the assigned workspace.
+          People and <em>@agent</em> share one workspace for tickets, TODOs, docs, tests,
+          and messages. Fenced jobs run on your own Worker and stay scoped to the assigned workspace.
         </p>
         <div class="ctas">
-          <a class="btn btn-primary" href="#install">Install</a>
-          <a class="btn btn-ghost" href="#how">How it works</a>
+          <a class="btn btn-primary" href="#demo">Watch the 72-sec demo</a>
+          <a class="btn btn-ghost" href="https://github.com/benchyard/benchyard-console">View on GitHub</a>
         </div>
         <p class="trust">
-          <span><b>No App Store</b> · Home Screen · native feel</span>
-          <span><b>Workspace scope</b> at /benchyard/&lt;slug&gt;</span>
-          <span><b>Cursor</b> is the currently supported provider</span>
+          <span><b>Open-source Console</b> · Apache-2.0</span>
+          <span><b>Free Worker image</b> · public GHCR</span>
+          <span><b>Your infrastructure</b> · code, data, and agents</span>
         </p>
 
         <div class="mac-scene" role="img" aria-label="Benchyard on Mac, iPad, and iPhone">
@@ -124,6 +124,33 @@
                 <div class="device-power"></div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section launch-demo" id="demo">
+        <div class="wrap">
+          <div class="launch-heading">
+            <div>
+              <p class="kicker">Product tour</p>
+              <h2>From a team request to a fenced Worker job.</h2>
+              <p class="sub">See the Console, job timeline, TODO board, docs, tests, and mobile messaging in 72 seconds. Every screen uses Acme mock data.</p>
+            </div>
+            <p class="release-pill"><b>0.1.0</b><span>signed release</span></p>
+          </div>
+          <figure class="demo-frame">
+            <video controls playsinline preload="metadata" poster="launch/product-hunt-assets/gallery/02-ticket-execution.png">
+              <source src="launch/product-hunt-assets/benchyard-product-hunt-demo.webm" type="video/webm" />
+              <source src="launch/product-hunt-assets/benchyard-product-hunt-demo.mp4" type="video/mp4" />
+              <track kind="captions" src="launch/product-hunt-assets/demo-captions.vtt" srclang="en" label="English" default />
+              Download the <a href="launch/product-hunt-assets/benchyard-product-hunt-demo.mp4">Benchyard demo video</a>.
+            </video>
+            <figcaption>Console stays authoritative. The Worker receives an expiring, fenced lease and runs each job in its own process.</figcaption>
+          </figure>
+          <div class="launch-facts">
+            <article><b>Open where it matters</b><span>Console and Worker contract are Apache-2.0.</span></article>
+            <article><b>Accurate secret boundary</b><span>Encrypted in Console, injected only for the assigned job.</span></article>
+            <article><b>No activation server</b><span>Signed images are publicly downloadable from GHCR.</span></article>
           </div>
         </div>
       </section>
@@ -259,6 +286,22 @@
         </div>
       </section>
 
+      <section class="section launch-gallery" id="gallery">
+        <div class="wrap">
+          <p class="kicker">Product gallery</p>
+          <h2>One operating surface, from queue to verification.</h2>
+          <p class="sub">The launch gallery is captured from the release candidate with mock workspaces, repositories, and people.</p>
+          <div class="gallery-grid">
+            <figure class="gallery-wide"><img src="launch/product-hunt-assets/gallery/01-console-worker-workspace.png" width="1600" height="1000" loading="lazy" alt="Benchyard Console, Worker, and workspace overview" /><figcaption>Console → Worker → workspace</figcaption></figure>
+            <figure class="gallery-wide"><img src="launch/product-hunt-assets/gallery/02-ticket-execution.png" width="1280" height="800" loading="lazy" alt="Ticket plan and fenced job execution timeline" /><figcaption>Plan, execute, gate, verify</figcaption></figure>
+            <figure><img src="launch/product-hunt-assets/gallery/03-todo-board.png" width="1600" height="1000" loading="lazy" alt="Shared TODO board using Acme mock data" /><figcaption>Shared TODO board</figcaption></figure>
+            <figure><img src="launch/product-hunt-assets/gallery/04-docs.png" width="960" height="646" loading="lazy" alt="Workspace documentation catalog" /><figcaption>Workspace docs</figcaption></figure>
+            <figure><img src="launch/product-hunt-assets/gallery/05-tests.png" width="960" height="646" loading="lazy" alt="Test catalog and verification status" /><figcaption>Test catalog</figcaption></figure>
+            <figure><img src="launch/product-hunt-assets/gallery/06-mobile-messaging.png" width="480" height="984" loading="lazy" alt="Mobile messaging and agent notifications" /><figcaption>Mobile messaging</figcaption></figure>
+          </div>
+        </div>
+      </section>
+
       <section class="section" id="agents">
         <div class="wrap">
           <div class="split">
@@ -313,7 +356,7 @@
               <h3>Console</h3>
               <p>Web, API, Postgres. First visit creates the admin. No agent process.</p>
               <div class="term">
-                <code id="cmd-console">curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- console</code>
+                <code id="cmd-console">curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- --version 0.1.0 console</code>
                 <button class="copy" type="button" data-copy="#cmd-console">Copy</button>
               </div>
             </article>
@@ -321,7 +364,7 @@
               <h3>Worker</h3>
               <p>Same host or another. Paste the join snippet from Admin → Secrets.</p>
               <div class="term">
-                <code id="cmd-worker">curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- worker</code>
+                <code id="cmd-worker">curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- --version 0.1.0 worker</code>
                 <button class="copy" type="button" data-copy="#cmd-worker">Copy</button>
               </div>
             </article>
