@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 """Validate local links and canonical metadata without network access."""
 
-from __future__ import annotations
-
 import html.parser
 import struct
 import sys
