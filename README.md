@@ -9,7 +9,8 @@ curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- console
 curl -fsSL https://hero.benchyard.com/install.sh | sh -s -- worker
 ```
 
-`install.sh` is the public verified bootstrap. It downloads a signed release manifest and the matching CLI artifact; it is not copied from the Console CLI implementation.
+`install.sh` is the public verified bootstrap. Signed release files live at
+`/releases/{version}/` and `/releases/latest/`. Images are public GHCR digests.
 
 ## Product boundary
 

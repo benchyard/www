@@ -61,17 +61,19 @@ case "$(uname -m)" in
   *) printf 'install.sh: unsupported architecture: %s\n' "$(uname -m)" >&2; exit 1 ;;
 esac
 
+HERO_RELEASES="${BENCHYARD_RELEASE_BASE:-https://hero.benchyard.com/releases}"
 if [ "$VERSION" = latest ]; then
-  RELEASE_BASE="https://github.com/${REPOSITORY}/releases/latest/download"
+  RELEASE_FOLDER=latest
+  GITHUB_BASE="https://github.com/${REPOSITORY}/releases/latest/download"
 else
   case "$VERSION" in
     *[!0-9A-Za-z.-]*) printf 'install.sh: invalid version\n' >&2; exit 2 ;;
   esac
-  RELEASE_BASE="https://github.com/${REPOSITORY}/releases/download/${VERSION}"
+  RELEASE_FOLDER="$VERSION"
+  GITHUB_BASE="https://github.com/${REPOSITORY}/releases/download/${VERSION}"
 fi
 
 printf 'benchyard-install: release %s role %s\n' "$VERSION" "${ROLE:-console}"
-printf 'benchyard-install: manifest %s/release-manifest.json\n' "$RELEASE_BASE"
 [ "$DRY_RUN" -eq 0 ] || exit 0
 
 for command in curl python3 cosign docker; do
@@ -96,8 +98,21 @@ mkdir -m 700 "$WORK_DIR"
 MANIFEST="$WORK_DIR/release-manifest.json"
 BUNDLE="$WORK_DIR/release-manifest.sigstore.json"
 
-curl --proto '=https' --tlsv1.2 -fsSLo "$MANIFEST" "$RELEASE_BASE/release-manifest.json"
-curl --proto '=https' --tlsv1.2 -fsSLo "$BUNDLE" "$RELEASE_BASE/release-manifest.sigstore.json"
+RELEASE_BASE=""
+for candidate in "${HERO_RELEASES}/${RELEASE_FOLDER}" "$GITHUB_BASE"; do
+  if curl --proto '=https' --tlsv1.2 -fsSLo "$MANIFEST" -A benchyard-install \
+    "$candidate/release-manifest.json"; then
+    RELEASE_BASE="$candidate"
+    break
+  fi
+done
+[ -n "$RELEASE_BASE" ] || {
+  printf 'install.sh: release manifest unavailable\n' >&2
+  exit 1
+}
+printf 'benchyard-install: manifest %s/release-manifest.json\n' "$RELEASE_BASE"
+curl --proto '=https' --tlsv1.2 -fsSLo "$BUNDLE" -A benchyard-install \
+  "$RELEASE_BASE/release-manifest.sigstore.json"
 
 cosign verify-blob \
   --bundle "$BUNDLE" \
@@ -127,6 +142,17 @@ if not isinstance(version, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:-
     raise SystemExit("invalid release version in manifest")
 artifacts = manifest.get("artifacts") or {}
 needed = ("compose", "compose_worker", "updater")
+names = {
+    "compose": "compose.yaml",
+    "compose_worker": "compose.worker.yaml",
+    "updater": "server.py",
+}
+trusted = release_base.startswith((
+    "https://hero.benchyard.com/releases/",
+    "https://github.com/benchyard/benchyard-console/releases/",
+))
+if not bundle_dir and not trusted:
+    raise SystemExit("untrusted release base")
 work_dir = Path(work)
 for name in needed:
     dest = work_dir / name
@@ -138,11 +164,8 @@ for name in needed:
         }[name]
         dest.write_bytes(src.read_bytes())
     else:
-        item = artifacts.get(name) or {}
-        url = item.get("url") or ""
-        digest = item.get("sha256") or ""
-        if not url.startswith("https://github.com/benchyard/benchyard-console/releases/download/"):
-            raise SystemExit(f"untrusted {name} URL in release manifest")
+        digest = (artifacts.get(name) or {}).get("sha256") or ""
+        url = f"{release_base}/{names[name]}"
         if not re.fullmatch(r"[0-9a-f]{64}", digest):
             raise SystemExit(f"invalid {name} digest in release manifest")
         req = urllib.request.Request(url, headers={"User-Agent": "benchyard-install"})

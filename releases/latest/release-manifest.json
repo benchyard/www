@@ -1,0 +1,28 @@
+{
+  "artifacts": {
+    "compose": {
+      "sha256": "168128ef83d52a32e407ca93a9061d1b8055e578db7655b46d067dd64f4e8305",
+      "url": "https://github.com/benchyard/benchyard-console/releases/download/0.2.1/compose.yaml"
+    },
+    "compose_worker": {
+      "sha256": "a14add65baf21b87b093996a92b61bb56630a4242ff22c404deded728382794f",
+      "url": "https://github.com/benchyard/benchyard-console/releases/download/0.2.1/compose.worker.yaml"
+    },
+    "updater": {
+      "sha256": "636f0cec9390a5dffa04d8f1fdff5f6bfa5a664b92f8b28628f22c99c7ba45ce",
+      "url": "https://github.com/benchyard/benchyard-console/releases/download/0.2.1/server.py"
+    }
+  },
+  "contract": {
+    "sha256": "c7a4b018b2f4d46a75a37cb97fc7f1c65671dc864adb694e400e402dc1a3fc4c",
+    "version": "1.0.0"
+  },
+  "images": {
+    "api": "ghcr.io/benchyard/benchyard-api@sha256:3041bd2ead2796d667ccfbef2ddd3c088010325c1262cf51012d39b6fcdcd0b6",
+    "web": "ghcr.io/benchyard/benchyard-web@sha256:9f038b6eb9b6f5d03f6fdf8356c347a0c227152831eaa8de501e4488b0685708",
+    "worker": "ghcr.io/benchyard/benchyard-worker@sha256:3def66a6017c26932e5c45ace117c04a50e404327a01adf5bdb2659109fada5d"
+  },
+  "published_at": "2026-08-15T04:39:17.699461Z",
+  "schema_version": 1,
+  "version": "0.2.1"
+}
