@@ -1,0 +1,42 @@
+# One worker per host. Workspace git trees live at /benchyard/<slug> on the host.
+name: benchyard-worker
+
+services:
+  worker:
+    image: ${BENCHYARD_WORKER_IMAGE:?set BENCHYARD_WORKER_IMAGE to a release digest}
+    env_file:
+      - worker.env
+    environment:
+      WORKSPACE_ROOT: /benchyard
+      BENCHYARD_IDENTITY_FILE: /var/lib/benchyard/identity.json
+      BENCHYARD_DOCS_MIRROR: ${BENCHYARD_DOCS_MIRROR:-0}
+      BENCHYARD_VERSION: ${BENCHYARD_VERSION:-}
+      BENCHYARD_WORKER_IMAGE: ${BENCHYARD_WORKER_IMAGE}
+      BENCHYARD_UPDATER_URL: http://updater:8787
+    volumes:
+      - ${BENCHYARD_WORKSPACES_DIR:-/benchyard}:/benchyard
+      - ${BENCHYARD_WORKER_STATE_DIR:-./state}:/var/lib/benchyard
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    cap_drop: ["ALL"]
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=1g
+    read_only: true
+    restart: unless-stopped
+
+  updater:
+    image: python:3.14.7-slim-trixie@sha256:ce40764625a4ff50df3548277632e7f96c4e77fe75fa848aae9885476e7df5a4
+    command: ["python3", "/opt/benchyard/updater/server.py"]
+    environment:
+      BENCHYARD_UPDATER_ROLE: worker
+      BENCHYARD_COMPOSE_DIR: /opt/benchyard/worker
+      BENCHYARD_REGISTRY_ENV: /opt/benchyard/registry.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/benchyard:/opt/benchyard
+      - /usr/bin/docker:/usr/bin/docker:ro
+      - /usr/libexec/docker:/usr/libexec/docker:ro
+      - /usr/local/bin/cosign:/usr/local/bin/cosign:ro
+    restart: unless-stopped
