@@ -2,15 +2,15 @@
   "artifacts": {
     "compose": {
       "sha256": "ffac7a24c55cad80d5605425d29a89ca848920953023fc12533b01f1e217b00c",
-      "url": "https://hero.benchyard.com/releases/0.4.0/compose.yaml"
+      "url": "https://hero.benchyard.com/releases/0.4.1/compose.yaml"
     },
     "compose_worker": {
       "sha256": "a14add65baf21b87b093996a92b61bb56630a4242ff22c404deded728382794f",
-      "url": "https://hero.benchyard.com/releases/0.4.0/compose.worker.yaml"
+      "url": "https://hero.benchyard.com/releases/0.4.1/compose.worker.yaml"
     },
     "updater": {
       "sha256": "f2545d805ccf13712f62df1e7e591610bb8a6cd4747aedb983042e7aab321550",
-      "url": "https://hero.benchyard.com/releases/0.4.0/server.py"
+      "url": "https://hero.benchyard.com/releases/0.4.1/server.py"
     }
   },
   "contract": {
@@ -22,7 +22,7 @@
     "web": "ghcr.io/benchyard/benchyard-web@sha256:853ab784a353f9e65d212738fa966db3f14d65f3c9287dcdc0990210d0181490",
     "worker": "ghcr.io/benchyard/benchyard-worker@sha256:3300dc57bfea683f92bfe300d6418255c6b368c329e0e7b4a8e17a61a1201bcf"
   },
-  "published_at": "2026-08-19T11:20:34.630337Z",
+  "published_at": "2026-08-19T11:19:39.808026Z",
   "schema_version": 1,
-  "version": "0.4.0"
+  "version": "0.4.1"
 }
