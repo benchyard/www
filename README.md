@@ -47,10 +47,15 @@ Copy `content/en.mjs` to `content/<code>.mjs`, translate the values (keys and st
 
 `public/img/` holds screenshots of the real app, taken from a throwaway local server with stand-in agents and made-up data (the account "alice", the workspaces "api" and "web-app"). Nothing in them is a real account, address or host. To retake them after the app changes: run the product's local test server (`scripts/e2e-local.sh` in its repository shows how), drive it with Playwright at 1280×800 and at a phone's size in light and dark, and replace the files under the same names; `src/page.mjs` carries each picture's pixel size.
 
+## Where it is served
+
+The site's address is `https://www.benchyard.com` (`site` in `src/page.mjs`, `public/robots.txt`, `public/sitemap.xml`): canonical and social-card addresses are made from it. The host must send `benchyard.com` on to `www.benchyard.com`; that is the host's setting, not a file here.
+
 ## To decide
 
+- **Where it is hosted** (any static host; nothing here names one).
+
 - **Licence** for this repository: see `LICENSE.md`.
-- **Domain**, and with it canonical and social-card addresses (none are set).
 - **A contact address** for the footer (none is shown).
 - **Analytics:** none. If wanted, a privacy-respecting, self-hosted one keeps the "nothing from another site" property.
 - **Pricing wording** once hosted plans exist; today the section says it is self-hosted and that hosted plans are being prepared.

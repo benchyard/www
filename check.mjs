@@ -25,6 +25,8 @@ for (const page of pages) {
   for (const [tag] of html.matchAll(/<(?:img|source|link|script)\b[^>]*>/g)) {
     const src = /\s(?:src|srcset|href)="([^"]+)"/.exec(tag)?.[1];
     if (!src) continue;
+    // The page's own address (its canonical link) loads nothing.
+    if (/rel="canonical"/.test(tag)) continue;
     if (/^(https?:)?\/\//.test(src)) say(`loads ${src} from another site`);
     else if (!/rel="alternate"/.test(tag) && !(await exists(join(dir, src)))) say(`${src} is missing`);
     if (tag.startsWith("<img")) {

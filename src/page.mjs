@@ -17,6 +17,9 @@ const shot = (base, name, alt, w, h, { eager = false, dark = true, cls = "" } = 
 </picture>`;
 
 export function render(t, { base = "", languages = [] } = {}) {
+  // The address the site is served at: the one canonical and social-card
+  // addresses are made from. benchyard.com sends people on to it.
+  const site = "https://www.benchyard.com";
   return `<!doctype html>
 <html lang="${t.lang}" dir="${t.dir}">
 <head>
@@ -30,6 +33,11 @@ export function render(t, { base = "", languages = [] } = {}) {
 <meta property="og:title" content="${esc(t.meta.title)}">
 <meta property="og:description" content="${esc(t.meta.description)}">
 <meta property="og:type" content="website">
+<link rel="canonical" href="${site}/">
+<meta property="og:url" content="${site}/">
+<meta property="og:site_name" content="Benchyard">
+<meta property="og:image" content="${site}/img/session-approval-light.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
 <link rel="icon" href="${base}favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="${base}apple-touch-icon.png">
