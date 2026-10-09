@@ -1,5 +1,5 @@
 {
-  "name": "benchyard-home",
+  "name": "benchyard-www",
   "private": true,
   "type": "module",
   "description": "Benchyard's homepage: a static site with no dependencies",
