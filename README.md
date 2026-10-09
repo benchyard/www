@@ -6,13 +6,14 @@ A static site: one HTML page per language, one stylesheet, pictures and fonts. N
 
 ## Why this stack
 
-Plain HTML and CSS, put together by a 30-line Node script with no dependencies. The page is a single document whose words change far more often than its structure; a framework would add a build chain and a dependency tree to maintain for no gain in what a visitor gets. If the site grows to many pages (docs, a blog), moving `src/page.mjs` and `content/` into Astro is a small step.
+Plain HTML and CSS, put together by a small Node script. Its one dependency is `sharp`, a development dependency that makes the pictures while building; the page itself needs nothing and the host that serves it installs nothing. The page is a single document whose words change far more often than its structure; a framework would add a build chain and a dependency tree to maintain for no gain in what a visitor gets. If the site grows to many pages (docs, a blog), moving `src/page.mjs` and `content/` into Astro is a small step.
 
 ## Run, build, check
 
-Needs Node 20 or later. There is nothing to install.
+Needs Node 20 or later.
 
 ```sh
+npm ci          # once: the picture library the build uses
 npm run dev     # build, then serve dist/ at http://localhost:4321 (PORT=... to change)
 npm run build   # build into dist/
 npm run check   # build, then check links, pictures, headings, that nothing comes from another site,
@@ -32,7 +33,9 @@ Worth setting at the host: long cache lifetimes for `fonts/` and `img/`, a short
 | `content/en.mjs` | Every word on the page. Edit text here, not in the template |
 | `src/page.mjs` | The page's structure, as a function of the words, and the three addresses it points at: `site`, `consoleAddress`, `contactAddress` |
 | `src/styles.css` | The stylesheet. Colours and fonts are the app's own; light and dark follow the visitor's system |
-| `public/` | Copied as it is: fonts (`fonts/LICENSES.md` has their licences), icons, screenshots (`img/`) |
+| `public/` | Copied as it is: fonts (`fonts/LICENSES.md` has their licences), icons, `robots.txt`, `sitemap.xml` |
+| `src-img/` | The pictures' originals: PNG screenshots of the app. Not published |
+| `src/pictures.mjs` | Makes what is published from them while building: see "The pictures" |
 | `build.mjs`, `serve.mjs`, `check.mjs` | Build, local preview, checks |
 | `docs/screenshots/` | How the built page looks at 1280, 390 and 360 wide, light and dark |
 
@@ -50,7 +53,15 @@ Copy `content/en.mjs` to `content/<code>.mjs`, translate the values (keys and st
 
 ## The screenshots
 
-`public/img/` holds screenshots of the real app, taken from a throwaway local server with stand-in agents and made-up data (the account "alice", the workspaces "api" and "web-app"). Nothing in them is a real account, address or host. To retake them after the app changes: run the product's local test server (`scripts/e2e-local.sh` in the product's repository shows how), drive it with Playwright at 1280×800 and at a phone's size in light and dark, and replace the files under the same names; `src/page.mjs` carries each picture's pixel size.
+`src-img/` holds screenshots of the real app, taken from a throwaway local server with stand-in agents and made-up data (the account "alice", the workspaces "api" and "web-app"). Nothing in them is a real account, address or host. To retake them after the app changes: run the product's local test server (`scripts/e2e-local.sh` in the product's repository shows how), drive it with Playwright at 1280×800 and at a phone's size in light and dark, and replace the files in `src-img/` under the same names (PNG, at two device pixels to one); `src/page.mjs` carries each picture's pixel size.
+
+## The pictures
+
+The build turns each PNG in `src-img/` into what the page loads (`src/pictures.mjs`), so the originals are the only pictures in the repository:
+
+- **WebP in two sizes:** the original's own size without loss (for screens with two device pixels to one; for flat screenshots lossless WebP is under half the PNG and smaller than a lossy one at high quality, and the text stays exact), and half of it at quality 90. The page offers both (`srcset` with `sizes`), and a dark and a light one by the visitor's system.
+- **The social card** (`social-card.png`, 1280 by 800): a PNG, since crawlers don't reliably take WebP, under a name that never changes, since other sites keep its address. It is made from `session-approval-light.png`; to show another picture, change `card` in `src/pictures.mjs`.
+- Conversions are kept in `.cache/` (not in git), named by the original's content and the settings, so a build converts only what is new or changed: about 5 seconds from nothing, well under one afterwards.
 
 ## Where it is served
 

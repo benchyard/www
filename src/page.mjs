@@ -1,3 +1,5 @@
+import { card } from "./pictures.mjs";
+
 // The page as a function of its words (content/<language>.mjs). Plain
 // strings: no framework, nothing to hydrate.
 
@@ -29,12 +31,18 @@ const link = ([href, text], cls = "") => `<a href="${esc(href)}"${cls ? ` class=
 
 const mark = `<svg class="mark" viewBox="0 0 44 44" aria-hidden="true" focusable="false"><path d="M39 19.8612H41V31.4523L39 33.501V19.8612Z"/><path d="M30.0665 8.92773H28V24.1771H30.0665V8.92773Z"/><path d="M19.1054 8.92773H30.046L13.9405 20.5189H3L19.1054 8.92773Z"/><path d="M30.0595 19.8612H41L26.5387 31.4523H15.5982L30.0595 19.8612Z"/></svg>`;
 
-// A screenshot in the theme the visitor's system asks for. Sizes are the
-// files' own, so the page doesn't move as they load.
-const shot = (base, name, alt, w, h, { eager = false, dark = true, cls = "" } = {}) => `<picture>
-  ${dark ? `<source srcset="${base}img/${name}-dark.png" media="(prefers-color-scheme: dark)">` : ""}
-  <img src="${base}img/${name}-light.png" alt="${esc(alt)}" width="${w}" height="${h}"${cls ? ` class="${cls}"` : ""} ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">
+// A screenshot in the theme the visitor's system asks for, as WebP in two
+// sizes (the file's own, for screens with two device pixels to one, and half
+// of it; the build makes both, src/pictures.mjs). `sizes` says how wide the picture is shown,
+// so the browser takes the smaller file where that is enough. Width and
+// height are the file's own, so the page doesn't move as it loads.
+const shot = (base, name, alt, w, h, { eager = false, dark = true, cls = "", sizes = "(min-width: 1220px) 1120px, 94vw" } = {}) => {
+  const set = (theme) => `${base}img/${name}-${theme}-${w / 2}.webp ${w / 2}w, ${base}img/${name}-${theme}-${w}.webp ${w}w`;
+  return `<picture>
+  ${dark ? `<source type="image/webp" srcset="${set("dark")}" sizes="${sizes}" media="(prefers-color-scheme: dark)">` : ""}
+  <img src="${base}img/${name}-light-${w / 2}.webp" srcset="${set("light")}" sizes="${sizes}" alt="${esc(alt)}" width="${w}" height="${h}"${cls ? ` class="${cls}"` : ""} ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">
 </picture>`;
+};
 
 export function render(t, { base = "", languages = [] } = {}) {
   // The two things a visitor can do: ask for access (a mail), or sign in.
@@ -59,7 +67,9 @@ export function render(t, { base = "", languages = [] } = {}) {
 <link rel="canonical" href="${site}/">
 <meta property="og:url" content="${site}/">
 <meta property="og:site_name" content="Benchyard">
-<meta property="og:image" content="${site}/img/session-approval-light.png">
+<meta property="og:image" content="${site}/social-card.png">
+<meta property="og:image:width" content="${card.width}">
+<meta property="og:image:height" content="${card.height}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
 <link rel="icon" href="${base}favicon.ico" sizes="32x32">
@@ -91,8 +101,8 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
     <p class="actions">${access("btn btn-primary")} ${signIn("btn")}</p>
     <p class="note">${esc(t.hero.note)}</p>
     <figure class="stage">
-      <div class="frame frame-desktop">${shot(base, "session-approval", t.hero.desktopAlt, 2560, 1600, { eager: true })}</div>
-      <div class="frame frame-phone">${shot(base, "phone-approval", t.hero.phoneAlt, 1170, 1992, { eager: true })}</div>
+      <div class="frame frame-desktop">${shot(base, "session-approval", t.hero.desktopAlt, 2560, 1600, { eager: true, sizes: "(min-width: 1060px) 980px, 94vw" })}</div>
+      <div class="frame frame-phone">${shot(base, "phone-approval", t.hero.phoneAlt, 1170, 1992, { eager: true, sizes: "(min-width: 721px) min(24vw, 260px), min(68vw, 300px)" })}</div>
       <figcaption>${esc(t.hero.caption)}</figcaption>
     </figure>
   </div>

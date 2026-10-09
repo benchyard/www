@@ -1,6 +1,7 @@
 // Checks the built pages without a browser: every link inside the page
 // leads to something that is there (or is the console, or a mail to the
-// contact address), every picture has its file, its size and a text,
+// contact address), every picture is WebP and has its file, its size and a
+// text, the social card is there under its fixed name,
 // headings don't skip a level, ids are unique, nothing is loaded from another
 // site, and the page names no repository and doesn't call the product open
 // source. Run after `npm run build`.
@@ -27,17 +28,32 @@ for (const page of pages) {
     else if (href !== consoleAddress && !href.startsWith(`${site}/`)) say(`link "${href}" leads somewhere other than the page, the console or the contact address`);
   }
   for (const [tag] of html.matchAll(/<(?:img|source|link|script)\b[^>]*>/g)) {
-    const src = /\s(?:src|srcset|href)="([^"]+)"/.exec(tag)?.[1];
-    if (!src) continue;
     // The page's own address (its canonical link) loads nothing.
-    if (/rel="canonical"/.test(tag)) continue;
-    if (/^(https?:)?\/\//.test(src)) say(`loads ${src} from another site`);
-    else if (!/rel="alternate"/.test(tag) && !(await exists(join(dir, src)))) say(`${src} is missing`);
+    if (/rel="canonical"/.test(tag) || /rel="alternate"/.test(tag)) continue;
+    // Everything the tag can make the browser fetch: src, href, and each
+    // candidate of a srcset.
+    const loads = [];
+    for (const [, attr, value] of tag.matchAll(/\s(src|href|srcset)="([^"]+)"/g)) {
+      if (attr === "srcset") loads.push(...value.split(",").map((c) => c.trim().split(/\s+/)[0]));
+      else loads.push(value);
+    }
+    for (const src of loads) {
+      if (/^(https?:)?\/\//.test(src)) say(`loads ${src} from another site`);
+      else if (!(await exists(join(dir, src)))) say(`${src} is missing`);
+      // The pictures the page shows are WebP (the build makes them).
+      if (/^<(img|source)/.test(tag) && !src.endsWith(".webp")) say(`picture ${src} is not WebP`);
+    }
     if (tag.startsWith("<img")) {
+      const src = loads[0];
       if (!/\salt="[^"]{20,}"/.test(tag)) say(`picture ${src} has no describing text`);
       if (!/\swidth="\d+"/.test(tag) || !/\sheight="\d+"/.test(tag)) say(`picture ${src} has no size`);
+      if (/\ssrcset=/.test(tag) && !/\ssizes=/.test(tag)) say(`picture ${src} has sizes to choose from and doesn't say how wide it is shown`);
     }
   }
+  // The social card is a PNG under a name that never changes.
+  const cardAt = /<meta property="og:image" content="([^"]+)"/.exec(html)?.[1];
+  if (cardAt !== `${site}/social-card.png`) say(`the social card is at "${cardAt}", not ${site}/social-card.png`);
+  else if (!(await exists(join(root, "social-card.png")))) say("social-card.png is missing");
   let last = 0;
   for (const [, level] of html.matchAll(/<h([1-6])\b/g)) {
     if (+level > last + 1) say(`a heading jumps from h${last} to h${level}`);

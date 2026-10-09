@@ -1,7 +1,9 @@
-// Builds the site into dist/: one page per language, the stylesheet, and
-// everything in public/ as it is. No dependencies.
+// Builds the site into dist/: one page per language, the stylesheet,
+// everything in public/ as it is, and the pictures, made from the originals
+// in src-img/ (src/pictures.mjs; the one thing that needs `npm install`).
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import { render } from "./src/page.mjs";
+import { pictures } from "./src/pictures.mjs";
 
 // The first language is served at /, the others at /<code>/.
 const languages = ["en"];
@@ -11,6 +13,10 @@ await rm(out, { recursive: true, force: true });
 await mkdir(out, { recursive: true });
 await cp(new URL("./public/", import.meta.url), out, { recursive: true });
 await writeFile(new URL("styles.css", out), await readFile(new URL("./src/styles.css", import.meta.url)));
+for (const { path, bytes } of await pictures()) {
+  await mkdir(new URL("./", new URL(path, out)), { recursive: true });
+  await writeFile(new URL(path, out), bytes);
+}
 
 const alternates = languages.length > 1 ? languages.map((code, i) => ({ code, href: i === 0 ? "/" : `/${code}/` })) : [];
 for (const [i, code] of languages.entries()) {
