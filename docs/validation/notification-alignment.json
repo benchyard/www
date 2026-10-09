@@ -1,0 +1,512 @@
+[
+  {
+    "name": "chromium",
+    "theme": "light",
+    "width": 320,
+    "phone": {
+      "y": 7846.15625,
+      "height": 532.359375,
+      "width": 246
+    },
+    "mail": {
+      "y": 8733.359375,
+      "height": 532.359375,
+      "width": 246
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "chromium",
+    "theme": "light",
+    "width": 390,
+    "phone": {
+      "y": 7387.1875,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 8316.4375,
+      "height": 600,
+      "width": 316
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "chromium",
+    "theme": "light",
+    "width": 768,
+    "phone": {
+      "y": 6193.8125,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6193.8125,
+      "height": 600,
+      "width": 301
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "chromium",
+    "theme": "light",
+    "width": 1024,
+    "phone": {
+      "y": 6267.390625,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6267.390625,
+      "height": 600,
+      "width": 429
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "chromium",
+    "theme": "light",
+    "width": 1440,
+    "phone": {
+      "y": 6596.40625,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6596.40625,
+      "height": 600,
+      "width": 484
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "chromium",
+    "theme": "dark",
+    "width": 320,
+    "phone": {
+      "y": 7846.15625,
+      "height": 532.359375,
+      "width": 246
+    },
+    "mail": {
+      "y": 8733.359375,
+      "height": 532.359375,
+      "width": 246
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "chromium",
+    "theme": "dark",
+    "width": 390,
+    "phone": {
+      "y": 7387.1875,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 8316.4375,
+      "height": 600,
+      "width": 316
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "chromium",
+    "theme": "dark",
+    "width": 768,
+    "phone": {
+      "y": 6193.8125,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6193.8125,
+      "height": 600,
+      "width": 301
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "chromium",
+    "theme": "dark",
+    "width": 1024,
+    "phone": {
+      "y": 6267.390625,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6267.390625,
+      "height": 600,
+      "width": 429
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "chromium",
+    "theme": "dark",
+    "width": 1440,
+    "phone": {
+      "y": 6596.40625,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6596.40625,
+      "height": 600,
+      "width": 484
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "light",
+    "width": 320,
+    "phone": {
+      "y": 7848.283203125,
+      "height": 532.3499755859375,
+      "width": 246
+    },
+    "mail": {
+      "y": 8735.533203125,
+      "height": 532.3499755859375,
+      "width": 246
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "light",
+    "width": 390,
+    "phone": {
+      "y": 7389.2001953125,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 8318.5,
+      "height": 600,
+      "width": 316
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "light",
+    "width": 768,
+    "phone": {
+      "y": 6193.13330078125,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6193.13330078125,
+      "height": 600,
+      "width": 301
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "light",
+    "width": 1024,
+    "phone": {
+      "y": 6267.60009765625,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6267.60009765625,
+      "height": 600,
+      "width": 429
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "light",
+    "width": 1440,
+    "phone": {
+      "y": 6596.64990234375,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6596.64990234375,
+      "height": 600,
+      "width": 484
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "dark",
+    "width": 320,
+    "phone": {
+      "y": 7848.283203125,
+      "height": 532.3499755859375,
+      "width": 246
+    },
+    "mail": {
+      "y": 8735.533203125,
+      "height": 532.3499755859375,
+      "width": 246
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "dark",
+    "width": 390,
+    "phone": {
+      "y": 7389.2001953125,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 8318.5,
+      "height": 600,
+      "width": 316
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "dark",
+    "width": 768,
+    "phone": {
+      "y": 6193.13330078125,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6193.13330078125,
+      "height": 600,
+      "width": 301
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "dark",
+    "width": 1024,
+    "phone": {
+      "y": 6267.60009765625,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6267.60009765625,
+      "height": 600,
+      "width": 429
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "firefox",
+    "theme": "dark",
+    "width": 1440,
+    "phone": {
+      "y": 6596.64990234375,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6596.64990234375,
+      "height": 600,
+      "width": 484
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "light",
+    "width": 320,
+    "phone": {
+      "y": 7844.5625,
+      "height": 532.359375,
+      "width": 246
+    },
+    "mail": {
+      "y": 8731.765625,
+      "height": 532.359375,
+      "width": 246
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "light",
+    "width": 390,
+    "phone": {
+      "y": 7385.59375,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 8314.84375,
+      "height": 600,
+      "width": 316
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "light",
+    "width": 768,
+    "phone": {
+      "y": 6191.828125,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6191.828125,
+      "height": 600,
+      "width": 301
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "light",
+    "width": 1024,
+    "phone": {
+      "y": 6266.421875,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6266.421875,
+      "height": 600,
+      "width": 429
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "light",
+    "width": 1440,
+    "phone": {
+      "y": 6595.4375,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6595.4375,
+      "height": 600,
+      "width": 484
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "dark",
+    "width": 320,
+    "phone": {
+      "y": 7844.5625,
+      "height": 532.359375,
+      "width": 246
+    },
+    "mail": {
+      "y": 8731.765625,
+      "height": 532.359375,
+      "width": 246
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "dark",
+    "width": 390,
+    "phone": {
+      "y": 7385.59375,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 8314.84375,
+      "height": 600,
+      "width": 316
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "dark",
+    "width": 768,
+    "phone": {
+      "y": 6191.828125,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6191.828125,
+      "height": 600,
+      "width": 301
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "dark",
+    "width": 1024,
+    "phone": {
+      "y": 6266.421875,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6266.421875,
+      "height": 600,
+      "width": 429
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  },
+  {
+    "name": "webkit",
+    "theme": "dark",
+    "width": 1440,
+    "phone": {
+      "y": 6595.4375,
+      "height": 600,
+      "width": 277.25
+    },
+    "mail": {
+      "y": 6595.4375,
+      "height": 600,
+      "width": 484
+    },
+    "mailOverflow": 0,
+    "pageOverflow": 0
+  }
+]

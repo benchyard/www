@@ -18,10 +18,15 @@ const full = { lossless: true, effort: 6 };
 const half = { quality: 90, effort: 6, smartSubsample: true };
 // The card other sites show beside a link to the page. Crawlers don't
 // reliably take WebP, so it is a PNG.
-export const card = { of: "session-approval-light", width: 1280, height: 800 };
+export const card = { of: "demo-poster-light", width: 1200, height: 630 };
 
 async function kept(source, how, make) {
-  const key = createHash("sha256").update(source).update(JSON.stringify(how)).update(sharp.versions.sharp).digest("hex").slice(0, 32);
+  const key = createHash("sha256")
+    .update(source)
+    .update(JSON.stringify(how))
+    .update(sharp.versions.sharp)
+    .digest("hex")
+    .slice(0, 32);
   const at = new URL(key, cache);
   try {
     return await readFile(at);
@@ -36,17 +41,34 @@ async function kept(source, how, make) {
 /** Every picture to publish: its path under the site and its bytes. */
 export async function pictures() {
   const out = [];
-  for (const name of (await readdir(from)).filter((n) => n.endsWith(".png")).sort()) {
+  for (const name of (await readdir(from))
+    .filter((n) => n.endsWith(".png") && n !== "demo-poster-dark.png")
+    .sort()) {
     const source = await readFile(new URL(name, from));
     const stem = name.slice(0, -4);
     const { width } = await sharp(source).metadata();
-    for (const [w, how] of [[width, full], [Math.round(width / 2), half]]) {
-      const bytes = await kept(source, { webp: how, w }, () => sharp(source).resize({ width: w }).webp(how).toBuffer());
+    for (const [w, how] of stem === "demo-poster-light"
+      ? [[width, full]]
+      : [
+          [width, full],
+          [Math.round(width / 2), half],
+        ]) {
+      const bytes = await kept(source, { webp: how, w }, () =>
+        sharp(source).resize({ width: w }).webp(how).toBuffer(),
+      );
       out.push({ path: `img/${stem}-${w}.webp`, bytes });
     }
     if (stem === card.of) {
       const how = { compressionLevel: 9, palette: true, quality: 95 };
-      const bytes = await kept(source, { png: how, w: card.width }, () => sharp(source).resize({ width: card.width }).png(how).toBuffer());
+      const bytes = await kept(
+        source,
+        { png: how, w: card.width, h: card.height },
+        () =>
+          sharp(source)
+            .resize({ width: card.width, height: card.height, fit: "cover" })
+            .png(how)
+            .toBuffer(),
+      );
       out.push({ path: "social-card.png", bytes });
     }
   }

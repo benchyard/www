@@ -1,122 +1,222 @@
-// Checks the built pages without a browser: every link inside the page
-// leads to something that is there (or is the console, or a mail to the
-// contact address), every picture is WebP and has its file, its size and a
-// text, the social card is there under its fixed name, everything a page
-// loads that can change (stylesheet, fonts, pictures) is in assets/ under a
-// name whose hash is its content's, no file in dist/ is left over,
-// headings don't skip a level, ids are unique, nothing is loaded from another
-// site, and the page names no repository and doesn't call the product open
-// source. Run after `npm run build`.
+// Check the complete public route and asset graph. No browser or server needed.
 import { createHash } from "node:crypto";
 import { readFile, readdir, stat } from "node:fs/promises";
-import { join, relative } from "node:path";
-import { fileURLToPath } from "node:url";
-import { consoleAddress, contactAddress, site } from "./src/page.mjs";
-
-const root = fileURLToPath(new URL("./dist/", import.meta.url));
-const problems = [];
-const pages = [];
-for (const name of await readdir(root, { recursive: true })) if (name.endsWith("index.html")) pages.push(name);
-
-const exists = async (p) => stat(p).then(() => true, () => false);
-// Files that keep their names from one build to the next: pages, what other
-// sites and browsers ask for by name, and what public/ holds for people.
-const fixed = new Set(["robots.txt", "sitemap.xml", "_headers", "favicon.ico", "favicon.svg", "favicon-96x96.png", "apple-touch-icon.png", "icon-512.png", "social-card.png", "fonts/LICENSES.md"]);
-// Every file some page or the stylesheet loads, as a path under dist/.
-const loaded = new Set();
-const hashedName = /^assets\/[^/]+\.([0-9a-f]{8})\.[a-z0-9]+$/;
-// A file that can change must be in assets/ under its content's hash.
-async function changing(path, say) {
-  const m = hashedName.exec(path);
-  if (!m) return say(`${path} can change and has no hash of its content in its name`);
-  if (!(await exists(join(root, path)))) return; // said elsewhere
-  const is = createHash("sha256").update(await readFile(join(root, path))).digest("hex").slice(0, 8);
-  if (is !== m[1]) say(`${path} is named for content it no longer has (its hash is ${is})`);
-}
-for (const page of pages) {
-  const html = await readFile(join(root, page), "utf8");
-  const dir = join(root, page, "..");
-  const say = (m) => problems.push(`${page}: ${m}`);
-  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
-  for (const id of ids) if (ids.filter((x) => x === id).length > 1) say(`id "${id}" is used more than once`);
-  for (const [, href] of html.matchAll(/<a\b[^>]*\shref="([^"]+)"/g)) {
-    if (href.startsWith("#")) { if (!ids.includes(href.slice(1))) say(`link to ${href}, which is not on the page`); }
-    else if (href.startsWith("mailto:")) { if (href.split("?")[0] !== `mailto:${contactAddress}`) say(`mail link "${href}" is not to ${contactAddress}`); }
-    else if (href !== consoleAddress && !href.startsWith(`${site}/`)) say(`link "${href}" leads somewhere other than the page, the console or the contact address`);
+import { join } from "node:path";
+import sharp from "sharp";
+import { site, consoleAddress, contactAddress } from "./src/page.mjs";
+import { card } from "./src/pictures.mjs";
+const root = new URL("./dist/", import.meta.url).pathname;
+const names = (await readdir(root, { recursive: true })).filter(
+  (x) => !x.includes(".."),
+);
+const pageNames = names.filter((x) => x.endsWith("index.html"));
+const pages = new Map(
+  await Promise.all(
+    pageNames.map(async (name) => [
+      "/" + name.replace(/index.html$/, ""),
+      { name, html: await readFile(join(root, name), "utf8") },
+    ]),
+  ),
+);
+const errors = [],
+  loaded = new Set();
+const fixed = new Set([
+  "robots.txt",
+  "sitemap.xml",
+  "_headers",
+  "favicon.ico",
+  "favicon.svg",
+  "favicon-96x96.png",
+  "apple-touch-icon.png",
+  "icon-512.png",
+  "social-card.png",
+  "fonts/LICENSES.md",
+]);
+const exists = (p) =>
+  stat(join(root, p)).then(
+    (s) => s.isFile(),
+    () => false,
+  );
+const seenHash = new Set();
+async function asset(path, say) {
+  if (!(await exists(path))) {
+    say(`missing asset ${path}`);
+    return;
   }
-  for (const [tag] of html.matchAll(/<(?:img|source|link|script)\b[^>]*>/g)) {
-    // The page's own address (its canonical link) loads nothing.
-    if (/rel="canonical"/.test(tag) || /rel="alternate"/.test(tag)) continue;
-    // Everything the tag can make the browser fetch: src, href, and each
-    // candidate of a srcset.
-    const loads = [];
-    for (const [, attr, value] of tag.matchAll(/\s(src|href|srcset)="([^"]+)"/g)) {
-      if (attr === "srcset") loads.push(...value.split(",").map((c) => c.trim().split(/\s+/)[0]));
-      else loads.push(value);
+  loaded.add(path);
+  if (fixed.has(path) || seenHash.has(path)) return;
+  seenHash.add(path);
+  const hash = /^assets\/[^/]+\.([0-9a-f]{8})\.[a-z0-9]+$/.exec(path);
+  if (!hash) return say(`asset has no content hash: ${path}`);
+  if (
+    createHash("sha256")
+      .update(await readFile(join(root, path)))
+      .digest("hex")
+      .slice(0, 8) !== hash[1]
+  )
+    say(`incorrect hash: ${path}`);
+}
+const titles = new Set(),
+  descriptions = new Set();
+for (const [route, { name, html }] of pages) {
+  const say = (m) => errors.push(`${name}: ${m}`);
+  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]);
+  if (new Set(ids).size !== ids.length) say("duplicate id");
+  for (const [, href] of html.matchAll(/<a\b[^>]*\shref="([^"]+)"/g)) {
+    if (href.startsWith("mailto:")) {
+      if (href.split("?")[0] !== `mailto:${contactAddress}`)
+        say("unexpected mail address");
+      continue;
     }
-    for (const src of loads) {
-      if (/^(https?:)?\/\//.test(src)) say(`loads ${src} from another site`);
-      else if (!(await exists(join(dir, src)))) say(`${src} is missing`);
-      const path = relative(root, join(dir, src));
-      loaded.add(path);
-      // The icons keep their names; a stylesheet, a font and a picture don't.
-      if (!fixed.has(path)) await changing(path, say);
-      // The pictures the page shows are WebP (the build makes them).
-      if (/^<(img|source)/.test(tag) && !src.endsWith(".webp")) say(`picture ${src} is not WebP`);
+    if (href === consoleAddress) continue;
+    const url = new URL(href, site + route);
+    if (url.origin !== site) {
+      say(`external link ${href}`);
+      continue;
+    }
+    if (url.pathname.startsWith("/assets/")) {
+      await asset(url.pathname.slice(1), say);
+      continue;
+    }
+    const target = pages.get(url.pathname);
+    if (!target) {
+      say(`missing route ${href}`);
+      continue;
+    }
+    if (
+      url.hash &&
+      !target.html.includes(`id="${decodeURIComponent(url.hash.slice(1))}"`)
+    )
+      say(`missing anchor ${href}`);
+  }
+  for (const [tag] of html.matchAll(
+    /<(?:img|source|link|script|video|track)\b[^>]*>/g,
+  )) {
+    if (/rel="(?:canonical|alternate)"/.test(tag)) continue;
+    for (const [, attr, value] of tag.matchAll(
+      /\s(src|href|srcset|poster)="([^"]+)"/g,
+    )) {
+      const candidates =
+        attr === "srcset"
+          ? value.split(",").map((x) => x.trim().split(/\s+/)[0])
+          : [value];
+      for (const src of candidates) {
+        const u = new URL(src, site + route);
+        if (u.origin !== site) {
+          say(`external resource ${src}`);
+          continue;
+        }
+        await asset(u.pathname.slice(1), say);
+        if (
+          (tag.startsWith("<img") ||
+            tag.includes('type="image/webp"') ||
+            attr === "poster") &&
+          !src.endsWith(".webp")
+        )
+          say(`image is not WebP: ${src}`);
+        if (tag.includes('type="video/mp4"') && !src.endsWith(".mp4"))
+          say(`invalid video source: ${src}`);
+        if (tag.startsWith("<track") && !src.endsWith(".vtt"))
+          say(`invalid caption source: ${src}`);
+      }
     }
     if (tag.startsWith("<img")) {
-      const src = loads[0];
-      if (!/\salt="[^"]{20,}"/.test(tag)) say(`picture ${src} has no describing text`);
-      if (!/\swidth="\d+"/.test(tag) || !/\sheight="\d+"/.test(tag)) say(`picture ${src} has no size`);
-      if (/\ssrcset=/.test(tag) && !/\ssizes=/.test(tag)) say(`picture ${src} has sizes to choose from and doesn't say how wide it is shown`);
+      if (!/\salt="[^"]{20,}"/.test(tag)) say("image needs descriptive alt");
+      if (!/\swidth="\d+"/.test(tag) || !/\sheight="\d+"/.test(tag))
+        say("image needs dimensions");
+      if (!tag.includes("srcset=") || !tag.includes("sizes="))
+        say("image needs responsive sources and sizes");
     }
+    if (
+      tag.startsWith("<video") &&
+      (!/\bcontrols\b/.test(tag) ||
+        !/\bplaysinline\b/.test(tag) ||
+        !tag.includes('preload="none"') ||
+        /\b(?:autoplay|loop)\b/.test(tag))
+    )
+      say(
+        "video must have controls, playsinline, preload=none, and no autoplay or loop",
+      );
   }
-  // The social card is a PNG under a name that never changes.
-  const cardAt = /<meta property="og:image" content="([^"]+)"/.exec(html)?.[1];
-  if (cardAt !== `${site}/social-card.png`) say(`the social card is at "${cardAt}", not ${site}/social-card.png`);
-  else if (!(await exists(join(root, "social-card.png")))) say("social-card.png is missing");
+  const canonical = /<link rel="canonical" href="([^"]+)"/.exec(html)?.[1];
+  if (canonical !== site + route) say("incorrect canonical");
+  const title = /<title>(.*?)<\/title>/.exec(html)?.[1],
+    description = /<meta name="description" content="([^"]+)"/.exec(html)?.[1];
+  if (!title || titles.has(title)) say("missing or duplicate title");
+  titles.add(title);
+  if (!description || descriptions.has(description))
+    say("missing or duplicate description");
+  descriptions.add(description);
+  if (!html.includes(`property="og:url" content="${site + route}"`))
+    say("incorrect social URL");
+  if (!html.includes(`property="og:image" content="${site}/social-card.png"`))
+    say("incorrect social card URL");
   let last = 0;
   for (const [, level] of html.matchAll(/<h([1-6])\b/g)) {
-    if (+level > last + 1) say(`a heading jumps from h${last} to h${level}`);
+    if (+level > last + 1) say(`heading jumps h${last} to h${level}`);
     last = +level;
   }
-  if ((html.match(/<h1\b/g) || []).length !== 1) say("there must be exactly one h1");
-  if (!/<html lang="[a-zA-Z-]+"/.test(html)) say("the page doesn't say its language");
-  if (/<script\b/.test(html)) say("the page has a script; it is meant to have none");
-  // The product's code is not public: the page links to no repository and
-  // doesn't say otherwise.
-  if (/github\.com/i.test(html)) say("the page contains github.com");
-  if (/open[\s-]*source/i.test(html)) say('the page contains the words "open source"');
-  if (/\u2026/.test(html)) say("the page has the single ellipsis character; write three dots, or none");
+  if ((html.match(/<h1\b/g) || []).length !== 1) say("expected one h1");
+  if (!/<html lang="en"/.test(html)) say("missing language");
+  if (/<script\b/i.test(html)) say("client scripts are not allowed");
+  if (/github\.com|open[\s-]*source|\u2026/i.test(html))
+    say("forbidden public text");
 }
-// The stylesheets' own files (fonts), which are beside them in assets/.
-for (const sheet of [...loaded].filter((p) => p.endsWith(".css"))) {
-  if (!(await exists(join(root, sheet)))) continue;
-  const css = await readFile(join(root, sheet), "utf8");
-  const say = (m) => problems.push(`${sheet}: ${m}`);
+for (const path of [...loaded].filter((x) => x.endsWith(".css"))) {
+  const css = await readFile(join(root, path), "utf8");
   for (const [, , src] of css.matchAll(/url\((["']?)([^"')]+)\1\)/g)) {
-    if (/^(https?:)?\/\//.test(src)) { say(`loads ${src} from another site`); continue; }
     if (src.startsWith("data:")) continue;
-    const path = relative(root, join(root, sheet, "..", src));
-    if (!(await exists(join(root, path)))) say(`${src} is missing`);
-    loaded.add(path);
-    await changing(path, say);
+    const url = new URL(src, site + "/" + path);
+    if (url.origin !== site) errors.push("external CSS resource " + src);
+    else await asset(url.pathname.slice(1), (m) => errors.push(m));
   }
 }
-// Nothing is published that nothing uses: an asset no page loads is a
-// leftover, and a file outside assets/ is a page or has a fixed name.
-for (const name of await readdir(root, { recursive: true })) {
-  const path = name.split("\\").join("/");
-  if (!(await stat(join(root, path))).isFile()) continue;
-  if (path.endsWith("index.html") || fixed.has(path) || loaded.has(path)) continue;
-  problems.push(`${path} is in dist/ and nothing loads it`);
+for (const name of names) {
+  if (!(await exists(name))) continue;
+  if (name.endsWith("index.html") || fixed.has(name) || loaded.has(name))
+    continue;
+  errors.push(`unused published file ${name}`);
 }
-// The rules for hosts that read _headers cover the pages and assets/.
-const headers = await readFile(join(root, "_headers"), "utf8").catch(() => "");
-if (!/^\/assets\/\*\n {2}Cache-Control: public, max-age=31536000, immutable$/m.test(headers)) problems.push("_headers doesn't let assets/ be kept for a year");
-for (const page of pages) {
-  const at = `/${page}`;
-  if (!headers.includes(`${at}\n  Cache-Control: no-cache\n`)) problems.push(`_headers doesn't say ${at} is asked for again each time`);
+const headers = await readFile(join(root, "_headers"), "utf8");
+for (const [, p] of pages)
+  if (!headers.includes(`/${p.name}\n  Cache-Control: no-cache\n`))
+    errors.push(`missing HTML cache rule ${p.name}`);
+if (
+  !headers.includes(
+    "/assets/*\n  Cache-Control: public, max-age=31536000, immutable",
+  )
+)
+  errors.push("missing asset cache rule");
+for (const name of fixed) {
+  if (await exists(name)) {
+    if (!headers.includes(`/${name}\n  Cache-Control: no-cache\n`))
+      errors.push(`missing fixed-file cache rule ${name}`);
+  }
 }
-if (problems.length) { console.error(problems.join("\n")); process.exit(1); }
-console.log(`${pages.length} page(s) checked: nothing wrong`);
+const sitemap = await readFile(join(root, "sitemap.xml"), "utf8");
+const listed = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)].map((m) => m[1]);
+if (
+  JSON.stringify(listed.sort()) !==
+  JSON.stringify([...pages.keys()].map((p) => site + p).sort())
+)
+  errors.push("sitemap does not match routes");
+const metadata = await sharp(join(root, "social-card.png")).metadata();
+if (metadata.width !== card.width || metadata.height !== card.height)
+  errors.push("social card dimensions mismatch");
+if (!(await exists("robots.txt"))) errors.push("missing robots.txt");
+const captions = [...loaded].find((x) => x.endsWith(".vtt"));
+if (
+  !captions ||
+  !(await readFile(join(root, captions), "utf8")).startsWith("WEBVTT\n")
+)
+  errors.push("missing or invalid WebVTT captions");
+const movie = [...loaded].find((x) => x.endsWith(".mp4"));
+if (!movie || (await stat(join(root, movie))).size > 15 * 1024 * 1024)
+  errors.push("missing video or exceeds 15MB budget");
+if (errors.length) {
+  console.error(errors.join("\n"));
+  process.exit(1);
+}
+console.log(
+  `${pages.size} pages checked: routes, anchors, metadata, media, hashes and cache rules passed.`,
+);

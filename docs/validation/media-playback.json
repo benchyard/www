@@ -1,0 +1,26 @@
+[
+  {
+    "browser": "webkit",
+    "fullscreen": true,
+    "duration": 60,
+    "ended": true,
+    "error": null,
+    "captionCount": 8
+  },
+  {
+    "browser": "chromium",
+    "fullscreen": true,
+    "duration": 60,
+    "ended": true,
+    "error": null,
+    "captionCount": 8
+  },
+  {
+    "browser": "firefox",
+    "fullscreen": true,
+    "duration": 60,
+    "ended": true,
+    "error": null,
+    "captionCount": 8
+  }
+]

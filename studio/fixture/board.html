@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Issue board</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      background: #f2f3ef;
+      color: #1a1e1b;
+      font: 17px/1.6 system-ui;
+    }
+    header {
+      background: #fff;
+      border-bottom: 1px solid #d6d9d1;
+      padding: 20px 5%;
+      display: flex;
+      justify-content: space-between;
+    }
+    main {
+      max-width: 1050px;
+      margin: 60px auto;
+      padding: 0 28px;
+    }
+    small,
+    .muted {
+      color: #626b65;
+    }
+    h1 {
+      font-size: 48px;
+      letter-spacing: -2px;
+      margin: 8px 0;
+    }
+    nav {
+      display: flex;
+      gap: 8px;
+      margin: 32px 0 20px;
+    }
+    button {
+      font: inherit;
+      padding: 10px 22px;
+      border: 1px solid #ccd2c9;
+      border-radius: 9px;
+      background: white;
+      cursor: pointer;
+    }
+    button[aria-pressed="true"] {
+      background: #1f6b6b;
+      color: white;
+      border-color: #1f6b6b;
+    }
+    article {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding: 22px;
+      background: white;
+      border-bottom: 1px solid #e3e7df;
+    }
+    article:first-of-type {
+      border-radius: 12px 12px 0 0;
+    }
+    article:last-of-type {
+      border-radius: 0 0 12px 12px;
+    }
+    article[hidden] {
+      display: none;
+    }
+    article div {
+      flex: 1;
+    }
+    article strong {
+      display: block;
+    }
+    .pill {
+      font-size: 13px;
+      padding: 5px 12px;
+      border-radius: 18px;
+      background: #d9ecea;
+      color: #1f6b6b;
+    }
+    .done {
+      background: #e8eae4;
+      color: #4d584e;
+    }
+    .summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+    }
+    footer {
+      margin-top: 25px;
+      color: #626b65;
+      font-size: 14px;
+    }
+    @media (max-width: 600px) {
+      main {
+        margin: 24px auto;
+        padding: 0 16px;
+      }
+      h1 {
+        font-size: 34px;
+      }
+      article {
+        padding: 16px;
+        gap: 12px;
+      }
+      button {
+        padding: 9px 12px;
+      }
+      small {
+        font-size: 12px;
+      }
+    }
+  </style>
+  <header>
+    <strong>◈ &nbsp; Issue board</strong
+    ><span class="muted">Product / Autumn release</span>
+  </header>
+  <main>
+    <small>TEAM WORKSPACE &nbsp; / &nbsp; WEB APP</small>
+    <div class="summary">
+      <div>
+        <h1>A little more shipped.</h1>
+        <p class="muted">Track the details that make the product better.</p>
+      </div>
+      <span id="count">6 issues</span>
+    </div>
+    <!-- FILTER -->
+    <article data-status="progress">
+      <small>WEB-142</small>
+      <div>
+        <strong>Add a status filter</strong
+        ><small>Product experience · Alice</small>
+      </div>
+      <span class="pill">In progress</span>
+    </article>
+    <article data-status="done">
+      <small>WEB-139</small>
+      <div>
+        <strong>Remember the selected workspace</strong
+        ><small>Navigation · Jamie</small>
+      </div>
+      <span class="pill done">Done</span>
+    </article>
+    <article data-status="progress">
+      <small>WEB-137</small>
+      <div>
+        <strong>Improve the empty state</strong
+        ><small>Product experience · Alex</small>
+      </div>
+      <span class="pill">In progress</span>
+    </article>
+    <article data-status="done">
+      <small>WEB-134</small>
+      <div>
+        <strong>Make keyboard focus easier to see</strong
+        ><small>Accessibility · Alice</small>
+      </div>
+      <span class="pill done">Done</span>
+    </article>
+    <article data-status="progress">
+      <small>WEB-131</small>
+      <div>
+        <strong>Polish the mobile layout</strong
+        ><small>Responsive design · Jamie</small>
+      </div>
+      <span class="pill">In progress</span>
+    </article>
+    <article data-status="done">
+      <small>WEB-128</small>
+      <div>
+        <strong>Write the onboarding checklist</strong
+        ><small>Documentation · Alex</small>
+      </div>
+      <span class="pill done">Done</span>
+    </article>
+    <footer>Demo project · Fictional people and issues</footer>
+  </main>
+  <!-- SCRIPT -->
+</html>

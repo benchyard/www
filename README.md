@@ -1,98 +1,88 @@
-# Benchyard's homepage
+# Benchyard public website
 
-The public page for Benchyard: persistent workspaces where coding agents (Claude Code, Codex, Cursor, Gemini CLI) keep running, watched and steered from a browser or a phone. Benchyard is a hosted service; its console is at `https://console.benchyard.com`. The product's code is not public, and the page links to no repository.
+A static homepage and three public guides for persistent coding-agent workspaces. Plain HTML and CSS, local fonts, responsive WebP, a native MP4 player and WebVTT captions. No scripts in the published site, third-party embeds, trackers or runtime framework.
 
-A static site: one HTML page per language, one stylesheet, pictures and fonts. No backend, no JavaScript on the page, nothing loaded from another site, no trackers.
+The homepage describes a workspace for coding agents, not a product limited to a fixed list of models. `content/en.mjs` holds the current integration registry. Kimi, GLM and MiniMax are identified as future directions, not verified current integrations. Model/provider compatibility and agent support are separate concepts.
 
-## Why this stack
+## Build and preview
 
-Plain HTML and CSS, put together by a small Node script. It has two development dependencies, used only while building: `sharp` makes the pictures and `lightningcss` minifies the stylesheet. The page itself needs nothing, and the host that serves it installs nothing. The page is a single document whose words change far more often than its structure; a framework would add a build chain and a dependency tree to maintain for no gain in what a visitor gets. If the site grows to many pages (docs, a blog), moving `src/page.mjs` and `content/` into Astro is a small step.
-
-## Run, build, check
-
-Needs Node 20 or later.
+Requires Node 20+. The lockfile pins build and development dependencies.
 
 ```sh
-npm ci          # once: the two libraries the build uses
-npm run dev     # build, then serve dist/ at http://localhost:4321 (PORT=... to change)
-npm run build   # build into dist/
-npm run check   # build, then check links, pictures, headings, that nothing comes from another site,
-                # that changing files are named by their content and nothing is left over,
-                # and that the page names no repository and doesn't call the product open source
+npm ci
+npm run check
+npm run dev                          # localhost:4321, live reload in responses only
+PORT=4322 LIVE_RELOAD=0 node serve.mjs # script-free local acceptance preview
+npx playwright install chromium firefox webkit
+npm test                             # use the acceptance preview above
+npm run measure                      # six local performance samples
+npm run format:check
 ```
 
-## Deploy
+`WWW_TEST_URL` overrides the acceptance URL. Firefox tests disable the host proxy for local traffic. WebKit uses macOS Option-Tab navigation and explicitly selects the native subtitle track, which otherwise follows the system caption preference. These are desktop-engine tests, not physical iPhone tests.
 
-`dist/` is the whole site: upload it to any static host (Cloudflare Pages, Netlify, an S3 bucket behind a CDN, nginx). The build command is `npm run build` and the output folder is `dist`.
+## Files and routes
 
-Set the two cache rules below at the host ("Caching").
+- `content/en.mjs`: homepage copy and current integration list.
+- `content/guides.mjs`: guide content, factual review date, demo transcript.
+- `src/page.mjs`: shared HTML, home and guide renderers, canonical site, console and contact addresses.
+- `src/styles.css`: responsive light/dark styles; slim device silhouette without an extra case.
+- `src-img/`: real app screenshot originals and rendered video posters. Screens use fictional demo data.
+- `media/`: the 720p website video and English captions; published under content hashes.
+- `studio/`: reproducible fixture, UI recording, video rendering and lab measurement tools. Never copied into `dist/`.
+- `docs/claims.md`: internal product-fact evidence, reviewed against the product main branch.
+- `docs/validation.md`: checks, measured results and release limitations.
 
-## Caching
+Routes: `/`, `/guides/agents/`, `/guides/workspaces/`, `/guides/security/`. Every route has its own title, description and canonical URL. The sitemap is generated from these routes. Cross-page fragments, resource hashes, source types, subtitles and cache headers are checked by `check.mjs`.
 
-A file that can change is published in `dist/assets/` under a name that carries a hash of its content (`styles.3682ede8.css`, and likewise each font and picture); the pages and the stylesheet refer to those names, and the stylesheet is minified. A changed file is therefore a new address, and an old page never meets a new stylesheet. Two rules for the host:
+## Demo and screenshot production
 
-| What | Header |
-|---|---|
-| `/assets/*` | `Cache-Control: public, max-age=31536000, immutable` |
-| everything else (the pages, `robots.txt`, `sitemap.xml`, the icons, `social-card.png`) | `Cache-Control: no-cache` (kept, and asked about each time) |
+The 60-second video records Benchyard main (`6ebde5e2d4e081f9b57c87751a7a14c0e5ebb8b8`), not the Airwallex branch. The agent responses are scripted; file edits, `npm test`, mobile approval and the preview filter interactions really execute. The lock screen and email are illustrations, not proof of external message delivery. No real model calls, accounts, keys or external mail are used.
 
-- `dist/_headers` says exactly this for the hosts that read such a file (Cloudflare Pages, Netlify). Any other host ignores it and is set by hand (nginx: a `location /assets/` block with the first header; S3 behind a CDN: the header as object metadata on `assets/`).
-- The files outside `assets/` keep their names because something asks for them by name: browsers (`favicon.ico`), crawlers (`robots.txt`), other sites (`social-card.png`, whose address they keep: to make them fetch a new card, give it a new name in `src/pictures.mjs` and `src/page.mjs` by hand).
-- The build empties `dist/` first, so old assets don't pile up; a host that uploads `dist/` as a whole (Pages, Netlify) drops them too. One that only adds files (a bucket synced without deleting) keeps old assets, which harms nothing.
-- The page's HTML is not minified: it is about 6 KB compressed, and the host's own gzip or Brotli does more than removing spaces would. The page has no JavaScript.
-- `npm run dev` sends the same two headers, to see the behaviour locally.
+Prerequisites: sibling `../benchyard` checkout on main, its web dependencies installed, Go matching its go.mod, Docker with `node:22-bookworm`, FFmpeg with H.264 encoding, and Playwright Chromium. The default capture setup is Linux ARM64 for an Apple Silicon host. Set `DEMO_ARCH=amd64` for an x86 Docker host. `BENCHYARD_SOURCE` may point to another main checkout.
 
-## Where things are
+```sh
+npm run demo:start
+npm run demo:capture
+npm run demo:render
+npm run check
+# After finishing with this disposable environment:
+docker rm -f benchyard-www-demo
+```
 
-| Path | What |
-|---|---|
-| `content/en.mjs` | Every word on the page. Edit text here, not in the template |
-| `src/page.mjs` | The page's structure, as a function of the words, and the three addresses it points at: `site`, `consoleAddress`, `contactAddress` |
-| `src/styles.css` | The stylesheet. Colours and fonts are the app's own; light and dark follow the visitor's system |
-| `src/fonts/` | The fonts (Latin subsets), published in `assets/` under hashed names |
-| `public/` | Copied as it is, names kept: icons, `robots.txt`, `sitemap.xml`, the fonts' licences (`fonts/LICENSES.md`) |
-| `src-img/` | The pictures' originals: PNG screenshots of the app. Not published |
-| `src/pictures.mjs` | Makes what is published from them while building: see "The pictures" |
-| `build.mjs`, `serve.mjs`, `check.mjs` | Build, local preview, checks |
-| `docs/screenshots/` | How the built page looks at 1280, 390 and 360 wide, light and dark |
+Use a fresh named demo container for another capture. The start command refuses a name collision. Container data is disposable; it is not mounted from a real user's application data. Only port 18080 on host loopback is exposed, and the studio mount is read-only. Generated binaries, frames, session metadata and the 1080p master are ignored under `studio/output/`.
 
-## Changing the text
+Outputs:
 
-The page says only what Benchyard does today, as a hosted service. Its sources are `docs/features.md`, `docs/roadmap.md` and `docs/storage.md` in the product's repository, which is private; a claim that isn't supported there doesn't belong here, and what is on the roadmap is called "planned". No invented numbers, quotes or customer names.
+- `studio/output/benchyard-demo-1080p.mp4`: 1920×1080, 30fps, H.264/yuv420p, faststart, 60 seconds, no audio.
+- `media/benchyard-demo-720p.mp4`: website version, 1280×720, same duration/frame rate, under 15MB.
+- `media/benchyard-demo.en.vtt`: English subtitles; the player provides native selection.
+- `/guides/workspaces/#demo-transcript`: readable transcript and disclosure.
+- Screenshot originals at 1440×900 and 390×740; mobile hero uses a generated crop of the real desktop diff. Source dimensions and responsive descriptors must remain in sync.
 
-What the page must keep saying, because the reader's data is on Benchyard's servers: provider sign-ins, API keys and secrets are held by the server and Benchyard can read them; the server can read the content of sessions. It claims no end-to-end encryption, certification or uptime.
+The intro uses a still of the recorded workspace, followed by actual task interactions. Timing is edited to the storyboard. Device decoration and the closing card are rendered separately. Neither runtime controls nor agent messages are painted over the application screenshots.
 
-The two things a visitor can do are "Request access" (a mail to `contactAddress`, with a subject and two questions from `access` in the content file) and "Sign in" (to `consoleAddress`). The console takes no sign-ups.
+## Assets, caching and deployment
 
-## Adding a language
+`npm run build` produces the entire deployable site in `dist/`. PNG sources are converted into WebP variants. The social card is a 1200×630 PNG. Build-only dependencies are sharp/lightningcss; Playwright, axe and Prettier are development tools.
 
-Copy `content/en.mjs` to `content/<code>.mjs`, translate the values (keys and structure stay), and add the code to `languages` in `build.mjs`. The first language is served at `/`, the others at `/<code>/`. The fonts in `src/fonts` are Latin subsets: a language in another script needs its subsets added (or falls back to the system's fonts, which the stylesheet allows).
+| Paths | Cache policy |
+| --- | --- |
+| `/assets/*` | `public, max-age=31536000, immutable` |
+| HTML, sitemap, robots, social card, icons, licences | `no-cache` |
 
-## The screenshots
+The generated `_headers` file provides those rules for compatible static hosts; configure other hosts equivalently. Keep old hashed assets available through a deployment transition so an already-open page can still load its video. The local server preserves the pre-existing live-reload workflow, adds main's MIME/cache handling, and serves video byte ranges. Set `LIVE_RELOAD=0` for acceptance tests.
 
-`src-img/` holds screenshots of the real app, taken from a throwaway local server with stand-in agents and made-up data (the account "alice", the workspaces "api" and "web-app"). Nothing in them is a real account, address or host. To retake them after the app changes: run the product's local test server (`scripts/e2e-local.sh` in the product's repository shows how), drive it with Playwright at 1280×800 and at a phone's size in light and dark, and replace the files in `src-img/` under the same names (PNG, at two device pixels to one); `src/page.mjs` carries each picture's pixel size.
+Production must serve `.mp4` as `video/mp4`, `.vtt` as `text/vtt`, support `Range` with `206` / `Content-Range`, and support direct navigation to every guide route. A normal static file server supplies this without an application backend. Verify those responses against the actual deployed host; local success is not production verification.
 
-## The pictures
+## Publishing and search
 
-The build turns each PNG in `src-img/` into what the page loads (`src/pictures.mjs`), so the originals are the only pictures in the repository:
+Publication is intentionally not part of this change. Before publishing, verify `hello@benchyard.com` is monitored and confirm which environments and features are enabled in the hosted console. Public copy qualifies deployment/account availability. The product can support registration when configured; invitation access is the chosen marketing flow, not a claim that sign-up code is absent.
 
-- **WebP in two sizes:** the original's own size without loss (for screens with two device pixels to one; for flat screenshots lossless WebP is under half the PNG and smaller than a lossy one at high quality, and the text stays exact), and half of it at quality 90. The page offers both (`srcset` with `sizes`), and a dark and a light one by the visitor's system.
-- **The social card** (`social-card.png`, 1280 by 800): a PNG, since crawlers don't reliably take WebP, under a name that never changes, since other sites keep its address. It is made from `session-approval-light.png`; to show another picture, change `card` in `src/pictures.mjs`.
-- Conversions are kept in `.cache/` (not in git), named by the original's content and the settings, so a build converts only what is new or changed: about 5 seconds from nothing, well under one afterwards.
+The canonical site is `https://www.benchyard.com`; the console is `https://console.benchyard.com`. Previews require a separate origin and their domain is not printed on the homepage. Preserve host redirects to the canonical site.
 
-## Where it is served
+Robots policy is unchanged. Search-bot access and model-training policy are separate decisions. Do not add hidden instructions, unsupported claims, keyword pages or scripts to influence AI answers. The visible guides and transcript supply facts with stable section links. No video-search eligibility or AI citation placement is promised.
 
-The site's address is `https://www.benchyard.com` (`site` in `src/page.mjs`, `public/robots.txt`, `public/sitemap.xml`): canonical and social-card addresses are made from it. The host must send `benchyard.com` on to `www.benchyard.com`; that is the host's setting, not a file here.
+Use `docs/geo-review.md` for manual post-launch checks at days 14 and 30. No automation or analytics tracker is installed.
 
-The console is at `https://console.benchyard.com` (`consoleAddress` in `src/page.mjs`). Previews of workspaces (a port of a workspace opened in the browser) must be served from a domain that is not the console's host and not under it: a page an agent serves must not share an origin, or cookies, with the console. The homepage names no preview domain.
-
-## To decide
-
-- **The contact address.** The page sends "Request access" and every "write to us" to `hello@benchyard.com` (`contactAddress` in `src/page.mjs`). Confirm that this mailbox exists and is read before the page is published, or change the constant.
-- **Where it is hosted** (any static host; nothing here names one).
-- **Licence** for this repository: see `LICENSE.md`.
-- **The preview domain** for workspaces (see "Where it is served"); the page doesn't mention previews until there is one.
-- **Which kinds of workspace the hosted service offers.** The page lists containers, cloud machines at Google Cloud and AWS, and a person's own machine "where this is turned on for your account". Take out what the service doesn't offer.
-- **Pricing.** The section says access is by request and that plans will be published later, with no figures.
-- **Terms and a privacy notice.** There are none, and the page links to none; a hosted service that holds people's credentials and sessions will need both.
-- **Analytics:** none. If wanted, one served from the site's own host keeps the "nothing from another site" property.
+The simulated iPhone lock screen is shared by the homepage and video through `src/lock-screen.mjs` and `src/lock-screen.css`. Edit these sources, then run `npm run demo:render` and `npm run check` to refresh both. The illustration uses original CSS wallpaper and SVG indicators; it is not a native push-delivery recording. Layout reference: [Apple’s notification guide](https://support.apple.com/guide/iphone/view-and-respond-to-notifications-iph6534c01bc/ios).

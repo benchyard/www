@@ -1,223 +1,114 @@
+import { securityDiagram } from "./security-diagram.mjs";
+import { lockScreenMarkup, statusIcons } from "./lock-screen.mjs";
 import { card } from "./pictures.mjs";
-
-// The page as a function of its words (content/<language>.mjs). Plain
-// strings: no framework, nothing to hydrate.
-
-// The addresses the page points at. Each is written here once.
-//
-// The address the site is served at: the one canonical and social-card
-// addresses are made from. benchyard.com sends people on to it.
+import { mark } from "./brand.mjs";
+import { agentMark } from "./agents.mjs";
+import { guides, reviewed, transcript } from "../content/guides.mjs";
 export const site = "https://www.benchyard.com";
-// The hosted console, where people who have an account sign in.
 export const consoleAddress = "https://console.benchyard.com";
-// Where "Request access" and "get in touch" send mail.
-// TO CONFIRM BEFORE PUBLISHING: the owner must make sure this mailbox exists
-// and is read. Every button on the page depends on it.
 export const contactAddress = "hello@benchyard.com";
-
-// A mailto: link with a subject and, if given, lines of text to start from.
-const mailto = (subject, lines = []) =>
-  `mailto:${contactAddress}?subject=${encodeURIComponent(subject)}${lines.length ? `&body=${encodeURIComponent(lines.join("\r\n\r\n") + "\r\n")}` : ""}`;
-
-const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-// `code` in a sentence becomes <code> and {contact} the contact address as a
-// link; everything else is escaped.
-const rich = (s) =>
-  esc(s)
-    .replace(/`([^`]+)`/g, "<code>$1</code>")
-    .replace(/\{contact\}/g, `<a href="mailto:${contactAddress}">${contactAddress}</a>`);
-const ext = (href) => (/^https?:/.test(href) ? ' rel="noopener"' : "");
-const link = ([href, text], cls = "") => `<a href="${esc(href)}"${cls ? ` class="${cls}"` : ""}${ext(href)}>${esc(text)}</a>`;
-
-const mark = `<svg class="mark" viewBox="0 0 44 44" aria-hidden="true" focusable="false"><path d="M39 19.8612H41V31.4523L39 33.501V19.8612Z"/><path d="M30.0665 8.92773H28V24.1771H30.0665V8.92773Z"/><path d="M19.1054 8.92773H30.046L13.9405 20.5189H3L19.1054 8.92773Z"/><path d="M30.0595 19.8612H41L26.5387 31.4523H15.5982L30.0595 19.8612Z"/></svg>`;
-
-// A screenshot in the theme the visitor's system asks for, as WebP in two
-// sizes (the file's own, for screens with two device pixels to one, and half
-// of it; the build makes both, src/pictures.mjs). `sizes` says how wide the
-// picture is shown, so the browser takes the smaller file where that is
-// enough. Width and height are the file's own, so the page doesn't move as
-// it loads. `at` gives a file's published address.
-const shot = (at, name, alt, w, h, { eager = false, dark = true, cls = "", sizes = "(min-width: 1220px) 1120px, 94vw" } = {}) => {
-  const file = (theme, width) => at(`img/${name}-${theme}-${width}.webp`);
-  const set = (theme) => `${file(theme, w / 2)} ${w / 2}w, ${file(theme, w)} ${w}w`;
-  return `<picture>
-  ${dark ? `<source type="image/webp" srcset="${set("dark")}" sizes="${sizes}" media="(prefers-color-scheme: dark)">` : ""}
-  <img src="${file("light", w / 2)}" srcset="${set("light")}" sizes="${sizes}" alt="${esc(alt)}" width="${w}" height="${h}"${cls ? ` class="${cls}"` : ""} ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">
-</picture>`;
-};
-
-// `asset` gives the name a changing file (the stylesheet, a font, a picture)
-// is published under, which carries a hash of its content; the build passes
-// it. Files whose names are fixed (the icons) are named as they are.
-export function render(t, { base = "", languages = [], asset = (name) => name } = {}) {
-  const at = (name) => base + asset(name);
-  // The two things a visitor can do: ask for access (a mail), or sign in.
-  const access = (cls) => link([mailto(t.access.subject, t.access.body), t.access.label], cls);
-  const signIn = (cls) => link([consoleAddress, t.signIn], cls);
-  // In the content, a link's address may be one of these names.
-  const named = { "@access": mailto(t.access.subject, t.access.body), "@console": consoleAddress, "@contact": `mailto:${contactAddress}` };
-  const listed = ([href, text]) => link([named[href] ?? href, text === "@contact" ? contactAddress : text]);
-  return `<!doctype html>
-<html lang="${t.lang}" dir="${t.dir}">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${esc(t.meta.title)}</title>
-<meta name="description" content="${esc(t.meta.description)}">
-<meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f2f3ef" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#111513" media="(prefers-color-scheme: dark)">
-<meta property="og:title" content="${esc(t.meta.title)}">
-<meta property="og:description" content="${esc(t.meta.description)}">
-<meta property="og:type" content="website">
-<link rel="canonical" href="${site}/">
-<meta property="og:url" content="${site}/">
-<meta property="og:site_name" content="Benchyard">
-<meta property="og:image" content="${site}/social-card.png">
-<meta property="og:image:width" content="${card.width}">
-<meta property="og:image:height" content="${card.height}">
-<meta name="twitter:card" content="summary_large_image">
-<link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
-<link rel="icon" href="${base}favicon.ico" sizes="32x32">
-<link rel="apple-touch-icon" href="${base}apple-touch-icon.png">
-<link rel="preload" href="${at("fonts/bricolage-grotesque-latin-wght-normal.woff2")}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="${at("fonts/ibm-plex-sans-latin-400-normal.woff2")}" as="font" type="font/woff2" crossorigin>
-${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.href}">`).join("\n")}
-<link rel="stylesheet" href="${at("styles.css")}">
-</head>
-<body>
-<a class="skip" href="#main">${esc(t.skip)}</a>
-<header class="top">
-  <div class="wrap top-in">
-    <a class="brand" href="#top" aria-label="Benchyard">${mark}<span>Benchyard</span></a>
-    <nav aria-label="${esc(t.nav.label)}">
-      <ul>
-        ${t.nav.items.map((i) => `<li>${link(i)}</li>`).join("\n        ")}
-      </ul>
-    </nav>
-    <div class="top-actions">${signIn("signin")} ${access("btn btn-primary btn-quiet")}</div>
-  </div>
-</header>
-
-<main id="main">
-<section class="hero" id="top">
-  <div class="wrap">
-    <h1>${esc(t.hero.title)}</h1>
-    <p class="lead">${esc(t.hero.lead)}</p>
-    <p class="actions">${access("btn btn-primary")} ${signIn("btn")}</p>
-    <p class="note">${esc(t.hero.note)}</p>
-    <figure class="stage">
-      <div class="frame frame-desktop">${shot(at, "session-approval", t.hero.desktopAlt, 2560, 1600, { eager: true, sizes: "(min-width: 1060px) 980px, 94vw" })}</div>
-      <div class="frame frame-phone">${shot(at, "phone-approval", t.hero.phoneAlt, 1170, 1992, { eager: true, sizes: "(min-width: 721px) min(24vw, 260px), min(68vw, 300px)" })}</div>
-      <figcaption>${esc(t.hero.caption)}</figcaption>
-    </figure>
-  </div>
-</section>
-
-<section id="how" aria-labelledby="how-h">
-  <div class="wrap">
-    <h2 id="how-h">${esc(t.how.title)}</h2>
-    <p class="lead">${esc(t.how.lead)}</p>
-    <ol class="steps">
-      ${t.how.steps.map((s) => `<li><h3>${esc(s.title)}</h3><p>${rich(s.body)}</p></li>`).join("\n      ")}
-    </ol>
-    <div class="frame">${shot(at, "session-done", t.how.shotAlt, 2560, 1600, { dark: false })}</div>
-  </div>
-</section>
-
-<section id="agents" class="band" aria-labelledby="agents-h">
-  <div class="wrap">
-    <h2 id="agents-h">${esc(t.agents.title)}</h2>
-    <p class="lead">${esc(t.agents.lead)}</p>
-    <ul class="cards cards-4">
-      ${t.agents.items.map((a) => `<li class="card"><h3>${esc(a.name)}</h3><p>${rich(a.body)}</p></li>`).join("\n      ")}
-    </ul>
-    <p class="foot">${esc(t.agents.foot)}</p>
-  </div>
-</section>
-
-<section id="workspace" aria-labelledby="workspace-h">
-  <div class="wrap">
-    <h2 id="workspace-h">${esc(t.workspace.title)}</h2>
-    <p class="lead">${esc(t.workspace.lead)}</p>
-    <dl class="grid">
-      ${t.workspace.items.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${rich(v)}</dd></div>`).join("\n      ")}
-    </dl>
-    <div class="frame">${shot(at, "workspaces", t.workspace.shotAlt, 2560, 1600)}</div>
-  </div>
-</section>
-
-<section id="security" class="band" aria-labelledby="security-h">
-  <div class="wrap">
-    <h2 id="security-h">${esc(t.security.title)}</h2>
-    <p class="lead">${esc(t.security.lead)}</p>
-    <ul class="cards cards-2">
-      ${t.security.points.map((p) => `<li class="card"><h3>${esc(p.title)}</h3><p>${rich(p.body)}</p></li>`).join("\n      ")}
-    </ul>
-    <aside class="plain" aria-labelledby="plain-h">
-      <h3 id="plain-h">${esc(t.security.plain.title)}</h3>
-      <ul>
-        ${t.security.plain.items.map((i) => `<li>${rich(i)}</li>`).join("\n        ")}
-      </ul>
-    </aside>
-  </div>
-</section>
-
-<section id="where" aria-labelledby="where-h">
-  <div class="wrap">
-    <h2 id="where-h">${esc(t.where.title)}</h2>
-    <p class="lead">${esc(t.where.lead)}</p>
-    <ul class="cards cards-3">
-      ${t.where.items.map((p) => `<li class="card"><h3>${esc(p.title)}</h3><p>${rich(p.body)}</p></li>`).join("\n      ")}
-    </ul>
-    <p class="foot">${esc(t.where.foot)}</p>
-  </div>
-</section>
-
-<section id="teams" class="band" aria-labelledby="teams-h">
-  <div class="wrap">
-    <h2 id="teams-h">${esc(t.teams.title)}</h2>
-    <dl class="grid">
-      ${t.teams.items.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${rich(v)}</dd></div>`).join("\n      ")}
-    </dl>
-    <div class="frame">${shot(at, "security", t.teams.shotAlt, 2560, 1600)}</div>
-  </div>
-</section>
-
-<section id="own-cluster" aria-labelledby="own-cluster-h">
-  <div class="wrap narrow">
-    <h2 id="own-cluster-h">${esc(t.ownCluster.title)}</h2>
-    <p class="lead">${rich(t.ownCluster.body)}</p>
-  </div>
-</section>
-
-<section id="pricing" class="band" aria-labelledby="pricing-h">
-  <div class="wrap narrow">
-    <h2 id="pricing-h">${esc(t.pricing.title)}</h2>
-    <p class="lead">${esc(t.pricing.body)}</p>
-    <p class="actions">${access("btn btn-primary")}</p>
-  </div>
-</section>
-
-<section id="faq" aria-labelledby="faq-h">
-  <div class="wrap narrow">
-    <h2 id="faq-h">${esc(t.faq.title)}</h2>
-    ${t.faq.items.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${rich(a)}</p></details>`).join("\n    ")}
-  </div>
-</section>
-</main>
-
-<footer class="bottom">
-  <div class="wrap bottom-in">
-    <div class="about">
-      <span class="brand">${mark}<span>Benchyard</span></span>
-      <p>${esc(t.footer.tagline)}</p>
-    </div>
-    ${t.footer.groups.map((g) => `<nav aria-label="${esc(g.title)}"><h2>${esc(g.title)}</h2><ul>${g.links.map((l) => `<li>${listed(l)}</li>`).join("")}</ul></nav>`).join("\n    ")}
-  </div>
-  <div class="wrap"><p class="legal">${esc(t.footer.legal)}</p></div>
-</footer>
-</body>
-</html>
-`;
+export const esc = (s) =>
+  String(s)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+const access = (t) =>
+  `mailto:${contactAddress}?subject=${encodeURIComponent(t.access.subject)}&amp;body=${encodeURIComponent(t.access.body.join("\n\n"))}`;
+const button = (t) =>
+  `<a class="btn btn-primary" href="${access(t)}">Request access <span aria-hidden="true">↗</span></a>`;
+export function shot(
+  at,
+  name,
+  alt,
+  w = 1440,
+  h = 900,
+  {
+    priority = false,
+    eager = false,
+    dark = true,
+    sizes = "(min-width: 1200px) 1120px, 92vw",
+  } = {},
+) {
+  const set = (theme) =>
+    `${at(`img/${name}-${theme}-${Math.round(w / 2)}.webp`)} ${Math.round(w / 2)}w, ${at(`img/${name}-${theme}-${w}.webp`)} ${w}w`;
+  return `<picture>${dark ? `<source type="image/webp" media="(prefers-color-scheme: dark)" srcset="${set("dark")}" sizes="${sizes}">` : ""}<img src="${at(`img/${name}-light-${Math.round(w / 2)}.webp`)}" srcset="${set("light")}" sizes="${sizes}" width="${w}" height="${h}" alt="${esc(alt)}" ${priority ? 'fetchpriority="high"' : ""} loading="${eager || priority ? "eager" : "lazy"}" decoding="async"></picture>`;
+}
+const phone = (content) =>
+  `<div class="iphone"><div class="phone-status" aria-hidden="true"><span>9:41</span><span class="phone-indicators">${statusIcons}</span></div><div class="island" aria-hidden="true"></div><div class="phone-screen">${content}</div><span class="phone-home" aria-hidden="true"></span></div>`;
+const cards = (items) =>
+  `<ul class="cards">${items.map(([title, body]) => `<li><h3>${esc(title)}</h3><p>${esc(body)}</p></li>`).join("")}</ul>`;
+const heading = (label, title, lead = "") =>
+  `<div class="section-heading"><p class="eyebrow">${label}</p><h2>${esc(title)}</h2>${lead ? `<p class="lead">${esc(lead)}</p>` : ""}</div>`;
+function shell(
+  t,
+  at,
+  body,
+  { path = "/", title = t.meta.title, description = t.meta.description } = {},
+) {
+  const nav = t.nav
+    .map(([id, label]) => `<li><a href="/#${id}">${label}</a></li>`)
+    .join("");
+  return `<!doctype html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f2f3ef" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#111513" media="(prefers-color-scheme: dark)"><link rel="canonical" href="${site}${path}"><meta property="og:url" content="${site}${path}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:site_name" content="Benchyard"><meta property="og:type" content="website"><meta property="og:image" content="${site}/social-card.png"><meta property="og:image:width" content="${card.width}"><meta property="og:image:height" content="${card.height}"><meta property="og:image:alt" content="Benchyard: persistent workspaces for coding agents"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="preload" as="font" type="font/woff2" crossorigin href="${at("fonts/bricolage-grotesque-latin-wght-normal.woff2")}"><link rel="preload" as="font" type="font/woff2" crossorigin href="${at("fonts/ibm-plex-sans-latin-400-normal.woff2")}"><link rel="stylesheet" href="${at("styles.css")}"></head><body>
+ <a class="skip" href="#main">Skip to content</a><header class="top"><div class="wrap top-in"><a class="brand" href="/" aria-label="Benchyard home">${mark}<span>Benchyard</span></a><nav class="desktop-nav" aria-label="Main navigation"><ul>${nav}</ul></nav><div class="top-actions"><a class="signin" href="${consoleAddress}">Sign in</a>${button(t)}</div><details class="mobile-nav"><summary aria-label="Open navigation">Menu</summary><nav aria-label="Mobile navigation"><ul>${nav}<li><a href="/guides/workspaces/">Guides</a></li><li><a href="${consoleAddress}">Sign in</a></li></ul></nav></details></div></header>
+ <main id="main" tabindex="-1">${body}</main><footer class="bottom"><div class="wrap footer-grid"><div><a href="/" class="brand">${mark}<span>Benchyard</span></a><p>Keep work moving.<br>Come back when it needs you.</p></div><nav aria-label="Product"><h2>Product</h2><ul>${nav}<li><a href="/#pricing">Access &amp; pricing</a></li></ul></nav><nav aria-label="Guides"><h2>Guides</h2><ul>${guides.map((g) => `<li><a href="/guides/${g.slug}/">${g.title}</a></li>`).join("")}<li><a href="/guides/workspaces/#demo-transcript">Demo transcript</a></li></ul></nav><nav aria-label="Contact"><h2>Get in touch</h2><ul><li><a href="${access(t)}">Request access</a></li><li><a href="mailto:${contactAddress}">${contactAddress}</a></li><li><a href="/#faq">Questions</a></li></ul></nav></div><p class="wrap legal">Claude, Codex, Cursor and Gemini are trademarks of their respective owners. Benchyard is not affiliated with or endorsed by their providers. Product information reviewed <time datetime="${reviewed}">${reviewed}</time>.</p></footer></body></html>`;
+}
+export function render(t, { asset } = {}) {
+  const at = (name) => "/" + asset(name);
+  const names = t.agents.items
+    .map(
+      ([id, name]) => `<span class="agent-name">${agentMark(id)}${name}</span>`,
+    )
+    .join("");
+  let desktop = shot(
+    at,
+    "session-approval",
+    "Codex session with three changed files, a readable filter diff and a test command awaiting approval.",
+    1440,
+    900,
+    {
+      priority: true,
+      sizes: "(min-width: 1200px) 980px, (min-width: 701px) 85vw, 92vw",
+    },
+  );
+  desktop = desktop.replace(
+    "<picture>",
+    `<picture>${["dark", "light"].map((theme) => `<source type="image/webp" media="(max-width: 700px)${theme === "dark" ? " and (prefers-color-scheme: dark)" : ""}" width="560" height="400" srcset="${at(`img/hero-detail-${theme}-280.webp`)} 280w, ${at(`img/hero-detail-${theme}-560.webp`)} 560w" sizes="92vw">`).join("")}`,
+  );
+  const mobile = shot(
+    at,
+    "phone-approval",
+    "The same Codex session on a phone, with Deny and Approve controls for npm test.",
+    390,
+    740,
+    { eager: true, sizes: "(min-width: 701px) 248px, 278px" },
+  );
+  return shell(
+    t,
+    at,
+    `
+ <section class="hero" id="top"><div class="wrap"><div class="hero-copy"><div><p class="eyebrow">${t.hero.eyebrow}</p><h1>${esc(t.hero.title)} <span class="hero-tagline">${esc(t.hero.tagline)}</span></h1></div><div><p class="lead hero-lead">${t.hero.lead}</p><p class="actions">${button(t)}<a class="btn btn-text" href="#demo"><span aria-hidden="true">▷</span> Watch the 60-second demo</a></p><p class="note">${t.hero.note}</p></div></div><div class="agent-strip" aria-label="Current agent integrations">${names}</div><figure class="stage"><div class="frame frame-desktop">${desktop}</div><div class="hero-phone">${phone(mobile)}</div><figcaption>One workspace, across your devices. Real interface with fictional demo data.</figcaption></figure></div></section>
+ <section id="demo" class="band"><div class="wrap">${heading("SEE IT IN ACTION", "From task to preview, wherever you are.", "Follow one task: add a status filter, approve the tests from a phone, and check the running app.")}<div class="video-frame"><video controls playsinline preload="none" width="1280" height="720" poster="${at("img/demo-poster-light-1920.webp")}" aria-label="Benchyard 60-second product demonstration" aria-describedby="demo-description"><source src="${at("media/benchyard-demo-720p.mp4")}" type="video/mp4"><track kind="subtitles" src="${at("media/benchyard-demo.en.vtt")}" srclang="en" label="English" default><p><a href="${at("media/benchyard-demo-720p.mp4")}">Download the demo video</a></p></video></div><p id="demo-description" class="caption">Recorded in Benchyard with demo data. Agent responses are scripted; timing is edited. The lock-screen notification is simulated. <a href="/guides/workspaces/#demo-transcript">Read the transcript</a>.</p><ol class="steps">${t.steps.map(([title, body], i) => `<li><span class="step-number">0${i + 1}</span><h3>${title}</h3><p>${body}</p></li>`).join("")}</ol></div></section>
+ <section id="workspace"><div class="wrap">${heading("THE WORKSPACE", t.workspace.title, t.workspace.lead)}${cards(t.workspace.items)}<figure class="frame workspace-shot">${shot(at, "workspaces", "Benchyard workspace list with the running issue-board workspace and its connected agent sessions.")}<figcaption>Keep projects and sessions in reach.</figcaption></figure><div class="locations"><h3>Choose where it runs.</h3><p>Available environments depend on your deployment and account.</p>${cards(t.workspace.locations)}</div><a class="text-link" href="/guides/workspaces/">Explore workspace behavior <span aria-hidden="true">→</span></a></div></section>
+ <section id="preview" class="band"><div class="wrap"><div class="split-heading">${heading("BROWSER PREVIEWS", "See the change working.", "Open a development server from Ports and try the app in your browser. Previews use a separate origin and require the workspace owner’s sign-in.")}<p class="aside-note">Available where previews are configured. Preview links are not public or team-sharing links.</p></div><div class="preview-grid"><figure class="frame">${shot(at, "ports", "The workspace Ports panel offers Open in browser for the running issue-board development server.", 1440, 900, { sizes: "(min-width: 900px) 540px, 92vw" })}<figcaption>01 &nbsp; Open the workspace port</figcaption></figure><figure class="frame">${shot(at, "preview", "The running issue-board application with All issues, In progress and Done filters and six fictional issues.", 1440, 900, { sizes: "(min-width: 900px) 540px, 92vw" })}<figcaption>02 &nbsp; Try the result</figcaption></figure></div></div></section>
+ <section id="agents"><div class="wrap">${heading("CURRENT INTEGRATIONS", t.agents.title, t.agents.lead)}<ul class="agent-cards">${t.agents.items.map(([id, name, body]) => `<li>${agentMark(id)}<h3>${name}</h3><p>${body}</p></li>`).join("")}</ul><div class="integration-future"><h3>Room for what comes next.</h3><p>${t.agents.future}</p></div><a class="text-link" href="/guides/agents/">Compare sign-ins and capabilities <span aria-hidden="true">→</span></a></div></section>
+ <section id="notifications" class="band"><div class="wrap">${heading("WHEN IT NEEDS YOU", "Step away. Stay in the loop.", "Choose notifications on your devices and actionable updates by email. Open the session when it is time to make a decision.")}<div class="notifications-grid"><article class="notification-card"><div class="notification-intro"><span class="eyebrow">DEVICE PUSH</span><h3>A tap back to your work.</h3><p>Approvals, completion, agent notes and workspace-ready updates. Enable push per device; on iPhone, add Benchyard to the Home Screen first.</p></div><div class="notification-visual">${lockScreenMarkup()}</div><p class="caption">Simulated lock-screen notifications. Open the session to approve.</p></article><article class="notification-card mail-card"><div class="notification-intro"><span class="eyebrow">EMAIL</span><h3>The decisions worth an email.</h3><p>Approvals, plans to review, failed turns and expired agent sign-ins. Completion and agent notes are not emailed.</p></div><div class="notification-visual"><div class="mail-surface"><div class="mail-toolbar"><span><span aria-hidden="true">←</span> &nbsp; Inbox</span><span>1 message</span></div><div class="mail-header"><h4>Approval needed</h4><div class="mail-sender"><span class="mail-avatar">${mark}</span><div><strong>Benchyard</strong><p>To: alice@example.com</p></div><time>9:41 AM</time></div></div><div class="mail-body"><div class="mail-message"><div class="mail-brand">${mark}<strong>Benchyard</strong></div><span class="mail-status">APPROVAL NEEDED</span><p><strong>Add a status filter</strong> needs your approval.</p><p>Open the session to review the request and decide whether to allow it.</p><span class="mail-button">Open session <span aria-hidden="true">↗</span></span><small>issue-board · Codex</small></div><p class="mail-delivery-note">An update for a decision that needs you.</p></div></div></div><p class="caption">Illustrated email using fictional data. Requires opt-in, a verified address and configured mail delivery.</p></article></div><a class="text-link" href="/guides/workspaces/#notifications">How notifications work <span aria-hidden="true">→</span></a></div></section>
+ <section id="teams"><div class="wrap">${heading("FOR TEAMS", t.teams.title, t.teams.lead)}${cards(t.teams.items)}<details class="settings-detail"><summary>See sign-in and security settings</summary><figure class="frame">${shot(at, "security", "Benchyard account settings for password, passkeys, two-factor authentication and signed-in devices.")}</figure></details></div></section>
+ <section id="security" class="band"><div class="wrap">${heading("SECURITY", t.security.title, t.security.lead)}${securityDiagram()}${cards(t.security.items)}<a class="text-link" href="/guides/security/">Read the security boundaries <span aria-hidden="true">→</span></a></div></section>
+ <section id="pricing"><div class="wrap access-panel"><div><p class="eyebrow">ACCESS &amp; PRICING</p><h2>Make room for your next task.</h2><p class="lead">Tell us how you work. We will discuss access, available environments and pricing before you start.</p><p class="note">Agent subscriptions and API usage are separate.</p></div><div>${button(t)}<p class="note">Already have access? <a href="${consoleAddress}">Sign in</a>.</p></div></div></section>
+ <section id="faq" class="band"><div class="wrap narrow">${heading("A FEW DETAILS", "Questions, answered.")}<div class="faq">${t.faq.map(([q, a]) => `<details><summary>${q}</summary><p>${esc(a)}</p></details>`).join("")}</div><p class="foot">Looking for details? Read the <a href="/guides/workspaces/">workspace guide</a>, <a href="/guides/agents/">agent guide</a> and <a href="/guides/security/">security guide</a>.</p></div></section>`,
+  );
+}
+export function renderGuide(t, g, { asset }) {
+  const table = (data) =>
+    `<div class="table-scroll" role="region" tabindex="0" aria-label="${esc(g.title)} comparison"><table><thead><tr>${data.head.map((h) => `<th scope="col">${esc(h)}</th>`).join("")}</tr></thead><tbody>${data.rows.map((row) => `<tr>${row.map((v, i) => (i ? `<td>${esc(v)}</td>` : `<th scope="row">${esc(v)}</th>`)).join("")}</tr>`).join("")}</tbody></table></div>`;
+  const body = `<article class="guide wrap"><header class="guide-header"><a class="text-link" href="/">← Back to Benchyard</a><p class="eyebrow">BENCHYARD GUIDES</p><h1>${g.title}</h1><p class="lead">${g.lead}</p><p class="note">Last reviewed <time datetime="${reviewed}">${reviewed}</time>. Availability depends on your deployment and account.</p></header><nav class="toc" aria-label="On this page"><strong>On this page</strong><ul>${g.sections.map((s) => `<li><a href="#${s.id}">${s.title}</a></li>`).join("")}</ul></nav><div class="guide-body">${g.sections.map((s) => `<section id="${s.id}"><h2>${s.title}</h2>${(s.paragraphs || []).map((p) => `<p>${esc(p)}</p>`).join("")}${s.id === "lifecycle" ? `<figure class="frame">${shot((name) => "/" + asset(name), "session-done", "Completed Codex task with actual filter test results and three file changes in the workspace.")}</figure>` : ""}${s.table ? table(s.table) : ""}${s.link ? `<p><a href="${s.link[0]}">${s.link[1]} →</a></p>` : ""}${s.transcript ? `<p><a href="/#demo">Watch the video on the homepage</a>.</p><ol class="transcript">${transcript.map(([time, title, text]) => `<li><span>${time}</span><div><h3>${title}</h3><p>${text}</p></div></li>`).join("")}</ol>` : ""}</section>`).join("")}<aside class="guide-next"><h2>Keep exploring</h2><ul>${guides
+    .filter((x) => x.slug !== g.slug)
+    .map((x) => `<li><a href="/guides/${x.slug}/">${x.title}</a></li>`)
+    .join("")}</ul>${button(t)}</aside></div></article>`;
+  return shell(t, (name) => "/" + asset(name), body, {
+    path: `/guides/${g.slug}/`,
+    title: g.title + " | Benchyard",
+    description: g.description,
+  });
 }

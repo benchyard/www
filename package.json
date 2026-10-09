@@ -6,13 +6,23 @@
   "scripts": {
     "build": "node build.mjs",
     "check": "node build.mjs && node check.mjs",
-    "dev": "node build.mjs && node serve.mjs"
+    "dev": "node build.mjs && node serve.mjs",
+    "test": "playwright test",
+    "format:check": "prettier --check content/*.mjs src/*.mjs src/*.css build.mjs check.mjs serve.mjs studio/*.mjs studio/fixture/*.mjs studio/fixture/board.html tests/*.mjs playwright.config.mjs",
+    "demo:start": "bash studio/start.sh",
+    "demo:capture": "node studio/capture.mjs",
+    "demo:render": "node studio/render-video.mjs",
+    "measure": "node studio/measure.mjs",
+    "verify:media": "node studio/verify-media.mjs"
   },
   "engines": {
     "node": ">=20"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.64.0",
     "lightningcss": "^1.33.0",
+    "prettier": "^3.9.9",
     "sharp": "^0.35.5"
   }
 }

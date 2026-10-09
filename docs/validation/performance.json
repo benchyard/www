@@ -1,0 +1,59 @@
+{
+  "method": "Local Chromium, cold browser context, 150ms network latency, 1.6Mbps download, 4x CPU throttle; uncompressed asset sizes; light theme. Lab data, not field p75 or INP.",
+  "results": [
+    {
+      "device": "mobile",
+      "run": 1,
+      "lcpMs": 960,
+      "cls": 0.0002,
+      "initialUncompressedResourceBytes": 289791,
+      "selectedPageImageBytes": 232024,
+      "videoFetchedBeforePlay": false
+    },
+    {
+      "device": "mobile",
+      "run": 2,
+      "lcpMs": 968,
+      "cls": 0.0002,
+      "initialUncompressedResourceBytes": 289791,
+      "selectedPageImageBytes": 232024,
+      "videoFetchedBeforePlay": false
+    },
+    {
+      "device": "mobile",
+      "run": 3,
+      "lcpMs": 972,
+      "cls": 0.0002,
+      "initialUncompressedResourceBytes": 289791,
+      "selectedPageImageBytes": 232024,
+      "videoFetchedBeforePlay": false
+    },
+    {
+      "device": "desktop",
+      "run": 1,
+      "lcpMs": 1860,
+      "cls": 0.0005,
+      "initialUncompressedResourceBytes": 334529,
+      "selectedPageImageBytes": 326052,
+      "videoFetchedBeforePlay": false
+    },
+    {
+      "device": "desktop",
+      "run": 2,
+      "lcpMs": 1844,
+      "cls": 0.0005,
+      "initialUncompressedResourceBytes": 334529,
+      "selectedPageImageBytes": 326052,
+      "videoFetchedBeforePlay": false
+    },
+    {
+      "device": "desktop",
+      "run": 3,
+      "lcpMs": 1852,
+      "cls": 0.0005,
+      "initialUncompressedResourceBytes": 334529,
+      "selectedPageImageBytes": 326052,
+      "videoFetchedBeforePlay": false
+    }
+  ]
+}

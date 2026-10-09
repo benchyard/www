@@ -1,0 +1,199 @@
+/* Shared by the homepage and the simulated notification scene in the demo. */
+.ios-lock {
+  container-type: inline-size;
+  width: 100%;
+  aspect-ratio: 390 / 844;
+  border-radius: 13% / 6%;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px #758c8980,
+    0 18px 45px #0002;
+  isolation: isolate;
+}
+.ios-screen {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  color: #fff;
+  font:
+    400 3.85cqw / 1.28 -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    sans-serif;
+  letter-spacing: -0.02em;
+  background: #234e57;
+}
+.ios-wallpaper {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 5% 0%, #75a5a7, transparent 58%),
+    linear-gradient(155deg, #436d7b 5%, #0f3346 47%, #377e82 70%, #b3d0c1);
+}
+.ios-wallpaper::before {
+  content: "";
+  position: absolute;
+  width: 170%;
+  height: 82%;
+  top: 31%;
+  left: -62%;
+  transform: rotate(-32deg);
+  border-radius: 48%;
+  background: linear-gradient(
+    90deg,
+    #102d3f 10%,
+    #234e61 65%,
+    #73a8a4 96%,
+    #cae3ce
+  );
+  box-shadow: 8px -2px 30px #d7f5e72b;
+}
+.ios-wallpaper::after {
+  content: "";
+  position: absolute;
+  width: 160%;
+  height: 65%;
+  left: 30%;
+  top: 58%;
+  transform: rotate(-38deg);
+  border-radius: 48%;
+  background: linear-gradient(90deg, #9dcabe, #427e81 12%, #183e54 65%);
+  box-shadow: -5px 0 20px #d5f7e345;
+}
+.ios-island {
+  position: absolute;
+  top: 3.5cqw;
+  left: 35%;
+  width: 30%;
+  height: 8cqw;
+  border-radius: 8cqw;
+  background: #090c0e;
+}
+.ios-indicators {
+  position: absolute;
+  right: 7%;
+  top: 6.4cqw;
+  width: 18%;
+}
+.ios-indicators svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.ios-clock {
+  position: absolute;
+  top: 17cqw;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+.ios-padlock svg {
+  width: 5cqw;
+  height: 5cqw;
+  margin: 0 auto 2cqw;
+}
+.ios-date {
+  font-size: 5.2cqw;
+  font-weight: 500;
+}
+.ios-time {
+  font-size: 26cqw;
+  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.055em;
+  padding-right: 1.5cqw;
+}
+.ios-notifications {
+  position: absolute;
+  bottom: 34cqw;
+  left: 3%;
+  right: 3%;
+  display: grid;
+  gap: 2cqw;
+}
+.ios-notification {
+  display: flex;
+  gap: 2.6cqw;
+  align-items: center;
+  padding: 3.4cqw;
+  border-radius: 6.2cqw;
+  color: #132527;
+  background: #e3eeebd9;
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  box-shadow:
+    inset 0 1px #ffffff90,
+    0 2px 8px #062c3520;
+}
+.ios-app-icon {
+  flex: 0 0 10.5cqw;
+  height: 10.5cqw;
+  border-radius: 2.5cqw;
+  background: #f2f3ef;
+  color: #1f6b6b;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 1px 3px #1232;
+}
+.ios-app-icon .mark {
+  width: 9cqw;
+  height: 9cqw;
+  fill: currentColor;
+}
+.ios-notification-copy {
+  flex: 1;
+  min-width: 0;
+}
+.ios-notification-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.3cqw;
+}
+.ios-notification-heading b {
+  font-size: 3.65cqw;
+  font-weight: 600;
+}
+.ios-notification-heading span {
+  color: #435b5c;
+  font-size: 3cqw;
+}
+.ios-notification-copy strong {
+  display: block;
+  font:
+    600 3.85cqw / 1.28 -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    sans-serif;
+  letter-spacing: -0.02em;
+}
+.ios-utilities {
+  position: absolute;
+  bottom: 12cqw;
+  left: 12%;
+  right: 12%;
+  display: flex;
+  justify-content: space-between;
+}
+.ios-utilities span {
+  display: grid;
+  place-items: center;
+  width: 12.8cqw;
+  height: 12.8cqw;
+  border-radius: 50%;
+  background: #0c253d66;
+  box-shadow: inset 0 0 0 1px #ffffff18;
+}
+.ios-utilities svg {
+  width: 6cqw;
+  height: 6cqw;
+}
+.ios-home {
+  position: absolute;
+  bottom: 2.3cqw;
+  left: 33%;
+  width: 34%;
+  height: 1.25cqw;
+  border-radius: 2cqw;
+  background: #fff;
+}
