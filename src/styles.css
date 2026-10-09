@@ -82,13 +82,17 @@ section { padding: clamp(56px, 9vw, 104px) 0; }
 .top nav ul { display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
 .top nav a { display: block; padding: 8px 10px; border-radius: 8px; color: var(--muted); text-decoration: none; font-size: 0.95rem; font-weight: 500; white-space: nowrap; }
 .top nav a:hover { color: var(--fg); background: var(--surface-2); }
-@media (max-width: 980px) { .top nav { display: none; } .top .btn { margin-left: auto; } }
+.top-actions { display: flex; align-items: center; gap: 6px; flex: none; }
+.signin { display: inline-flex; align-items: center; min-height: 38px; padding: 0 10px; border-radius: 8px; color: var(--fg); text-decoration: none; font-size: 0.95rem; font-weight: 600; white-space: nowrap; }
+.signin:hover { background: var(--surface-2); }
+@media (max-width: 1100px) { .top nav { display: none; } .top-actions { margin-left: auto; } }
+@media (max-width: 420px) { .top-in { gap: 6px; } .top-actions { gap: 0; } .top .brand { font-size: 1.1rem; gap: 6px; } .top .mark { width: 26px; height: 26px; } .signin { padding: 0 8px; font-size: 0.9rem; } .top .btn-quiet { padding: 0 10px; font-size: 0.9rem; } }
 
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px; border-radius: 10px; border: 1px solid var(--line-strong); background: var(--surface); color: var(--fg); font-weight: 600; text-decoration: none; }
 .btn:hover { border-color: var(--fg); }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
 .btn-primary:hover { border-color: var(--accent); filter: brightness(1.08); }
-.btn-quiet { min-height: 38px; padding: 0 14px; font-size: 0.95rem; }
+.btn-quiet { min-height: 38px; padding: 0 14px; font-size: 0.95rem; white-space: nowrap; }
 
 /* The first screen */
 .hero { padding-top: clamp(48px, 8vw, 96px); padding-bottom: clamp(40px, 6vw, 72px); }
@@ -128,16 +132,6 @@ section:not(.band) .card { background: var(--surface); }
 /* What it doesn't do */
 .plain { margin-top: 24px; border: 1px solid var(--warn); background: var(--warn-soft); border-radius: 14px; padding: 22px 24px; }
 .plain ul { margin: 12px 0 0; padding-left: 1.2em; display: grid; gap: 8px; }
-.plain p { margin-top: 14px; }
-.plain a { color: var(--fg); }
-.more { font-weight: 600; }
-.more::after { content: " \2192"; }
-
-/* Installing */
-pre { margin: clamp(24px, 4vw, 36px) 0 0; background: var(--term-bg); color: var(--term-fg); border-radius: 14px; padding: 20px 22px; overflow-x: auto; font: 400 0.9rem/1.65 var(--mono); border: 1px solid var(--line); }
-pre code { background: none; padding: 0; font: inherit; overflow-wrap: normal; }
-.notes { margin: 20px 0 0; padding-left: 1.2em; color: var(--muted); display: grid; gap: 6px; max-width: 70ch; }
-.links { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 10px; }
 
 /* Questions */
 details { border-top: 1px solid var(--line); padding: 4px 0; }

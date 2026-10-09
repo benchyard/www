@@ -1,10 +1,13 @@
 // Checks the built pages without a browser: every link inside the page
-// leads to something that is there, every picture has its file, its size
-// and a text, headings don't skip a level, ids are unique, and nothing is
-// loaded from another site. Run after `npm run build`.
+// leads to something that is there (or is the console, or a mail to the
+// contact address), every picture has its file, its size and a text,
+// headings don't skip a level, ids are unique, nothing is loaded from another
+// site, and the page names no repository and doesn't call the product open
+// source. Run after `npm run build`.
 import { readFile, readdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { consoleAddress, contactAddress, site } from "./src/page.mjs";
 
 const root = fileURLToPath(new URL("./dist/", import.meta.url));
 const problems = [];
@@ -20,7 +23,8 @@ for (const page of pages) {
   for (const id of ids) if (ids.filter((x) => x === id).length > 1) say(`id "${id}" is used more than once`);
   for (const [, href] of html.matchAll(/<a\b[^>]*\shref="([^"]+)"/g)) {
     if (href.startsWith("#")) { if (!ids.includes(href.slice(1))) say(`link to ${href}, which is not on the page`); }
-    else if (!/^https:\/\//.test(href)) say(`link "${href}" is neither on the page nor an https address`);
+    else if (href.startsWith("mailto:")) { if (href.split("?")[0] !== `mailto:${contactAddress}`) say(`mail link "${href}" is not to ${contactAddress}`); }
+    else if (href !== consoleAddress && !href.startsWith(`${site}/`)) say(`link "${href}" leads somewhere other than the page, the console or the contact address`);
   }
   for (const [tag] of html.matchAll(/<(?:img|source|link|script)\b[^>]*>/g)) {
     const src = /\s(?:src|srcset|href)="([^"]+)"/.exec(tag)?.[1];
@@ -42,6 +46,11 @@ for (const page of pages) {
   if ((html.match(/<h1\b/g) || []).length !== 1) say("there must be exactly one h1");
   if (!/<html lang="[a-zA-Z-]+"/.test(html)) say("the page doesn't say its language");
   if (/<script\b/.test(html)) say("the page has a script; it is meant to have none");
+  // The product's code is not public: the page links to no repository and
+  // doesn't say otherwise.
+  if (/github\.com/i.test(html)) say("the page contains github.com");
+  if (/open[\s-]*source/i.test(html)) say('the page contains the words "open source"');
+  if (/\u2026/.test(html)) say("the page has the single ellipsis character; write three dots, or none");
 }
 if (problems.length) { console.error(problems.join("\n")); process.exit(1); }
 console.log(`${pages.length} page(s) checked: nothing wrong`);

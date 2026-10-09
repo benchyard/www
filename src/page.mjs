@@ -1,9 +1,29 @@
 // The page as a function of its words (content/<language>.mjs). Plain
 // strings: no framework, nothing to hydrate.
 
+// The addresses the page points at. Each is written here once.
+//
+// The address the site is served at: the one canonical and social-card
+// addresses are made from. benchyard.com sends people on to it.
+export const site = "https://www.benchyard.com";
+// The hosted console, where people who have an account sign in.
+export const consoleAddress = "https://console.benchyard.com";
+// Where "Request access" and "get in touch" send mail.
+// TO CONFIRM BEFORE PUBLISHING: the owner must make sure this mailbox exists
+// and is read. Every button on the page depends on it.
+export const contactAddress = "hello@benchyard.com";
+
+// A mailto: link with a subject and, if given, lines of text to start from.
+const mailto = (subject, lines = []) =>
+  `mailto:${contactAddress}?subject=${encodeURIComponent(subject)}${lines.length ? `&body=${encodeURIComponent(lines.join("\r\n\r\n") + "\r\n")}` : ""}`;
+
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-// `code` in a sentence becomes <code>; everything else is escaped.
-const rich = (s) => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>");
+// `code` in a sentence becomes <code> and {contact} the contact address as a
+// link; everything else is escaped.
+const rich = (s) =>
+  esc(s)
+    .replace(/`([^`]+)`/g, "<code>$1</code>")
+    .replace(/\{contact\}/g, `<a href="mailto:${contactAddress}">${contactAddress}</a>`);
 const ext = (href) => (/^https?:/.test(href) ? ' rel="noopener"' : "");
 const link = ([href, text], cls = "") => `<a href="${esc(href)}"${cls ? ` class="${cls}"` : ""}${ext(href)}>${esc(text)}</a>`;
 
@@ -17,9 +37,12 @@ const shot = (base, name, alt, w, h, { eager = false, dark = true, cls = "" } = 
 </picture>`;
 
 export function render(t, { base = "", languages = [] } = {}) {
-  // The address the site is served at: the one canonical and social-card
-  // addresses are made from. benchyard.com sends people on to it.
-  const site = "https://www.benchyard.com";
+  // The two things a visitor can do: ask for access (a mail), or sign in.
+  const access = (cls) => link([mailto(t.access.subject, t.access.body), t.access.label], cls);
+  const signIn = (cls) => link([consoleAddress, t.signIn], cls);
+  // In the content, a link's address may be one of these names.
+  const named = { "@access": mailto(t.access.subject, t.access.body), "@console": consoleAddress, "@contact": `mailto:${contactAddress}` };
+  const listed = ([href, text]) => link([named[href] ?? href, text === "@contact" ? contactAddress : text]);
   return `<!doctype html>
 <html lang="${t.lang}" dir="${t.dir}">
 <head>
@@ -56,7 +79,7 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
         ${t.nav.items.map((i) => `<li>${link(i)}</li>`).join("\n        ")}
       </ul>
     </nav>
-    ${link([t.source, t.nav.source], "btn btn-quiet")}
+    <div class="top-actions">${signIn("signin")} ${access("btn btn-primary btn-quiet")}</div>
   </div>
 </header>
 
@@ -65,7 +88,7 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
   <div class="wrap">
     <h1>${esc(t.hero.title)}</h1>
     <p class="lead">${esc(t.hero.lead)}</p>
-    <p class="actions">${link(t.hero.primary, "btn btn-primary")} ${link(t.hero.secondary, "btn")}</p>
+    <p class="actions">${access("btn btn-primary")} ${signIn("btn")}</p>
     <p class="note">${esc(t.hero.note)}</p>
     <figure class="stage">
       <div class="frame frame-desktop">${shot(base, "session-approval", t.hero.desktopAlt, 2560, 1600, { eager: true })}</div>
@@ -120,7 +143,6 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
       <ul>
         ${t.security.plain.items.map((i) => `<li>${rich(i)}</li>`).join("\n        ")}
       </ul>
-      <p>${link([t.security.plain.more[1], t.security.plain.more[0]], "more")}</p>
     </aside>
   </div>
 </section>
@@ -146,17 +168,10 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
   </div>
 </section>
 
-<section id="install" aria-labelledby="install-h">
-  <div class="wrap">
-    <h2 id="install-h">${esc(t.install.title)}</h2>
-    <p class="lead">${esc(t.install.lead)}</p>
-    <pre tabindex="0" aria-label="${esc(t.install.codeLabel)}"><code>${esc(t.install.code)}</code></pre>
-    <ul class="notes">
-      ${t.install.notes.map((n) => `<li>${rich(n)}</li>`).join("\n      ")}
-    </ul>
-    <ul class="links">
-      ${t.install.links.map(([text, href]) => `<li>${link([href, text], "more")}</li>`).join("\n      ")}
-    </ul>
+<section id="own-cluster" aria-labelledby="own-cluster-h">
+  <div class="wrap narrow">
+    <h2 id="own-cluster-h">${esc(t.ownCluster.title)}</h2>
+    <p class="lead">${rich(t.ownCluster.body)}</p>
   </div>
 </section>
 
@@ -164,6 +179,7 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
   <div class="wrap narrow">
     <h2 id="pricing-h">${esc(t.pricing.title)}</h2>
     <p class="lead">${esc(t.pricing.body)}</p>
+    <p class="actions">${access("btn btn-primary")}</p>
   </div>
 </section>
 
@@ -181,7 +197,7 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
       <span class="brand">${mark}<span>Benchyard</span></span>
       <p>${esc(t.footer.tagline)}</p>
     </div>
-    ${t.footer.groups.map((g) => `<nav aria-label="${esc(g.title)}"><h2>${esc(g.title)}</h2><ul>${g.links.map((l) => `<li>${link(l)}</li>`).join("")}</ul></nav>`).join("\n    ")}
+    ${t.footer.groups.map((g) => `<nav aria-label="${esc(g.title)}"><h2>${esc(g.title)}</h2><ul>${g.links.map((l) => `<li>${listed(l)}</li>`).join("")}</ul></nav>`).join("\n    ")}
   </div>
   <div class="wrap"><p class="legal">${esc(t.footer.legal)}</p></div>
 </footer>
