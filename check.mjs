@@ -1,12 +1,15 @@
 // Checks the built pages without a browser: every link inside the page
 // leads to something that is there (or is the console, or a mail to the
 // contact address), every picture is WebP and has its file, its size and a
-// text, the social card is there under its fixed name,
+// text, the social card is there under its fixed name, everything a page
+// loads that can change (stylesheet, fonts, pictures) is in assets/ under a
+// name whose hash is its content's, no file in dist/ is left over,
 // headings don't skip a level, ids are unique, nothing is loaded from another
 // site, and the page names no repository and doesn't call the product open
 // source. Run after `npm run build`.
+import { createHash } from "node:crypto";
 import { readFile, readdir, stat } from "node:fs/promises";
-import { join } from "node:path";
+import { join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { consoleAddress, contactAddress, site } from "./src/page.mjs";
 
@@ -16,6 +19,20 @@ const pages = [];
 for (const name of await readdir(root, { recursive: true })) if (name.endsWith("index.html")) pages.push(name);
 
 const exists = async (p) => stat(p).then(() => true, () => false);
+// Files that keep their names from one build to the next: pages, what other
+// sites and browsers ask for by name, and what public/ holds for people.
+const fixed = new Set(["robots.txt", "sitemap.xml", "_headers", "favicon.ico", "favicon.svg", "favicon-96x96.png", "apple-touch-icon.png", "icon-512.png", "social-card.png", "fonts/LICENSES.md"]);
+// Every file some page or the stylesheet loads, as a path under dist/.
+const loaded = new Set();
+const hashedName = /^assets\/[^/]+\.([0-9a-f]{8})\.[a-z0-9]+$/;
+// A file that can change must be in assets/ under its content's hash.
+async function changing(path, say) {
+  const m = hashedName.exec(path);
+  if (!m) return say(`${path} can change and has no hash of its content in its name`);
+  if (!(await exists(join(root, path)))) return; // said elsewhere
+  const is = createHash("sha256").update(await readFile(join(root, path))).digest("hex").slice(0, 8);
+  if (is !== m[1]) say(`${path} is named for content it no longer has (its hash is ${is})`);
+}
 for (const page of pages) {
   const html = await readFile(join(root, page), "utf8");
   const dir = join(root, page, "..");
@@ -40,6 +57,10 @@ for (const page of pages) {
     for (const src of loads) {
       if (/^(https?:)?\/\//.test(src)) say(`loads ${src} from another site`);
       else if (!(await exists(join(dir, src)))) say(`${src} is missing`);
+      const path = relative(root, join(dir, src));
+      loaded.add(path);
+      // The icons keep their names; a stylesheet, a font and a picture don't.
+      if (!fixed.has(path)) await changing(path, say);
       // The pictures the page shows are WebP (the build makes them).
       if (/^<(img|source)/.test(tag) && !src.endsWith(".webp")) say(`picture ${src} is not WebP`);
     }
@@ -67,6 +88,35 @@ for (const page of pages) {
   if (/github\.com/i.test(html)) say("the page contains github.com");
   if (/open[\s-]*source/i.test(html)) say('the page contains the words "open source"');
   if (/\u2026/.test(html)) say("the page has the single ellipsis character; write three dots, or none");
+}
+// The stylesheets' own files (fonts), which are beside them in assets/.
+for (const sheet of [...loaded].filter((p) => p.endsWith(".css"))) {
+  if (!(await exists(join(root, sheet)))) continue;
+  const css = await readFile(join(root, sheet), "utf8");
+  const say = (m) => problems.push(`${sheet}: ${m}`);
+  for (const [, , src] of css.matchAll(/url\((["']?)([^"')]+)\1\)/g)) {
+    if (/^(https?:)?\/\//.test(src)) { say(`loads ${src} from another site`); continue; }
+    if (src.startsWith("data:")) continue;
+    const path = relative(root, join(root, sheet, "..", src));
+    if (!(await exists(join(root, path)))) say(`${src} is missing`);
+    loaded.add(path);
+    await changing(path, say);
+  }
+}
+// Nothing is published that nothing uses: an asset no page loads is a
+// leftover, and a file outside assets/ is a page or has a fixed name.
+for (const name of await readdir(root, { recursive: true })) {
+  const path = name.split("\\").join("/");
+  if (!(await stat(join(root, path))).isFile()) continue;
+  if (path.endsWith("index.html") || fixed.has(path) || loaded.has(path)) continue;
+  problems.push(`${path} is in dist/ and nothing loads it`);
+}
+// The rules for hosts that read _headers cover the pages and assets/.
+const headers = await readFile(join(root, "_headers"), "utf8").catch(() => "");
+if (!/^\/assets\/\*\n {2}Cache-Control: public, max-age=31536000, immutable$/m.test(headers)) problems.push("_headers doesn't let assets/ be kept for a year");
+for (const page of pages) {
+  const at = `/${page}`;
+  if (!headers.includes(`${at}\n  Cache-Control: no-cache\n`)) problems.push(`_headers doesn't say ${at} is asked for again each time`);
 }
 if (problems.length) { console.error(problems.join("\n")); process.exit(1); }
 console.log(`${pages.length} page(s) checked: nothing wrong`);

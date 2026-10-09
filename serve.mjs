@@ -14,7 +14,10 @@ createServer(async (req, res) => {
   if (path.endsWith("/")) path += "index.html";
   try {
     const body = await readFile(join(root, path));
-    res.writeHead(200, { "content-type": types[extname(path)] || "application/octet-stream" }).end(body);
+    // As a host should: what is in assets/ is named by its content and can
+    // be kept for a year; everything else is asked for again each time.
+    const cache = path.startsWith("/assets/") ? "public, max-age=31536000, immutable" : "no-cache";
+    res.writeHead(200, { "content-type": types[extname(path)] || "application/octet-stream", "cache-control": cache }).end(body);
   } catch {
     res.writeHead(404, { "content-type": "text/plain" }).end("not found");
   }

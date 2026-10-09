@@ -6,17 +6,18 @@ A static site: one HTML page per language, one stylesheet, pictures and fonts. N
 
 ## Why this stack
 
-Plain HTML and CSS, put together by a small Node script. Its one dependency is `sharp`, a development dependency that makes the pictures while building; the page itself needs nothing and the host that serves it installs nothing. The page is a single document whose words change far more often than its structure; a framework would add a build chain and a dependency tree to maintain for no gain in what a visitor gets. If the site grows to many pages (docs, a blog), moving `src/page.mjs` and `content/` into Astro is a small step.
+Plain HTML and CSS, put together by a small Node script. It has two development dependencies, used only while building: `sharp` makes the pictures and `lightningcss` minifies the stylesheet. The page itself needs nothing, and the host that serves it installs nothing. The page is a single document whose words change far more often than its structure; a framework would add a build chain and a dependency tree to maintain for no gain in what a visitor gets. If the site grows to many pages (docs, a blog), moving `src/page.mjs` and `content/` into Astro is a small step.
 
 ## Run, build, check
 
 Needs Node 20 or later.
 
 ```sh
-npm ci          # once: the picture library the build uses
+npm ci          # once: the two libraries the build uses
 npm run dev     # build, then serve dist/ at http://localhost:4321 (PORT=... to change)
 npm run build   # build into dist/
 npm run check   # build, then check links, pictures, headings, that nothing comes from another site,
+                # that changing files are named by their content and nothing is left over,
                 # and that the page names no repository and doesn't call the product open source
 ```
 
@@ -24,7 +25,22 @@ npm run check   # build, then check links, pictures, headings, that nothing come
 
 `dist/` is the whole site: upload it to any static host (Cloudflare Pages, Netlify, an S3 bucket behind a CDN, nginx). The build command is `npm run build` and the output folder is `dist`.
 
-Worth setting at the host: long cache lifetimes for `fonts/` and `img/`, a short one for `index.html` and `styles.css` (their names don't change between builds).
+Set the two cache rules below at the host ("Caching").
+
+## Caching
+
+A file that can change is published in `dist/assets/` under a name that carries a hash of its content (`styles.3682ede8.css`, and likewise each font and picture); the pages and the stylesheet refer to those names, and the stylesheet is minified. A changed file is therefore a new address, and an old page never meets a new stylesheet. Two rules for the host:
+
+| What | Header |
+|---|---|
+| `/assets/*` | `Cache-Control: public, max-age=31536000, immutable` |
+| everything else (the pages, `robots.txt`, `sitemap.xml`, the icons, `social-card.png`) | `Cache-Control: no-cache` (kept, and asked about each time) |
+
+- `dist/_headers` says exactly this for the hosts that read such a file (Cloudflare Pages, Netlify). Any other host ignores it and is set by hand (nginx: a `location /assets/` block with the first header; S3 behind a CDN: the header as object metadata on `assets/`).
+- The files outside `assets/` keep their names because something asks for them by name: browsers (`favicon.ico`), crawlers (`robots.txt`), other sites (`social-card.png`, whose address they keep: to make them fetch a new card, give it a new name in `src/pictures.mjs` and `src/page.mjs` by hand).
+- The build empties `dist/` first, so old assets don't pile up; a host that uploads `dist/` as a whole (Pages, Netlify) drops them too. One that only adds files (a bucket synced without deleting) keeps old assets, which harms nothing.
+- The page's HTML is not minified: it is about 6 KB compressed, and the host's own gzip or Brotli does more than removing spaces would. The page has no JavaScript.
+- `npm run dev` sends the same two headers, to see the behaviour locally.
 
 ## Where things are
 
@@ -33,7 +49,8 @@ Worth setting at the host: long cache lifetimes for `fonts/` and `img/`, a short
 | `content/en.mjs` | Every word on the page. Edit text here, not in the template |
 | `src/page.mjs` | The page's structure, as a function of the words, and the three addresses it points at: `site`, `consoleAddress`, `contactAddress` |
 | `src/styles.css` | The stylesheet. Colours and fonts are the app's own; light and dark follow the visitor's system |
-| `public/` | Copied as it is: fonts (`fonts/LICENSES.md` has their licences), icons, `robots.txt`, `sitemap.xml` |
+| `src/fonts/` | The fonts (Latin subsets), published in `assets/` under hashed names |
+| `public/` | Copied as it is, names kept: icons, `robots.txt`, `sitemap.xml`, the fonts' licences (`fonts/LICENSES.md`) |
 | `src-img/` | The pictures' originals: PNG screenshots of the app. Not published |
 | `src/pictures.mjs` | Makes what is published from them while building: see "The pictures" |
 | `build.mjs`, `serve.mjs`, `check.mjs` | Build, local preview, checks |
@@ -49,7 +66,7 @@ The two things a visitor can do are "Request access" (a mail to `contactAddress`
 
 ## Adding a language
 
-Copy `content/en.mjs` to `content/<code>.mjs`, translate the values (keys and structure stay), and add the code to `languages` in `build.mjs`. The first language is served at `/`, the others at `/<code>/`. The fonts in `public/fonts` are Latin subsets: a language in another script needs its subsets added (or falls back to the system's fonts, which the stylesheet allows).
+Copy `content/en.mjs` to `content/<code>.mjs`, translate the values (keys and structure stay), and add the code to `languages` in `build.mjs`. The first language is served at `/`, the others at `/<code>/`. The fonts in `src/fonts` are Latin subsets: a language in another script needs its subsets added (or falls back to the system's fonts, which the stylesheet allows).
 
 ## The screenshots
 

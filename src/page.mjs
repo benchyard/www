@@ -33,18 +33,24 @@ const mark = `<svg class="mark" viewBox="0 0 44 44" aria-hidden="true" focusable
 
 // A screenshot in the theme the visitor's system asks for, as WebP in two
 // sizes (the file's own, for screens with two device pixels to one, and half
-// of it; the build makes both, src/pictures.mjs). `sizes` says how wide the picture is shown,
-// so the browser takes the smaller file where that is enough. Width and
-// height are the file's own, so the page doesn't move as it loads.
-const shot = (base, name, alt, w, h, { eager = false, dark = true, cls = "", sizes = "(min-width: 1220px) 1120px, 94vw" } = {}) => {
-  const set = (theme) => `${base}img/${name}-${theme}-${w / 2}.webp ${w / 2}w, ${base}img/${name}-${theme}-${w}.webp ${w}w`;
+// of it; the build makes both, src/pictures.mjs). `sizes` says how wide the
+// picture is shown, so the browser takes the smaller file where that is
+// enough. Width and height are the file's own, so the page doesn't move as
+// it loads. `at` gives a file's published address.
+const shot = (at, name, alt, w, h, { eager = false, dark = true, cls = "", sizes = "(min-width: 1220px) 1120px, 94vw" } = {}) => {
+  const file = (theme, width) => at(`img/${name}-${theme}-${width}.webp`);
+  const set = (theme) => `${file(theme, w / 2)} ${w / 2}w, ${file(theme, w)} ${w}w`;
   return `<picture>
   ${dark ? `<source type="image/webp" srcset="${set("dark")}" sizes="${sizes}" media="(prefers-color-scheme: dark)">` : ""}
-  <img src="${base}img/${name}-light-${w / 2}.webp" srcset="${set("light")}" sizes="${sizes}" alt="${esc(alt)}" width="${w}" height="${h}"${cls ? ` class="${cls}"` : ""} ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">
+  <img src="${file("light", w / 2)}" srcset="${set("light")}" sizes="${sizes}" alt="${esc(alt)}" width="${w}" height="${h}"${cls ? ` class="${cls}"` : ""} ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async">
 </picture>`;
 };
 
-export function render(t, { base = "", languages = [] } = {}) {
+// `asset` gives the name a changing file (the stylesheet, a font, a picture)
+// is published under, which carries a hash of its content; the build passes
+// it. Files whose names are fixed (the icons) are named as they are.
+export function render(t, { base = "", languages = [], asset = (name) => name } = {}) {
+  const at = (name) => base + asset(name);
   // The two things a visitor can do: ask for access (a mail), or sign in.
   const access = (cls) => link([mailto(t.access.subject, t.access.body), t.access.label], cls);
   const signIn = (cls) => link([consoleAddress, t.signIn], cls);
@@ -74,10 +80,10 @@ export function render(t, { base = "", languages = [] } = {}) {
 <link rel="icon" href="${base}favicon.svg" type="image/svg+xml">
 <link rel="icon" href="${base}favicon.ico" sizes="32x32">
 <link rel="apple-touch-icon" href="${base}apple-touch-icon.png">
-<link rel="preload" href="${base}fonts/bricolage-grotesque-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="${base}fonts/ibm-plex-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${at("fonts/bricolage-grotesque-latin-wght-normal.woff2")}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="${at("fonts/ibm-plex-sans-latin-400-normal.woff2")}" as="font" type="font/woff2" crossorigin>
 ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.href}">`).join("\n")}
-<link rel="stylesheet" href="${base}styles.css">
+<link rel="stylesheet" href="${at("styles.css")}">
 </head>
 <body>
 <a class="skip" href="#main">${esc(t.skip)}</a>
@@ -101,8 +107,8 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
     <p class="actions">${access("btn btn-primary")} ${signIn("btn")}</p>
     <p class="note">${esc(t.hero.note)}</p>
     <figure class="stage">
-      <div class="frame frame-desktop">${shot(base, "session-approval", t.hero.desktopAlt, 2560, 1600, { eager: true, sizes: "(min-width: 1060px) 980px, 94vw" })}</div>
-      <div class="frame frame-phone">${shot(base, "phone-approval", t.hero.phoneAlt, 1170, 1992, { eager: true, sizes: "(min-width: 721px) min(24vw, 260px), min(68vw, 300px)" })}</div>
+      <div class="frame frame-desktop">${shot(at, "session-approval", t.hero.desktopAlt, 2560, 1600, { eager: true, sizes: "(min-width: 1060px) 980px, 94vw" })}</div>
+      <div class="frame frame-phone">${shot(at, "phone-approval", t.hero.phoneAlt, 1170, 1992, { eager: true, sizes: "(min-width: 721px) min(24vw, 260px), min(68vw, 300px)" })}</div>
       <figcaption>${esc(t.hero.caption)}</figcaption>
     </figure>
   </div>
@@ -115,7 +121,7 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
     <ol class="steps">
       ${t.how.steps.map((s) => `<li><h3>${esc(s.title)}</h3><p>${rich(s.body)}</p></li>`).join("\n      ")}
     </ol>
-    <div class="frame">${shot(base, "session-done", t.how.shotAlt, 2560, 1600, { dark: false })}</div>
+    <div class="frame">${shot(at, "session-done", t.how.shotAlt, 2560, 1600, { dark: false })}</div>
   </div>
 </section>
 
@@ -137,7 +143,7 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
     <dl class="grid">
       ${t.workspace.items.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${rich(v)}</dd></div>`).join("\n      ")}
     </dl>
-    <div class="frame">${shot(base, "workspaces", t.workspace.shotAlt, 2560, 1600)}</div>
+    <div class="frame">${shot(at, "workspaces", t.workspace.shotAlt, 2560, 1600)}</div>
   </div>
 </section>
 
@@ -174,7 +180,7 @@ ${languages.map((l) => `<link rel="alternate" hreflang="${l.code}" href="${l.hre
     <dl class="grid">
       ${t.teams.items.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${rich(v)}</dd></div>`).join("\n      ")}
     </dl>
-    <div class="frame">${shot(base, "security", t.teams.shotAlt, 2560, 1600)}</div>
+    <div class="frame">${shot(at, "security", t.teams.shotAlt, 2560, 1600)}</div>
   </div>
 </section>
 
