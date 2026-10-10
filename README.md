@@ -77,7 +77,7 @@ Production must serve `.mp4` as `video/mp4`, `.vtt` as `text/vtt`, support `Rang
 
 ## Publishing and search
 
-Publication is intentionally not part of this change. Before publishing, verify `hello@benchyard.com` is monitored and confirm which environments and features are enabled in the hosted console. Public copy qualifies deployment/account availability. The product can support registration when configured; invitation access is the chosen marketing flow, not a claim that sign-up code is absent.
+GitHub Pages publishes `dist/` from `main`. The Pages hostname is `www.benchyard.com`; `benchyard.com` redirects there. Before treating the site as launched, verify `hello@benchyard.com` is monitored and confirm which environments and features are enabled in the hosted console. Public copy qualifies deployment/account availability. The product can support registration when configured; invitation access is the chosen marketing flow, not a claim that sign-up code is absent.
 
 The canonical site is `https://www.benchyard.com`; the console is `https://console.benchyard.com`. Previews require a separate origin and their domain is not printed on the homepage. Preserve host redirects to the canonical site.
 
