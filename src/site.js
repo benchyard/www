@@ -45,10 +45,16 @@
     for (const el of tour.children)
       el.classList.toggle("on", (el.dataset.tour ?? el.dataset.shot) === i);
   };
+  // The picture follows a step that stays in the middle, not every step a
+  // fast scroll passes on its way somewhere (a link in the menu, a flick).
+  let settle;
   const middle = new IntersectionObserver(
     (entries) => {
       for (const e of entries)
-        if (e.isIntersecting) show(e.target.dataset.tour);
+        if (e.isIntersecting) {
+          clearTimeout(settle);
+          settle = setTimeout(show, 160, e.target.dataset.tour);
+        }
     },
     { rootMargin: "-45% 0px -45% 0px" },
   );
