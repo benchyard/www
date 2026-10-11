@@ -97,7 +97,13 @@
     },
     { passive: true },
   );
-  show("0");
+  // At first the picture waits for the page to be where it will be: a reload
+  // puts the page back where it was, and the picture should be that step's
+  // from the start, not the first step's and then another.
+  tour.classList.add("moving");
+  const settled = () => (rest = setTimeout(arrive, 80));
+  if (document.readyState === "complete") settled();
+  else addEventListener("load", settled, { once: true });
 })();
 (() => {
   const root = document.querySelector("[data-replay]");
