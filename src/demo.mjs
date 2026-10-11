@@ -74,6 +74,18 @@ const icons = {
   edit: icon(
     '<path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.4 2.6a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4z"/>',
   ),
+  bell: icon(
+    '<path d="M10.3 21a1.9 1.9 0 0 0 3.4 0M3.3 15.3A1 1 0 0 0 4 17h16a1 1 0 0 0 .7-1.7C19.4 14 18 12.5 18 8A6 6 0 0 0 6 8c0 4.5-1.4 6-2.7 7.3"/>',
+  ),
+  clock: icon(
+    '<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/><circle cx="15" cy="15" r="3"/>',
+  ),
+  book: icon(
+    '<path d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/>',
+  ),
+  key: icon(
+    '<circle cx="7.5" cy="15.5" r="4.5"/><path d="m11 12 9-9M16 7l3 3"/>',
+  ),
   search: icon('<circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/>'),
 };
 
@@ -158,7 +170,7 @@ export function demo(boardHref) {
   const names = Object.keys(data.files);
   return `<div class="rp" data-replay data-dock="changes" data-view="chat" data-board="${boardHref}">
  <div class="rp-window" role="group" aria-label="Replay of a Benchyard session with demo data">
-  <div class="rp-side" aria-hidden="true"><p class="rp-who"><span class="rp-avatar">A</span><span><b>alice</b><small>Benchyard</small></span></p><p class="rp-search">${icons.search}Search sessions</p><p class="rp-new">${icons.edit}New session</p><p class="rp-label">Workspaces</p><p class="rp-ws">issue-board<i></i></p><ul>${sessions.map(([agent, title, current]) => `<li${current ? ' class="rp-current"' : ""}>${agentMark(agent)}<span>${title}</span></li>`).join("")}</ul><p class="rp-device">${icons.laptop}This device: <b>MacBook</b></p></div>
+  <div class="rp-side" aria-hidden="true"><p class="rp-who"><span class="rp-avatar">A</span><span><b>alice</b><small>Benchyard</small></span>${icons.bell}</p><p class="rp-search">${icons.search}Search sessions</p><p class="rp-new">${icons.edit}New session</p><p class="rp-page">${icons.clock}Schedules</p><p class="rp-page">${icons.book}Rules, skills &amp; tools</p><p class="rp-page">${icons.key}Secrets</p><p class="rp-label">Workspaces</p><p class="rp-ws">issue-board<i></i></p><ul>${sessions.map(([agent, title, current]) => `<li${current ? ' class="rp-current"' : ""}>${agentMark(agent)}<span>${title}</span></li>`).join("")}</ul></div>
   <div class="rp-head"><span class="rp-agent">${agentMark("codex")}</span><div><p class="rp-title">Add a status filter</p><p class="rp-sub">Ask first<span>Model</span>Demo model</p></div><span class="rp-pill" data-pill data-kind="idle">Idle</span></div>
   <div class="rp-tabs" role="tablist" aria-label="Parts of the session">${tabs}</div>
   <div class="rp-chat" id="rp-panel-chat" role="tabpanel" aria-labelledby="rp-tab-chat">
@@ -200,7 +212,7 @@ export function demo(boardHref) {
   <div class="rp-phone" data-phone aria-label="The same session on a phone" hidden>
    <div class="rp-phone-screen">
     <p class="rp-phone-head"><b>Add a status filter</b><span class="rp-pill" data-kind="approval">Needs approval</span></p>
-    <p class="rp-driving">${icons.laptop}<span><b>MacBook</b> is driving. You can watch and approve.</span></p>
+    <p class="rp-driving">${icons.laptop}<span><b>MacBook</b> is driving. Sending from here takes over.</span></p>
     <div class="rp-say">${paragraphs(ready)}</div>
     <div class="rp-card rp-shell" data-state="waiting"><div class="rp-card-head">${icons.chevron}<b>Shell</b><code>${esc(data.test.command)}</code></div><p class="rp-card-foot">Waiting for approval</p></div>
     ${approval("phone")}

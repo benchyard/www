@@ -8,9 +8,9 @@ This Policy is part of the [Terms of Service](terms-of-service.md). It applies o
 
 Before purchase, we will show the seller, currency, amount payable, credit quantity or service purchased, applicable taxes, and material conditions. We may use Airwallex or another identified payment provider. The payment provider's applicable notice and terms will be linked at checkout. We remain responsible for our contractual obligations as seller, including applicable refunds.
 
-The standard purchase is a one-time purchase of machine credits for your personal Benchyard balance. This does not enroll you in automatic top-ups or a recurring subscription. Team purchases are available only through an expressly offered team order or supported purchase flow. Promotional credits, if offered, have the conditions disclosed when granted.
+The standard purchase is a one-time purchase of credits for your personal Benchyard balance. This does not enroll you in automatic top-ups or a recurring subscription. Team purchases are available only through an expressly offered team order or supported purchase flow. Promotional credits, if offered, have the conditions disclosed when granted.
 
-## 2. What machine credits pay for
+## 2. What credits pay for
 
 Credits are an accounting unit for using the Benchyard services described in the applicable price schedule. They are not transferable to other users or exchangeable outside Benchyard. Their legal and tax treatment depends on applicable law and is not determined merely by calling them credits.
 

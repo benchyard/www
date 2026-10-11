@@ -90,7 +90,7 @@ export const guides = [
         title: "Can I change direction while an agent is working?",
         paragraphs: [
           "Codex can take a new instruction while it is working. With the other agents you stop what it is doing and send a new message.",
-          "One device sends the messages in a session at a time; your other signed-in devices can watch and approve. Separate sessions, each with its own copy of the code if you like, keep tasks apart. Agents in different sessions do not coordinate with each other by themselves.",
+          "One device drives a session at a time, and your other signed-in devices can watch and approve. Sending a message from another device takes the session over. Separate sessions, each with its own copy of the code if you like, keep tasks apart. Agents in different sessions do not coordinate with each other by themselves.",
         ],
       },
       {
@@ -163,7 +163,7 @@ export const guides = [
         id: "devices",
         title: "How do I continue on my phone?",
         paragraphs: [
-          "Sign in on the other device and open the same workspace and session. One device sends the messages at a time; your other signed-in devices can watch and approve.",
+          "Sign in on the other device and open the same workspace and session. One device drives a session at a time, and the others can watch and approve. To carry on from another device, just send a message there: that device takes the session over, and a line in the session says which device is driving.",
           "On an iPhone, add Benchyard to the Home Screen before turning on notifications. You turn them on for each device, and the device asks your permission. A notification opens the session, where you look at the request and approve it.",
         ],
       },

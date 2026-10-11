@@ -110,3 +110,9 @@ The opening arrives in order and session cards drift beside the lead; the tour's
 The capture takes desktop screenshots at 4× and phone screenshots at 3×, and the hero crop keeps that density. The build and the HTML share one list of widths and skip any width the PNG does not cover, so nothing is upscaled. The pictures on the page are still the 1× capture from product `ed818788`. A denser capture from earlier the same day showed the previous product UI (no list/cards toggle, no idle-policy bar) and was not published. The homepage demo remains the replay; no video was added.
 
 `npm run check` passed for 14 pages. The density check passed in Chromium, Firefox and WebKit at 390, 700 and 1440 pixels, light and dark: each screenshot used the largest published width that screen needs. The rest of the site suite passed with it.
+
+## Picked up at product `f93793b8` — 2026-10-11
+
+- **Capture.** `npm run demo:capture` ran the task again in the real app at product commit `f93793b8`, from a detached worktree that was removed afterwards, in a container the script removed. The screenshots (4× on the desktop, 3× on the phone) and `content/demo.json` are from that run. The capture approved `npm test` from the phone while the MacBook drove, and tried the board's filters (3, 3, 6).
+- **The replay** was redrawn to the app's shape at that commit: the menu with its bell, search, New session, Schedules, Rules, skills & tools, Secrets and the workspaces; on the phone the quiet line "MacBook is driving. Sending from here takes over." in place of the bar with Take over. It was compared with the new screenshots by eye at 1440 pixels.
+- **Words.** "Credits" in place of "machine credits" on the site and in the two policies that said it. The site no longer says credits can be bought: buying was run only in the payment provider's sandbox. Which device drives a session is said as the app says it.

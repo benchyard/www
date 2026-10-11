@@ -158,19 +158,23 @@
   height: 15px;
   flex: none;
 }
-.rp-device {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  margin-top: auto !important;
-  padding: 10px 6px 0;
-  border-top: 1px solid var(--line);
+.rp-who .rp-icon {
+  margin-left: auto;
   color: var(--muted);
-  font-size: 12px;
 }
-.rp-device b {
-  color: var(--fg);
+.rp-page {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  padding: 5px 8px;
   font-weight: 500;
+}
+.rp-page .rp-icon {
+  color: var(--muted);
+}
+.rp-label {
+  margin-top: 8px !important;
+  border-top: 1px solid var(--line);
 }
 
 /* The session's head and the tabs of what belongs to it. */
@@ -679,10 +683,14 @@ pre.rp-code {
   display: flex;
   gap: 8px;
   margin-inline: 0 !important;
-  padding: 8px 12px;
-  background: var(--warn-soft);
-  color: var(--warn);
+  padding: 7px 12px;
+  background: var(--surface-2);
+  border-block: 1px solid var(--line);
+  color: var(--muted);
   font-size: 12px;
+}
+.rp-driving b {
+  color: var(--fg);
 }
 .rp-phone .rp-say {
   font-size: 13px;

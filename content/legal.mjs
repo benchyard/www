@@ -35,7 +35,7 @@ export const policies = [
     file: "billing-and-refund-policy.md",
     label: "Billing",
     description:
-      "How a disclosed Benchyard purchase works, what machine credits pay for, and how cancellation and refunds are handled.",
+      "How a disclosed Benchyard purchase works, what credits pay for, and how cancellation and refunds are handled.",
   },
   {
     slug: "cookies",

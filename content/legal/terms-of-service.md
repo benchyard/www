@@ -72,7 +72,7 @@ We may limit or remove an integration where authorization is absent, a provider 
 
 ## 8. Fees and resource use
 
-An order or checkout must disclose the applicable currency, price, billing unit, taxes, and purchase terms before you agree to pay. You authorize only charges described in your accepted purchase and authorized usage. Machine credits, storage charges, network charges, and provider fees are distinct; a Benchyard payment does not automatically include model-provider charges.
+An order or checkout must disclose the applicable currency, price, billing unit, taxes, and purchase terms before you agree to pay. You authorize only charges described in your accepted purchase and authorized usage. Credits, storage charges, network charges, and provider fees are distinct; a Benchyard payment does not automatically include model-provider charges.
 
 Resources can continue consuming credits while idle or stopped if the disclosed rate covers retained storage, snapshots, or another continuing allocation. The Billing and Refund Policy explains metering, depleted balances, cancellation, and refunds. No subscription, automatic renewal, or automatic top-up is created merely by accepting these Terms.
 

@@ -238,7 +238,7 @@ export default {
     ],
     [
       "Can I approve from a second device?",
-      "Yes. One device sends the messages at a time, and any other device you are signed in on can watch and approve. Open the session from a notification to make the decision.",
+      "Yes. One device drives a session at a time, and any other device you are signed in on can watch and approve. Sending a message from another device takes the session over. Open the session from a notification to make the decision.",
     ],
     [
       "Are agents and models the same thing?",
@@ -258,7 +258,7 @@ export default {
     ],
     [
       "How is workspace use counted?",
-      "Where an installation charges for use, what workspaces use is counted in machine credits, and credits can be bought by card through a payment provider. Agent subscriptions and API usage are separate and stay with their providers.",
+      "Where an installation charges for use, what workspaces use is counted in credits. Agent subscriptions and API usage are separate and stay with their providers.",
     ],
     [
       "How do I get access?",
