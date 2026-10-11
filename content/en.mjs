@@ -42,6 +42,38 @@ export default {
       "Read the diff, inspect the test output and open the running app in your browser.",
     ],
   ],
+  tour: [
+    [
+      "Review the changes",
+      "Read each file's diff beside the conversation while the agent waits for your decision.",
+      "session-approval",
+      "Codex session with three changed files, a readable filter diff and a test command awaiting approval.",
+    ],
+    [
+      "See what ran",
+      "The command you approved, its output and the agent's summary stay in the session.",
+      "session-done",
+      "Completed Codex task with the output of the approved test command and three file changes.",
+    ],
+    [
+      "Open a port",
+      "Ports lists what is listening in the workspace. Where the installation has previews, Open in browser shows it at an address of its own, which only you can open.",
+      "ports",
+      "The workspace Ports panel offers Open in browser for the running issue-board development server.",
+    ],
+    [
+      "Try the result",
+      "Use the running app before you accept the change. A preview is not a public link or a way to share with a team.",
+      "preview",
+      "The running issue-board application with All issues, In progress and Done filters and six fictional issues.",
+    ],
+    [
+      "Keep every project in reach",
+      "Each workspace lists its sessions and says whether it is running, with its SSH name beside it.",
+      "workspaces",
+      "Benchyard workspace list with the running issue-board workspace and its connected agent sessions.",
+    ],
+  ],
   workspace: {
     title: "A place for the whole task.",
     lead: "The conversation, files, terminal and changes stay together. Close your browser and return to the same workspace from another device.",

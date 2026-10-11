@@ -22,6 +22,39 @@
   addEventListener("resize", ask);
   read();
 })();
+// What arrives as it is scrolled to, and the tour whose picture follows the
+// step in the middle of the screen. Both only add classes; the styles that
+// move things apply where the visitor has not asked for less motion.
+(() => {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.documentElement.classList.add("fx");
+  const seen = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries)
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+          seen.unobserve(e.target);
+        }
+    },
+    { rootMargin: "0px 0px -10% 0px" },
+  );
+  for (const el of document.querySelectorAll("[data-in]")) seen.observe(el);
+  const tour = document.querySelector(".tour");
+  if (!tour) return;
+  const show = (i) => {
+    for (const el of tour.children)
+      el.classList.toggle("on", (el.dataset.tour ?? el.dataset.shot) === i);
+  };
+  const middle = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries)
+        if (e.isIntersecting) show(e.target.dataset.tour);
+    },
+    { rootMargin: "-45% 0px -45% 0px" },
+  );
+  for (const el of tour.querySelectorAll("[data-tour]")) middle.observe(el);
+  show("0");
+})();
 (() => {
   const root = document.querySelector("[data-replay]");
   if (!root) return;
