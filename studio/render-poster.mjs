@@ -10,16 +10,25 @@ const data = async (path) =>
   (await readFile(new URL(path, root))).toString("base64");
 
 // The artwork of the card other sites show beside a link to the homepage.
-export async function renderPosters(page) {
-  const font = await data(
-    "src/fonts/bricolage-grotesque-latin-wght-normal.woff2",
-  );
-  const sans = await data("src/fonts/ibm-plex-sans-latin-400-normal.woff2");
-  await page.setViewportSize({ width: 1920, height: 1080 });
-  for (const theme of ["light"]) {
-    const dark = theme === "dark";
-    const screen = await data(`src-img/session-approval-${theme}.png`);
-    await page.setContent(`<!doctype html><html lang="en"><head><meta charset="utf-8"><style>
+// Drawn at 2× so the type stays sharp when the card is scaled to 1200×630.
+export async function renderPosters(parentPage) {
+  const context = await parentPage
+    .context()
+    .browser()
+    .newContext({
+      deviceScaleFactor: 2,
+      viewport: { width: 1920, height: 1080 },
+    });
+  const page = await context.newPage();
+  try {
+    const font = await data(
+      "src/fonts/bricolage-grotesque-latin-wght-normal.woff2",
+    );
+    const sans = await data("src/fonts/ibm-plex-sans-latin-400-normal.woff2");
+    for (const theme of ["light"]) {
+      const dark = theme === "dark";
+      const screen = await data(`src-img/session-approval-${theme}.png`);
+      await page.setContent(`<!doctype html><html lang="en"><head><meta charset="utf-8"><style>
       @font-face {font-family: Bricolage; src: url(data:font/woff2;base64,${font})}
       @font-face {font-family: Plex; src: url(data:font/woff2;base64,${sans})}
       * {box-sizing: border-box}
@@ -45,13 +54,16 @@ export async function renderPosters(page) {
       <img class="screen" src="data:image/png;base64,${screen}" alt="Benchyard workspace showing a status filter task, approval request and file changes."></main>
       <footer>The real interface with fictional demo data.</footer>
     </body></html>`);
-    await page.evaluate(async () => {
-      await document.fonts.ready;
-      await Promise.all([...document.images].map((image) => image.decode()));
-    });
-    await page.screenshot({
-      path: new URL(`src-img/demo-poster-${theme}.png`, root).pathname,
-    });
+      await page.evaluate(async () => {
+        await document.fonts.ready;
+        await Promise.all([...document.images].map((image) => image.decode()));
+      });
+      await page.screenshot({
+        path: new URL(`src-img/demo-poster-${theme}.png`, root).pathname,
+      });
+    }
+  } finally {
+    await context.close();
   }
 }
 

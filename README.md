@@ -57,7 +57,7 @@ git -C ../hestia worktree remove "$PWD/.cache/benchyard"
 
 `BENCHYARD_SOURCE` names another checkout; `KEEP_DEMO=1` leaves the container (`benchyard-www-demo`, port 18080 on loopback only) for a look. Container data is disposable and the studio mount is read-only. Generated binaries and reference pictures are ignored under `studio/output/`.
 
-The capture writes the screenshot originals at 1440×900 and 390×740 (the small-screen hero picture is a crop of the real desktop diff) and `content/demo.json`. Source dimensions and responsive descriptors must remain in sync. Look at every picture and at `content/demo.json` before committing: fictional data only.
+The capture writes desktop screenshots at 4× (5760×3600), phone screenshots at 3× (1170×2220), the small-screen hero as a crop of the desktop diff at that same density, and `content/demo.json`. `src/pictures.mjs` shares the responsive pixel widths with the HTML and publishes only widths the source covers, so a 1× original stays at half and full size and a denser one also feeds 2× and 3×. Nothing is upscaled. The social card is drawn at 2×. Look at every picture and at `content/demo.json` before committing: fictional data only. The screenshots in `src-img/` stay the last capture until this script is run again.
 
 ## Assets, caching and deployment
 

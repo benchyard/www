@@ -1,6 +1,6 @@
 import { securityDiagram } from "./security-diagram.mjs";
 import { lockScreenMarkup, statusIcons } from "./lock-screen.mjs";
-import { card } from "./pictures.mjs";
+import { card, pictureWidths } from "./pictures.mjs";
 import { mark } from "./brand.mjs";
 import { agentMark } from "./agents.mjs";
 import { demo } from "./demo.mjs";
@@ -34,8 +34,10 @@ export function shot(
   } = {},
 ) {
   const set = (theme) =>
-    `${at(`img/${name}-${theme}-${Math.round(w / 2)}.webp`)} ${Math.round(w / 2)}w, ${at(`img/${name}-${theme}-${w}.webp`)} ${w}w`;
-  return `<picture>${dark ? `<source type="image/webp" media="(prefers-color-scheme: dark)" srcset="${set("dark")}" sizes="${sizes}">` : ""}<img src="${at(`img/${name}-light-${Math.round(w / 2)}.webp`)}" srcset="${set("light")}" sizes="${sizes}" width="${w}" height="${h}" alt="${esc(alt)}" ${priority ? 'fetchpriority="high"' : ""} loading="${eager || priority ? "eager" : "lazy"}" decoding="async"></picture>`;
+    pictureWidths(name)
+      .map((width) => `${at(`img/${name}-${theme}-${width}.webp`)} ${width}w`)
+      .join(", ");
+  return `<picture>${dark ? `<source type="image/webp" media="(prefers-color-scheme: dark)" srcset="${set("dark")}" sizes="${sizes}">` : ""}<img src="${at(`img/${name}-light-${pictureWidths(name)[0]}.webp`)}" srcset="${set("light")}" sizes="${sizes}" width="${w}" height="${h}" alt="${esc(alt)}" ${priority ? 'fetchpriority="high"' : ""} loading="${eager || priority ? "eager" : "lazy"}" decoding="async"></picture>`;
 }
 const phone = (content) =>
   `<div class="iphone"><div class="phone-status" aria-hidden="true"><span>9:41</span><span class="phone-indicators">${statusIcons}</span></div><div class="island" aria-hidden="true"></div><div class="phone-screen">${content}</div><span class="phone-home" aria-hidden="true"></span></div>`;
@@ -86,7 +88,19 @@ export function render(t, { asset } = {}) {
   );
   desktop = desktop.replace(
     "<picture>",
-    `<picture>${["dark", "light"].map((theme) => `<source type="image/webp" media="(max-width: 700px)${theme === "dark" ? " and (prefers-color-scheme: dark)" : ""}" width="560" height="400" srcset="${at(`img/hero-detail-${theme}-280.webp`)} 280w, ${at(`img/hero-detail-${theme}-560.webp`)} 560w" sizes="92vw">`).join("")}`,
+    `<picture>${["dark", "light"]
+      .map(
+        (theme) =>
+          `<source type="image/webp" media="(max-width: 700px)${theme === "dark" ? " and (prefers-color-scheme: dark)" : ""}" width="560" height="400" srcset="${pictureWidths(
+            "hero-detail",
+          )
+            .map(
+              (width) =>
+                `${at(`img/hero-detail-${theme}-${width}.webp`)} ${width}w`,
+            )
+            .join(", ")}" sizes="92vw">`,
+      )
+      .join("")}`,
   );
   const mobile = shot(
     at,

@@ -104,3 +104,9 @@ The sections above describe the 60-second video, which is gone: the homepage's d
 The opening arrives in order and session cards drift beside the lead; the tour's picture stays in place and changes with the step in the middle of the screen; the desktop and phone come together as they are scrolled to; headings, cards and the security diagram's parts rise as they come into view. All of it is off under reduced motion and without the script, where every part is in its place.
 
 `npm run check`: 14 pages. `npm test`: 29 passed, 1 skipped. A first run failed three tests: with motion on, the tour and the sliding phone made the page wider than the screen at 1120 and 1280 pixels; both were fixed and the run repeated. `npm run measure`: mobile LCP 1264 to 1272 ms, CLS 0.0007; desktop LCP 1264 to 1268 ms, CLS 0.0015. The motion was looked at in Chromium at 1440 pixels only; no other engine or real device.
+
+## Screenshot density — 2026-10-11
+
+The capture takes desktop screenshots at 4× and phone screenshots at 3×, and the hero crop keeps that density. The build and the HTML share one list of widths and skip any width the PNG does not cover, so nothing is upscaled. The pictures on the page are still the 1× capture from product `ed818788`. A denser capture from earlier the same day showed the previous product UI (no list/cards toggle, no idle-policy bar) and was not published. The homepage demo remains the replay; no video was added.
+
+`npm run check` passed for 14 pages. The density check passed in Chromium, Firefox and WebKit at 390, 700 and 1440 pixels, light and dark: each screenshot used the largest published width that screen needs. The rest of the site suite passed with it.

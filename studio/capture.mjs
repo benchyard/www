@@ -4,7 +4,7 @@
 import { chromium, expect } from "@playwright/test";
 import { execFileSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
-import sharp from "sharp";
+import { cropHeroDetails } from "./crop-hero.mjs";
 const baseURL = process.env.DEMO_URL || "http://localhost:18080";
 const container = process.env.DEMO_CONTAINER || "benchyard-www-demo";
 const out = new URL("./output/", import.meta.url).pathname;
@@ -16,7 +16,7 @@ const browser = await chromium.launch({ headless: true });
 const desktop = await browser.newContext({
   baseURL,
   viewport: { width: 1440, height: 900 },
-  deviceScaleFactor: 1,
+  deviceScaleFactor: 4,
   colorScheme: "light",
   // The Devices list says what each fictional device is.
   userAgent:
@@ -25,7 +25,7 @@ const desktop = await browser.newContext({
 const mobile = await browser.newContext({
   baseURL,
   viewport: { width: 390, height: 740 },
-  deviceScaleFactor: 1,
+  deviceScaleFactor: 3,
   colorScheme: "light",
   isMobile: true,
   hasTouch: true,
@@ -182,12 +182,9 @@ try {
   await page.goto("/settings/security");
   await page.getByRole("heading", { name: "Password", exact: true }).waitFor();
   await themed(page, "security");
-  // The small-screen hero picture is a piece of the real desktop diff.
-  for (const theme of ["light", "dark"])
-    await sharp(`${images}/session-approval-${theme}.png`)
-      .extract({ left: 880, top: 0, width: 560, height: 400 })
-      .png()
-      .toFile(`${images}/hero-detail-${theme}.png`);
+  // The small-screen hero picture is a piece of the real desktop diff,
+  // at the same density as that capture.
+  await cropHeroDetails();
 
   // What the replay on the site shows comes from this run, not from a copy
   // written by hand.
