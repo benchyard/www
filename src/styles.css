@@ -1664,6 +1664,53 @@ figcaption {
   .fx [data-in]:nth-child(6) {
     --i: 5;
   }
+  /* The path of a kept credential is drawn in its order: the workspace's
+     placeholder, the request, the keeper, the request with the secret, the
+     service, and the answer on its way back. Each part's sample lights once
+     as it arrives. */
+  .fx .trust-map-grid > [data-in],
+  .fx .trust-response[data-in] {
+    transition-delay: calc(var(--i, 0) * 380ms);
+  }
+  .fx .trust-response[data-in] {
+    --i: 5;
+  }
+  .fx .trust-connection path,
+  .fx .trust-response path {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 0.7s ease-in-out;
+    transition-delay: calc(var(--i, 0) * 380ms + 200ms);
+  }
+  .fx .in.trust-connection path,
+  .fx .in.trust-response path {
+    stroke-dashoffset: 0;
+  }
+  .fx .trust-node.in .credential-sample {
+    animation: lit 1.1s ease-out calc(var(--i, 0) * 380ms + 450ms) 1;
+  }
+  /* The lock screen's notifications arrive one after the other, the newest
+     last, and the mail's message after its header. */
+  .fx [data-in] .ios-notification,
+  .fx [data-in] .mail-message {
+    opacity: 0;
+    transform: translateY(26px) scale(0.96);
+    transition:
+      opacity 0.5s ease-out,
+      transform 0.7s cubic-bezier(0.2, 0.9, 0.25, 1.1);
+  }
+  .fx [data-in].in .ios-notification,
+  .fx [data-in].in .mail-message {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.6s;
+  }
+  .fx [data-in].in .ios-notification:first-child {
+    transition-delay: 1.5s;
+  }
+  .fx [data-in].in .mail-message {
+    transition-delay: 0.9s;
+  }
   /* The desktop and the phone come together as they are scrolled to. The
      phone starts beyond the page's edge, which the section cuts off. */
   #devices {
@@ -1685,6 +1732,11 @@ figcaption {
   from {
     opacity: 0;
     transform: translateY(28px);
+  }
+}
+@keyframes lit {
+  30% {
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 35%, transparent);
   }
 }
 @keyframes drift {
@@ -1741,25 +1793,25 @@ figcaption {
     rotate: -3deg;
   }
   .chip-2 {
-    right: max(16px, 50% - 700px);
+    right: max(16px, 50% - 724px);
     top: 436px;
     rotate: 2deg;
     --d: 0.6s;
   }
   .chip-3 {
-    left: max(40px, 50% - 640px);
+    left: max(20px, 50% - 696px);
     top: 566px;
     rotate: 2deg;
     --d: 1.1s;
   }
   .chip-4 {
-    right: max(48px, 50% - 640px);
-    top: 548px;
+    right: max(20px, 50% - 704px);
+    top: 566px;
     rotate: -2deg;
     --d: 0.3s;
   }
   .chip-5 {
-    left: max(90px, 50% - 600px);
+    left: max(40px, 50% - 668px);
     top: 676px;
     rotate: -1deg;
     --d: 1.5s;
