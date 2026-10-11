@@ -56,21 +56,39 @@ export default {
       ],
       [
         "Return when you are ready",
-        "Closing a browser does not stop the workspace. Stopping the workspace ends its processes; disk contents and session history remain.",
+        "Closing a browser does not stop the workspace. A stopped workspace keeps its files and session history, and starts again when you send a message.",
+      ],
+    ],
+    tools: [
+      [
+        "Terminal and files in the browser",
+        "A terminal that outlives a closed tab, and a file tree with an editor for the open folder.",
+      ],
+      [
+        "SSH from your own computer",
+        "Add a public key and connect with ssh, scp, rsync or sftp through the benchyard command. No port is opened on the workspace.",
+      ],
+      [
+        "Snapshots and rollback",
+        "Take a snapshot of the workspace's disk by hand, or daily while it is idle. A rollback saves the present state first, so it can be undone.",
+      ],
+      [
+        "A desktop where the machine type has one",
+        "Open a graphical desktop in the browser to look at what an agent built. It has no sound and is drawn in software.",
       ],
     ],
     locations: [
       [
         "Containers",
-        "Container workspaces on the configured infrastructure. Isolation depends on the backend and runtime.",
+        "A container for each workspace. Stopping one ends what was running and keeps its files.",
       ],
       [
-        "Cloud machines",
-        "Google Cloud and AWS machine backends, where offered by your deployment and account.",
+        "Machines",
+        "A virtual machine for each workspace, with a disk of its own. An idle machine can be suspended, which keeps what was running in its memory.",
       ],
       [
-        "Your own Linux machine",
-        "Attach a Linux machine with systemd when enabled for your account. Available in your personal space.",
+        "Shared or Dedicated",
+        "Each machine type says which it is. Shared types share their host's cores with other workspaces; Dedicated types have cores and memory reserved for them.",
       ],
     ],
   },
@@ -123,13 +141,12 @@ export default {
   business: {
     eyebrow: "FOR BUSINESS",
     title: "Run Benchyard the way your business works.",
-    lead: "Contact us about a hosted account, an installation on infrastructure you operate, or Linux machines your people already have. We agree the shape before anything starts.",
+    lead: "Contact us about a hosted account or an installation on infrastructure you operate. We agree the shape before anything starts.",
     subject: "Benchyard for business",
     cta: "Contact us",
     body: [
       "Business and your role",
       "Where should it run: Benchyard's hosted service, your own infrastructure, or both?",
-      "Do people need to attach Linux machines they already run?",
       "What should be tailored: agents, machine types, limits, network, or something else?",
     ],
     items: [
@@ -141,32 +158,36 @@ export default {
         "On your infrastructure",
         "Benchyard can run on infrastructure your business operates. That installation is licensed separately from the hosted service, and the operator's own privacy notice applies to it.",
       ],
-      [
-        "Bring your own machine",
-        "Where that option is enabled, a person attaches a Linux machine with systemd that they already run. macOS is not supported for that attachment. A phone is for review and approval, not the machine that runs the workspace.",
-      ],
     ],
     note: "Availability depends on what we agree. Agent subscriptions and API usage stay with their providers.",
   },
   security: {
     title: "Keep secrets outside the workspace.",
-    lead: "For supported provider credentials and host-scoped secrets, agents receive placeholders. A credential keeper adds the real value only to requests for the configured hosts.",
+    lead: "For the credentials the keepers hold, agents receive placeholders. A credential keeper outside the workspace adds the real value only to requests for that credential's hosts.",
     items: [
       [
         "Credentials outside the workspace",
-        "For keeper-protected credentials, agents receive placeholders. The real values stay outside the workspace and are added to the configured outgoing requests.",
+        "The keepers hold secrets that name their hosts, API keys for the providers Benchyard knows, and subscription sign-ins for Claude Code, Codex and Cursor. The workspace holds a placeholder.",
       ],
       [
-        "Server visibility",
-        "Benchyard’s server can read stored credentials and session content. This is not end-to-end encryption.",
-      ],
-      [
-        "Environment matters",
-        "Isolation varies across containers, cloud machines and your own machine. Root access changes the protection boundary.",
+        "What the operator can read",
+        "Whoever runs the installation can read stored credentials and session content. Stored credentials are encrypted with keys the operator holds. This is not end-to-end encryption.",
       ],
       [
         "Secrets need care",
-        "Plain environment variables, custom gateway keys and secrets written into files may be readable by the agent.",
+        "A secret that names no hosts, a team key for the team's own gateway, private keys and anything saved in files can be read by the agent.",
+      ],
+      [
+        "Environment matters",
+        "Containers and machines are isolated in different ways. Where a machine type lets people become root, the protection boundary changes.",
+      ],
+      [
+        "Network and traffic",
+        "A workspace can reach any public address; private network ranges are refused. Each workspace has an allowance for what it sends, and installation admins decide whether an empty one restricts it.",
+      ],
+      [
+        "Sign-in and records",
+        "Sign in with a password or a passkey, with two-factor authentication. Installation admins have an audit log of changes to accounts, sign-ins, teams and settings.",
       ],
     ],
   },
@@ -178,6 +199,10 @@ export default {
     [
       "Does work continue when I close my laptop?",
       "It can continue while the workspace remains running. Closing the browser does not stop it. A task that needs approval waits for your decision; stopping the workspace ends its running processes.",
+    ],
+    [
+      "What happens when a workspace is stopped?",
+      "Its files, conversations and sign-ins are kept; terminals and running programs end. Opening a session does not start it. Sending a message does, and the message is held until the workspace is up. An idle machine may be suspended instead, which keeps what was running in its memory.",
     ],
     [
       "Can I approve from a second device?",
@@ -200,12 +225,16 @@ export default {
       "When enabled and configured, email is for approvals, plans needing review, failed turns and expired agent sign-ins. Completion and agent notes are not sent by email.",
     ],
     [
+      "How is workspace use counted?",
+      "Where an installation charges for use, what workspaces use is counted in machine credits, and credits can be bought by card through a payment provider. Agent subscriptions and API usage are separate and stay with their providers.",
+    ],
+    [
       "How do I get access?",
       "Request an invitation and tell us which agents you use and what you want to work on. We will discuss availability, supported environments and pricing before you start.",
     ],
     [
       "Can a business run Benchyard itself?",
-      "Yes, as an installation you agree, on infrastructure you operate. You can also use the hosted service, and where enabled attach Linux machines people already run. Contact us with the business, where it should run, and what should be tailored.",
+      "Yes, as an installation you agree, on infrastructure you operate. You can also use the hosted service. Contact us with the business, where it should run, and what should be tailored.",
     ],
   ],
 };

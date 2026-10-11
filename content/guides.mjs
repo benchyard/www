@@ -1,4 +1,4 @@
-export const reviewed = "2026-10-09";
+export const reviewed = "2026-10-11";
 export const transcript = [
   [
     "00:00",
@@ -92,7 +92,7 @@ export const guides = [
         title: "Do all agents use the same approval controls?",
         paragraphs: [
           "No. Benchyard presents approvals from each agent’s protocol. The available modes, edit approvals, planning and subagent behavior depend on that integration. Cursor does not provide the same Ask first edit-approval behavior as Claude Code or Codex.",
-          "A waiting approval pauses the action that needs permission. A notification opens the session; the decision is made inside the signed-in application.",
+          "A session's mode is Ask first, Accept edits, Full auto or Plan, where the agent supports it. A waiting approval pauses the action that needs permission. A notification opens the session; the decision is made inside the signed-in application.",
         ],
       },
       {
@@ -108,7 +108,7 @@ export const guides = [
         title: "Where do the credentials come from?",
         paragraphs: [
           "Use your supported provider subscription or API key, or credentials made available by your team. Benchyard access does not include an agent subscription or promise a provider allowance.",
-          "Supported provider sign-ins and host-scoped secrets can be mediated by credential keepers. The Benchyard server can read credentials and session content. Read the security guide before choosing how to provide secrets.",
+          "API keys for the providers Benchyard knows, subscription sign-ins for Claude Code, Codex and Cursor, and secrets that name their hosts are held by credential keepers outside the workspace. Whoever runs the installation can read stored credentials and session content. Read the security guide before choosing how to provide secrets.",
         ],
         link: ["/guides/security/", "Read the security and credentials guide"],
       },
@@ -126,29 +126,48 @@ export const guides = [
         title: "What persists when I leave?",
         paragraphs: [
           "Closing a browser tab or laptop does not stop a running workspace. A running agent can continue until it finishes, needs input, encounters a failure or the workspace stops.",
-          "Stopping a workspace ends its running processes and terminals. Its disk contents and session history remain. Starting it again does not restore a suspended process’s memory; restart development servers and other processes as needed. Idle-stop and deployment policies may also affect how long a workspace runs.",
+          "Stopping a workspace ends its terminals and running programs. Its files, conversations and sign-ins are kept. A machine can also be suspended: what was running is kept in the machine's memory and goes on when it starts again. A container is stopped, not suspended. The workspace's card says which happened and why.",
+          "Opening a session of a stopped or suspended workspace does not start it. Sending a message does: the message is held and sent once the workspace is up, and you can take it back before then. Opening the terminal, the files, the desktop or a preview also starts it.",
+          "A workspace is stopped when idle only if you ask for it. The setting is Never unless you choose 30 minutes, 1 hour, 4 hours or 1 day; a machine type can carry a time of its own, and Keep running exempts one workspace. Idle means no agent is at work or waiting for you, nothing is running in its terminals or in the background, and you have not had it open for a while.",
         ],
       },
       {
         id: "environments",
         title: "Where does the workspace run?",
+        paragraphs: [
+          'A machine type is the size of a workspace. Shared types share their host\'s cores with other workspaces and read "up to" their size; Dedicated types have their cores and memory reserved. A machine type also says whether it has a desktop. Which types you can choose depends on your installation and account.',
+        ],
         table: {
-          head: ["Environment", "Availability and boundary"],
+          head: ["Kind", "What it is"],
           rows: [
             [
-              "Containers",
-              "Available on configured infrastructure. Runtime isolation depends on the deployment; gVisor is not a claim about every backend.",
+              "Container",
+              "A container for each workspace. When stopped, what was running ends and its files are kept. Whether you can become root is set by its machine type.",
             ],
             [
-              "Google Cloud or AWS",
-              "Cloud-machine backends are available where configured and enabled for your account.",
-            ],
-            [
-              "Your own Linux machine",
-              "Requires Linux with systemd and the own-machine feature. Personal spaces only. The server does not create, start or stop your machine.",
+              "Machine",
+              "A virtual machine for each workspace, with a disk of its own. It can be suspended when idle, keeping what was running in memory. The app does not say which provider a machine is at.",
             ],
           ],
         },
+      },
+      {
+        id: "tools",
+        title: "What can I do inside a workspace?",
+        paragraphs: [
+          "The terminal in the browser is a session that stays when you close the tab, and several tabs or devices can share it. The file editor shows the open folder as a tree, opens text files up to 2 MB, and uploads or downloads one file at a time.",
+          "For SSH, install the benchyard command on your computer, sign in with it, add a public key in the app, and connect with ssh to the workspace's name. Shell, scp, rsync, sftp and local forwards work; no port is opened on the workspace. The connection is relayed through the server, which supplies the workspace's host key.",
+          "Where a machine type has a desktop, it opens in the browser. It has no sound and is drawn in software. All of these belong to the workspace's owner.",
+        ],
+      },
+      {
+        id: "snapshots",
+        title: "How do snapshots and rollback work?",
+        paragraphs: [
+          "A snapshot holds the workspace's disk at one moment, not what was running. You can take up to ten by hand, and choose a daily one that is taken while the workspace is idle or stopped. Only the workspace's owner can use them.",
+          "A rollback asks you to confirm, saves the present state as a snapshot first, and then puts the disk back. Sessions and messages from after the snapshot leave the history. Rolling back to the saved state undoes it. A new workspace can also be made from a snapshot.",
+          "Where a snapshot is kept depends on the storage, and the app says which. On a cloud provider's disks the storage provider keeps it apart from the disk, so it survives losing the disk. An installation on storage that keeps snapshots beside the disk says so: there a snapshot undoes mistakes and is lost with that storage. Whether snapshots are offered depends on the installation.",
+        ],
       },
       {
         id: "devices",
@@ -207,26 +226,36 @@ export const guides = [
     sections: [
       {
         id: "server-access",
-        title: "What can the Benchyard server read?",
+        title: "What can the operator read?",
         paragraphs: [
-          "The server can read provider sign-ins, stored API keys and secrets, and session content. There is no end-to-end encryption that prevents the server from accessing these contents.",
-          "Storage protection and credential mediation do not change that trust relationship. Do not treat the server as unable to access the information you give it.",
+          "Whoever runs the installation can read provider sign-ins, stored API keys and secrets, and session content. There is no end-to-end encryption that keeps these from the operator.",
+          "Stored credentials are encrypted with a key for each person and each team, and those keys are wrapped by a master key the operator holds. That protects a copy of the database; it does not change the trust relationship. Passwords are stored as hashes.",
         ],
       },
       {
         id: "keepers",
         title: "What do credential keepers protect?",
         paragraphs: [
-          "For supported provider credentials and host-scoped secrets, the workspace receives a placeholder. Credential keepers hold the real value outside the workspace and insert it only into configured request fields for the credential’s hosts. The agent can use the credential at those hosts while the workspace runs, without receiving its raw value.",
-          "This is not a universal guarantee that an agent cannot read secrets. Plain environment variables, custom gateway keys and secrets written into files can be readable in the workspace. Configure each secret according to its actual handling.",
+          "For a credential the keepers hold, the workspace receives a placeholder. A keeper outside the workspace holds the real value and puts it only into the declared fields of requests to that credential's hosts. The agent can use the credential at those hosts while the workspace runs, without receiving its value.",
+          "The keepers hold: a secret that names its hosts; your own API key for a provider Benchyard knows; a subscription sign-in for Claude Code, Codex or Cursor; a team's key when the team gives no gateway address; and a token for git over HTTPS.",
+          "They do not hold: a secret that names no hosts, which is a plain variable in the workspace; a team's key sent to a gateway address of the team's own; cloud access keys, private keys and database passwords; and anything saved in files in the home. An agent can read all of these.",
+          "Other limits: a program that ignores proxy settings does not go through a keeper, and a host that repeats what it is sent gives the value back to whoever asked.",
         ],
       },
       {
         id: "isolation",
         title: "Is every workspace isolated the same way?",
         paragraphs: [
-          "No. Container, cloud-machine and attached-machine backends have different boundaries. gVisor applies only to deployments using that runtime. An attached Linux machine is not automatically equivalent to a sandboxed container.",
-          "Where a workspace allows sudo or root access, the agent can affect more of the machine and its daemon protections. Network controls also depend on the actual deployment; this guide makes no blanket managed-egress promise.",
+          "No. A container workspace is a pod of its own with its own network rules, in a gVisor sandbox unless the operator chose another runtime. A machine workspace is a virtual machine of its own that accepts nothing inbound.",
+          "Where a machine type lets people become root, the agent can affect more of the container or machine, including the workspace daemon. Team administration gives no access to another member's workspace.",
+        ],
+      },
+      {
+        id: "network",
+        title: "What can a workspace reach on the network?",
+        paragraphs: [
+          "Any public address. Requests to private network ranges and outgoing mail on port 25 are refused. There is no list of allowed hosts, so anything an agent can read could be sent out.",
+          "Each workspace has a traffic allowance: a count of what it sends, which refills over time. Whether an empty allowance restricts the workspace is a setting of the installation's admins, and it is off unless they turn it on. When a restriction applies, connections that are already open are not ended.",
         ],
       },
       {
@@ -243,6 +272,14 @@ export const guides = [
         paragraphs: [
           "Configured browser previews use a different origin from the console, with separate authentication cookies. Access currently belongs to the workspace owner.",
           "The application being previewed is still code running in the workspace. Preview separation does not make arbitrary application content trustworthy or turn the preview into a public sharing link.",
+        ],
+      },
+      {
+        id: "sign-in",
+        title: "How do people sign in, and what is recorded?",
+        paragraphs: [
+          "People sign in with a username and password or with a passkey. Two-factor authentication uses a passkey, an authenticator app, approval from a device that is already signed in, or a recovery code; an installation can require it. Single sign-on is not available. Signed-in devices are listed and can be signed out one by one.",
+          "Installation admins have an audit log of what was done to accounts, sign-ins, teams and settings, and by whom. It does not record what happens inside workspaces and sessions, and it never holds secret values. An Events page shows them what went wrong inside the installation. No retention period is set for either.",
         ],
       },
       {

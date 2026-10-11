@@ -163,6 +163,17 @@ for (const [route, { name, html }] of pages) {
   if (!/<html lang="en"/.test(html)) say("missing language");
   if (/<script\b/i.test(html)) say("client scripts are not allowed");
   if (/github\.com|\u2026/i.test(html)) say("forbidden public text");
+  // People are not told which cloud a machine is at, and a person's own
+  // machine is not offered publicly. The legal pages name their own providers.
+  if (!route.startsWith("/legal/")) {
+    const text = html.replace(/<[^>]+>/g, " ");
+    const named =
+      /Google Cloud|\bGCP\b|\bAWS\b|\bEC2\b|Amazon/.exec(text) ||
+      /own (?:Linux )?machine|attach(?:es|ed)? a (?:Linux )?machine|machines (?:your )?people already/i.exec(
+        text,
+      );
+    if (named) say(`text the site must not carry: ${named[0]}`);
+  }
   // Marketing copy does not describe the product as open source. The legal
   // terms keep their own sentence about open-source component licenses.
   if (!route.startsWith("/legal/") && /open[\s-]*source/i.test(html))
