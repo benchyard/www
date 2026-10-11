@@ -63,7 +63,7 @@ Outputs:
 - `/guides/workspaces/#demo-transcript`: readable transcript and disclosure.
 - Screenshot originals at 1440×900 and 390×740; mobile hero uses a generated crop of the real desktop diff. Source dimensions and responsive descriptors must remain in sync.
 
-The intro uses a still of the recorded workspace, followed by actual task interactions. Timing is edited to the storyboard. Device decoration and the closing card are rendered separately. Neither runtime controls nor agent messages are painted over the application screenshots. Agent branding is normalized during capture by `studio/agent-branding.mjs`, using the same local color Codex SVG as the site; this changes only the glyph appearance. Kimi Code and GLM Code marks in the marketing artwork remain labeled Planned.
+The intro uses a still of the recorded workspace, followed by actual task interactions. Timing is edited to the storyboard. Device decoration and the closing card are rendered separately. Neither runtime controls nor agent messages are painted over the application screenshots. Agent branding is normalized during capture by `studio/agent-branding.mjs`, using the same local brand SVGs as the site; this changes only the glyph appearance. Kimi Code and GLM Code marks in the marketing artwork remain labeled Planned.
 
 ## Assets, caching and deployment
 

@@ -293,7 +293,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 ## Agent glyphs
 
 Claude: Simple Icons, CC0 1.0 Universal. No trademark rights are granted by CC0.
-Codex, Cursor and Gemini: LobeHub icons, under the following MIT licence.
+Claude, Codex, Gemini, Kimi and ChatGLM: LobeHub icons, under the following MIT licence.
 
 MIT License
 
@@ -316,3 +316,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+Cursor 2.5D cube: Cursor/Anysphere brand artwork, provided at https://cursor.com/brand. Original neutral colors and geometry preserved. Not covered by the LobeHub MIT license.

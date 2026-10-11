@@ -80,3 +80,11 @@ Codex now uses the locally vendored LobeHub color variant throughout the homepag
 The demo was recaptured using the existing isolated Linux demo binaries from product commit `6ebde5e2d4e081f9b57c87751a7a14c0e5ebb8b8`; only glyph appearance is normalized during capture. No product checkout changes were made. The disposable demo container was removed after capture. The new website MP4 is 789,079 bytes, 60 seconds, 1280×720, 30fps, yuv420p; the 1080p master was regenerated under ignored studio output.
 
 `npm run check` passed for 14 pages. All 21 Playwright tests passed across Chromium, Firefox and WebKit, including light/dark layouts at 320–1440px, accessibility, keyboard, no-script behavior, captions and native playback. `npm run verify:media` completed the full 60-second video in each engine, with eight subtitle cues, working fullscreen and no media errors. The poster, agent strips and result/outro video frames were visually inspected.
+
+## Complete brand palette — 2026-10-11
+
+The website and Benchyard application share locally bundled artwork for all six displayed brands: Claude orange, Codex blue/purple, Gemini multicolor, Kimi's blue-accented letterform, ChatGLM blue, and Cursor's official 2.5D cube in its original neutral palette. Cursor's asset is from its official brand kit; its source and separate licensing are documented. Screenshot capture, poster composition and the video outro use the same artwork. The recaptured 60-second MP4 is 795,716 bytes.
+
+The application production build and lint passed, with 223 unit tests passing and one skipped. Its actual AgentGlyph and both AgentMark sizes were rendered and inspected in light and dark themes. All 18 images loaded in each theme. Website inline gradients have ten distinct IDs and no unresolved references. The temporary application preview page and development server were removed after inspection.
+
+Final verification passed: all 14 website pages, all 21 Playwright checks, and full 60-second playback in Chromium, Firefox and WebKit with fullscreen, eight subtitle cues and no media errors.
