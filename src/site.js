@@ -26,8 +26,9 @@
 // step in the middle of the screen. Both only add classes; the styles that
 // move things apply where the visitor has not asked for less motion.
 (() => {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  document.documentElement.classList.add("fx");
+  // fx.js marked the page before it was drawn, unless less motion is wanted.
+  document.documentElement.dataset.site = "1";
+  if (!document.documentElement.classList.contains("fx")) return;
   const seen = new IntersectionObserver(
     (entries) => {
       for (const e of entries)
@@ -41,9 +42,20 @@
   for (const el of document.querySelectorAll("[data-in]")) seen.observe(el);
   const tour = document.querySelector(".tour");
   if (!tour) return;
+  // A picture is shown once it has been fetched: until then its frame would
+  // be an empty box.
+  let current;
   const show = (i) => {
-    for (const el of tour.children)
-      el.classList.toggle("on", (el.dataset.tour ?? el.dataset.shot) === i);
+    current = i;
+    for (const el of tour.children) {
+      const on = (el.dataset.tour ?? el.dataset.shot) === i;
+      const img = on && el.querySelector("img");
+      if (img && !img.complete) {
+        img.loading = "eager";
+        img.addEventListener("load", () => show(current), { once: true });
+        el.classList.remove("on");
+      } else el.classList.toggle("on", on);
+    }
   };
   // The picture follows the step nearest the middle of the screen. When a
   // link takes the page somewhere (the menu, "Play the demo"), the picture is

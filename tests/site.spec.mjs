@@ -28,7 +28,7 @@ for (const theme of ["light", "dark"])
           `${route} overflows at ${width}`,
         ).toBe(true);
         await expect(page.locator("h1")).toHaveCount(1);
-        await expect(page.locator("script")).toHaveCount(route === "/" ? 1 : 0);
+        await expect(page.locator("script")).toHaveCount(route === "/" ? 2 : 0);
         if (width === 360 || width === 390 || width === 1280) {
           if (route === "/") {
             await mkdir(
@@ -220,9 +220,11 @@ test("works without scripts and reflows at 200% text size", async ({
 test("the script, the board and cache headers", async ({ request }) => {
   const html = await (await request.get("/")).text();
   const script = /<script defer src="([^"]+)"/.exec(html)[1];
+  const mark = /<script src="([^"]+)"/.exec(html)[1];
   const board = /data-board="([^"]+)"/.exec(html)[1];
   for (const [path, type] of [
     [script, "javascript"],
+    [mark, "javascript"],
     [board, "text/html"],
   ]) {
     const got = await request.get(path);

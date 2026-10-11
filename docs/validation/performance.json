@@ -4,54 +4,54 @@
     {
       "device": "mobile",
       "run": 1,
-      "lcpMs": 1284,
+      "lcpMs": 1216,
       "cls": 0.0007,
-      "initialUncompressedResourceBytes": 197111,
+      "initialUncompressedResourceBytes": 232653,
       "selectedPageImageBytes": 211868,
       "boardFetchedBeforeOpened": false
     },
     {
       "device": "mobile",
       "run": 2,
-      "lcpMs": 1272,
+      "lcpMs": 1204,
       "cls": 0.0007,
-      "initialUncompressedResourceBytes": 197111,
+      "initialUncompressedResourceBytes": 232653,
       "selectedPageImageBytes": 211868,
       "boardFetchedBeforeOpened": false
     },
     {
       "device": "mobile",
       "run": 3,
-      "lcpMs": 1272,
+      "lcpMs": 1236,
       "cls": 0.0007,
-      "initialUncompressedResourceBytes": 197111,
+      "initialUncompressedResourceBytes": 232653,
       "selectedPageImageBytes": 211868,
       "boardFetchedBeforeOpened": false
     },
     {
       "device": "desktop",
       "run": 1,
-      "lcpMs": 1280,
-      "cls": 0.0015,
-      "initialUncompressedResourceBytes": 269557,
+      "lcpMs": 1228,
+      "cls": 0.0016,
+      "initialUncompressedResourceBytes": 305099,
       "selectedPageImageBytes": 277738,
       "boardFetchedBeforeOpened": false
     },
     {
       "device": "desktop",
       "run": 2,
-      "lcpMs": 1344,
-      "cls": 0.0015,
-      "initialUncompressedResourceBytes": 269557,
+      "lcpMs": 1212,
+      "cls": 0.0016,
+      "initialUncompressedResourceBytes": 305099,
       "selectedPageImageBytes": 277738,
       "boardFetchedBeforeOpened": false
     },
     {
       "device": "desktop",
       "run": 3,
-      "lcpMs": 1316,
-      "cls": 0.0014,
-      "initialUncompressedResourceBytes": 269557,
+      "lcpMs": 1236,
+      "cls": 0.0015,
+      "initialUncompressedResourceBytes": 305099,
       "selectedPageImageBytes": 277738,
       "boardFetchedBeforeOpened": false
     }

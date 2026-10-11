@@ -1,6 +1,6 @@
 # Benchyard public website
 
-A static homepage, three public guides, and the customer legal policies for persistent coding-agent workspaces. Plain HTML and CSS, local fonts and responsive WebP. The homepage carries one script of the site's own, which plays the demo; guides and legal pages carry none, and every page reads whole without scripts. No third-party embeds, trackers or runtime framework.
+A static homepage, three public guides, and the customer legal policies for persistent coding-agent workspaces. Plain HTML and CSS, local fonts and responsive WebP. The homepage carries two small scripts of the site's own (one marks the page for motion before it is drawn, the other plays the demo and moves things); guides and legal pages carry none, and every page reads whole without scripts. No third-party embeds, trackers or runtime framework.
 
 The homepage describes a workspace for coding agents, not a product limited to a fixed list of models. `content/en.mjs` holds the current integration registry. Kimi, GLM and MiniMax are identified as future directions, not verified current integrations. Model/provider compatibility and agent support are separate concepts.
 

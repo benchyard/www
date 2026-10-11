@@ -73,6 +73,7 @@ for (const { path, bytes } of await pictures()) {
 // The homepage's script, and the issue board that the replay's Ports panel
 // opens: the page of the recorded run, in a frame.
 await publish("site.js", await readFile(here("./src/site.js")));
+await publish("fx.js", await readFile(here("./src/fx.js")));
 await publish("demo-board.html", Buffer.from(board()));
 // The stylesheet names its fonts as the pages do; in assets/ they are beside
 // it. Then it is minified, and named by what it has become.
