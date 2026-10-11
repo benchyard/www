@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { mkdir, writeFile } from "node:fs/promises";
+import { policies } from "../content/legal.mjs";
 const routes = [
   "/",
   "/guides/agents/",
@@ -175,9 +176,56 @@ test("media byte ranges, MIME and cache headers", async ({ request }) => {
   expect((await request.get(track)).headers()["content-type"]).toContain(
     "text/vtt",
   );
-  for (const path of routes)
+  for (const path of [
+    ...routes,
+    ...policies.map((policy) => `/legal/${policy.slug}/`),
+  ])
     expect((await request.get(path)).headers()["cache-control"]).toBe(
       "no-cache",
     );
   expect((await request.get("/does-not-exist/")).status()).toBe(404);
+});
+test("legal policies fit the page and can be opened from the footer", async ({
+  page,
+}) => {
+  await page.emulateMedia({ colorScheme: "light", reducedMotion: "reduce" });
+  for (const width of [320, 390, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const policy of policies) {
+      const route = `/legal/${policy.slug}/`;
+      expect((await page.goto(route)).status(), route).toBe(200);
+      await page.evaluate(() => document.fonts.ready);
+      expect(
+        await page.evaluate(
+          () => document.documentElement.scrollWidth <= innerWidth + 1,
+        ),
+        `${route} overflows at ${width}`,
+      ).toBe(true);
+      await expect(page.locator("h1")).toHaveCount(1);
+    }
+  }
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.getByRole("link", { name: "Terms of Service" }).click();
+  await expect(page).toHaveURL(/\/legal\/terms\/$/);
+  await expect(page.locator("h1")).toHaveText("Benchyard Terms of Service");
+  await expect(
+    page.getByRole("link", { name: "Privacy Policy" }).first(),
+  ).toHaveAttribute("href", "/legal/privacy/");
+  for (const route of ["/legal/terms/", "/legal/cookies/", "/legal/dpa/"]) {
+    await page.goto(route);
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
+      .analyze();
+    expect(
+      results.violations.map((x) => ({
+        id: x.id,
+        nodes: x.nodes.map((n) => n.target),
+      })),
+      route,
+    ).toEqual([]);
+  }
+  await expect(
+    page.getByRole("link", { name: "European Commission SCC resources" }),
+  ).toHaveAttribute("href", /^https:\/\/commission\.europa\.eu\//);
 });

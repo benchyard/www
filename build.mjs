@@ -22,9 +22,11 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { transform } from "lightningcss";
-import { render, renderGuide, site } from "./src/page.mjs";
+import { render, renderGuide, renderLegal, site } from "./src/page.mjs";
 import { pictures } from "./src/pictures.mjs";
 import { guides } from "./content/guides.mjs";
+import { policies } from "./content/legal.mjs";
+import { renderMarkdown } from "./src/markdown.mjs";
 
 // The first language is served at /, the others at /<code>/.
 const languages = ["en"];
@@ -111,6 +113,18 @@ for (const guide of guides) {
   await writeFile(
     new URL(`${path}index.html`, out),
     renderGuide(english, guide, { asset }),
+  );
+  pages.push(`/${path}`);
+}
+for (const policy of policies) {
+  const path = `legal/${policy.slug}/`;
+  const source = await readFile(here(`./content/legal/${policy.file}`), "utf8");
+  await mkdir(new URL(path, out), { recursive: true });
+  await writeFile(
+    new URL(`${path}index.html`, out),
+    renderLegal(english, policy, renderMarkdown(source, policy.file), {
+      asset,
+    }),
   );
   pages.push(`/${path}`);
 }

@@ -71,6 +71,9 @@ for (const [route, { name, html }] of pages) {
     if (href === consoleAddress) continue;
     const url = new URL(href, site + route);
     if (url.origin !== site) {
+      // A legal page may cite the official instrument it names. Marketing
+      // pages stay on this site, the console, and the contact address.
+      if (route.startsWith("/legal/") && url.protocol === "https:") continue;
       say(`external link ${href}`);
       continue;
     }
@@ -159,7 +162,10 @@ for (const [route, { name, html }] of pages) {
   if ((html.match(/<h1\b/g) || []).length !== 1) say("expected one h1");
   if (!/<html lang="en"/.test(html)) say("missing language");
   if (/<script\b/i.test(html)) say("client scripts are not allowed");
-  if (/github\.com|open[\s-]*source|\u2026/i.test(html))
+  if (/github\.com|\u2026/i.test(html)) say("forbidden public text");
+  // Marketing copy does not describe the product as open source. The legal
+  // terms keep their own sentence about open-source component licenses.
+  if (!route.startsWith("/legal/") && /open[\s-]*source/i.test(html))
     say("forbidden public text");
 }
 for (const path of [...loaded].filter((x) => x.endsWith(".css"))) {

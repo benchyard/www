@@ -4,6 +4,7 @@ import { card } from "./pictures.mjs";
 import { mark } from "./brand.mjs";
 import { agentMark } from "./agents.mjs";
 import { guides, reviewed, transcript } from "../content/guides.mjs";
+import { policies } from "../content/legal.mjs";
 export const site = "https://www.benchyard.com";
 export const consoleAddress = "https://console.benchyard.com";
 export const contactAddress = "hello@benchyard.com";
@@ -51,7 +52,7 @@ function shell(
     .join("");
   return `<!doctype html><html lang="en" dir="ltr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="color-scheme" content="light dark"><meta name="theme-color" content="#f2f3ef" media="(prefers-color-scheme: light)"><meta name="theme-color" content="#111513" media="(prefers-color-scheme: dark)"><link rel="canonical" href="${site}${path}"><meta property="og:url" content="${site}${path}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:site_name" content="Benchyard"><meta property="og:type" content="website"><meta property="og:image" content="${site}/social-card.png"><meta property="og:image:width" content="${card.width}"><meta property="og:image:height" content="${card.height}"><meta property="og:image:alt" content="Benchyard: persistent workspaces for coding agents"><meta name="twitter:card" content="summary_large_image"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="icon" href="/favicon.ico" sizes="32x32"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="preload" as="font" type="font/woff2" crossorigin href="${at("fonts/bricolage-grotesque-latin-wght-normal.woff2")}"><link rel="preload" as="font" type="font/woff2" crossorigin href="${at("fonts/ibm-plex-sans-latin-400-normal.woff2")}"><link rel="stylesheet" href="${at("styles.css")}"></head><body>
  <a class="skip" href="#main">Skip to content</a><header class="top"><div class="wrap top-in"><a class="brand" href="/" aria-label="Benchyard home">${mark}<span>Benchyard</span></a><nav class="desktop-nav" aria-label="Main navigation"><ul>${nav}</ul></nav><div class="top-actions"><a class="signin" href="${consoleAddress}">Sign in</a>${button(t)}</div><details class="mobile-nav"><summary aria-label="Open navigation">Menu</summary><nav aria-label="Mobile navigation"><ul>${nav}<li><a href="/guides/workspaces/">Guides</a></li><li><a href="${consoleAddress}">Sign in</a></li></ul></nav></details></div></header>
- <main id="main" tabindex="-1">${body}</main><footer class="bottom"><div class="wrap footer-grid"><div><a href="/" class="brand">${mark}<span>Benchyard</span></a><p>Keep work moving.<br>Come back when it needs you.</p></div><nav aria-label="Product"><h2>Product</h2><ul>${nav}<li><a href="/#pricing">Access &amp; pricing</a></li></ul></nav><nav aria-label="Guides"><h2>Guides</h2><ul>${guides.map((g) => `<li><a href="/guides/${g.slug}/">${g.title}</a></li>`).join("")}<li><a href="/guides/workspaces/#demo-transcript">Demo transcript</a></li></ul></nav><nav aria-label="Contact"><h2>Get in touch</h2><ul><li><a href="${access(t)}">Request access</a></li><li><a href="mailto:${contactAddress}">${contactAddress}</a></li><li><a href="/#faq">Questions</a></li></ul></nav></div><p class="wrap legal">Claude, Codex, Cursor and Gemini are trademarks of their respective owners. Benchyard is not affiliated with or endorsed by their providers. Product information reviewed <time datetime="${reviewed}">${reviewed}</time>.</p></footer></body></html>`;
+ <main id="main" tabindex="-1">${body}</main><footer class="bottom"><div class="wrap footer-grid"><div><a href="/" class="brand">${mark}<span>Benchyard</span></a><p>Keep work moving.<br>Come back when it needs you.</p></div><nav aria-label="Product"><h2>Product</h2><ul>${nav}<li><a href="/#pricing">Access &amp; pricing</a></li></ul></nav><nav aria-label="Guides"><h2>Guides</h2><ul>${guides.map((g) => `<li><a href="/guides/${g.slug}/">${g.title}</a></li>`).join("")}<li><a href="/guides/workspaces/#demo-transcript">Demo transcript</a></li></ul></nav><nav aria-label="Contact"><h2>Get in touch</h2><ul><li><a href="${access(t)}">Request access</a></li><li><a href="mailto:${contactAddress}">${contactAddress}</a></li><li><a href="/#faq">Questions</a></li></ul></nav></div><div class="wrap legal"><nav aria-label="Legal"><ul>${policies.map((policy) => `<li><a href="/legal/${policy.slug}/">${esc(policy.label)}</a></li>`).join("")}</ul></nav><p>Claude, Codex, Cursor and Gemini are trademarks of their respective owners. Benchyard is not affiliated with or endorsed by their providers. Product information reviewed <time datetime="${reviewed}">${reviewed}</time>.</p></div></footer></body></html>`;
 }
 export function render(t, { asset } = {}) {
   const at = (name) => "/" + asset(name);
@@ -110,5 +111,14 @@ export function renderGuide(t, g, { asset }) {
     path: `/guides/${g.slug}/`,
     title: g.title + " | Benchyard",
     description: g.description,
+  });
+}
+export function renderLegal(t, policy, doc, { asset }) {
+  const toc = `<nav class="toc" aria-label="On this page"><strong>On this page</strong><ul>${doc.sections.map((section) => `<li><a href="#${section.id}">${esc(section.title)}</a></li>`).join("")}</ul></nav>`;
+  const body = `<article class="guide legal-doc wrap"><header class="guide-header"><a class="text-link" href="/">← Back to Benchyard</a><p class="eyebrow">LEGAL</p><h1>${esc(doc.title)}</h1></header>${toc}<div class="guide-body">${doc.html}</div></article>`;
+  return shell(t, (name) => "/" + asset(name), body, {
+    path: `/legal/${policy.slug}/`,
+    title: `${doc.title} | Benchyard`,
+    description: policy.description,
   });
 }

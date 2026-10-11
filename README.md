@@ -1,6 +1,6 @@
 # Benchyard public website
 
-A static homepage and three public guides for persistent coding-agent workspaces. Plain HTML and CSS, local fonts, responsive WebP, a native MP4 player and WebVTT captions. No scripts in the published site, third-party embeds, trackers or runtime framework.
+A static homepage, three public guides, and the customer legal policies for persistent coding-agent workspaces. Plain HTML and CSS, local fonts, responsive WebP, a native MP4 player and WebVTT captions. No scripts in the published site, third-party embeds, trackers or runtime framework.
 
 The homepage describes a workspace for coding agents, not a product limited to a fixed list of models. `content/en.mjs` holds the current integration registry. Kimi, GLM and MiniMax are identified as future directions, not verified current integrations. Model/provider compatibility and agent support are separate concepts.
 
@@ -25,6 +25,7 @@ npm run format:check
 
 - `content/en.mjs`: homepage copy and current integration list.
 - `content/guides.mjs`: guide content, factual review date, demo transcript.
+- `content/legal/`: customer policies (terms, privacy, and the related notices), rendered as pages. The launch checklist and research memorandum are not published.
 - `src/page.mjs`: shared HTML, home and guide renderers, canonical site, console and contact addresses.
 - `src/styles.css`: responsive light/dark styles; slim device silhouette without an extra case.
 - `src-img/`: real app screenshot originals and rendered video posters. Screens use fictional demo data.
@@ -33,7 +34,7 @@ npm run format:check
 - `docs/claims.md`: internal product-fact evidence, reviewed against the product main branch.
 - `docs/validation.md`: checks, measured results and release limitations.
 
-Routes: `/`, `/guides/agents/`, `/guides/workspaces/`, `/guides/security/`. Every route has its own title, description and canonical URL. The sitemap is generated from these routes. Cross-page fragments, resource hashes, source types, subtitles and cache headers are checked by `check.mjs`.
+Routes: `/`, `/guides/agents/`, `/guides/workspaces/`, `/guides/security/`, and `/legal/<policy>/` for each customer policy. Every route has its own title, description and canonical URL. The sitemap is generated from these routes. Cross-page fragments, resource hashes, source types, subtitles and cache headers are checked by `check.mjs`.
 
 ## Demo and screenshot production
 
