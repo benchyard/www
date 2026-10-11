@@ -7,7 +7,6 @@ export default {
       "Build with your agents in a persistent cloud workspace. Guide tasks, review changes and approve next steps from your laptop, tablet or phone.",
   },
   hero: {
-    eyebrow: "One workspace. Across your devices.",
     title: "A secure cloud workspace yard for agents.",
     tagline: "Build from any device, solo or with your team.",
     lead: "Keep code, terminals and previews in a workspace that runs independently of your browser. Guide your agents, review changes and approve the next step anytime, anywhere, from your laptop, tablet or phone.",
@@ -18,6 +17,7 @@ export default {
     ["agents", "Agents"],
     ["notifications", "Notifications"],
     ["teams", "For Teams"],
+    ["organizations", "Organizations"],
     ["security", "Security"],
   ],
   access: {
@@ -116,6 +116,34 @@ export default {
       ],
     ],
   },
+  organization: {
+    eyebrow: "FOR ORGANIZATIONS",
+    title: "Run Benchyard the way your organization works.",
+    lead: "Contact us about a hosted account, an installation on infrastructure you operate, or Linux machines your people already have. We agree the shape before anything starts.",
+    subject: "Benchyard for an organization",
+    cta: "Contact us",
+    body: [
+      "Organization and your role",
+      "Where should it run: Benchyard's hosted service, your own infrastructure, or both?",
+      "Do people need to attach Linux machines they already run?",
+      "What should be tailored: agents, machine types, limits, network, or something else?",
+    ],
+    items: [
+      [
+        "A tailored installation",
+        "Agents, machine types, limits and how the deployment is set up are agreed for your organization. This page is not a catalog, and it does not promise a feature that is not agreed.",
+      ],
+      [
+        "On your infrastructure",
+        "Benchyard can run on infrastructure your organization operates. That installation is licensed separately from the hosted service, and the operator's own privacy notice applies to it.",
+      ],
+      [
+        "Bring your own machine",
+        "Where that option is enabled, a person attaches a Linux machine with systemd that they already run. macOS is not supported for that attachment. A phone is for review and approval, not the machine that runs the workspace.",
+      ],
+    ],
+    note: "Availability depends on what we agree. Agent subscriptions and API usage stay with their providers.",
+  },
   security: {
     title: "Keep secrets outside the workspace.",
     lead: "For supported provider credentials and host-scoped secrets, agents receive placeholders. A credential keeper adds the real value only to requests for the configured hosts.",
@@ -170,6 +198,10 @@ export default {
     [
       "How do I get access?",
       "Request an invitation and tell us which agents you use and what you want to work on. We will discuss availability, supported environments and pricing before you start.",
+    ],
+    [
+      "Can an organization run Benchyard itself?",
+      "Yes, as an installation you agree, on infrastructure you operate. You can also use the hosted service, and where enabled attach Linux machines people already run. Contact us with the organization, where it should run, and what should be tailored.",
     ],
   ],
 };
