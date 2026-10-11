@@ -8,7 +8,7 @@ export const transcript = [
   [
     "2",
     "The agent edits three files.",
-    "Codex changes filter.mjs, filter.test.mjs and index.html. Each edit appears in the conversation and under Changes, with its diff.",
+    "Codex changes three files. Each edit appears in the conversation and under Changes, where you can see exactly what changed.",
   ],
   [
     "3",
@@ -23,7 +23,7 @@ export const transcript = [
   [
     "5",
     "You look through the result.",
-    "Changes holds the three diffs, Files the project's files, and Terminal the recorded output of the command. Ports lists the development server on port 4173.",
+    "Changes shows what changed in each of the three files, Files the project's files, and Terminal the recorded output of the command. Ports lists the app running in the workspace.",
   ],
   [
     "6",
@@ -37,7 +37,7 @@ export const guides = [
     title: "Coding agents in Benchyard",
     description:
       "Compare supported sign-ins, approvals and steering for Claude Code, Codex, Cursor and Gemini CLI in Benchyard.",
-    lead: "Benchyard provides a persistent workspace around your coding agent. The current integrations share a workspace interface, but their authentication and capabilities are different.",
+    lead: "Benchyard gives your coding agent a workspace that keeps running. The agents share one interface, but each signs in its own way and can do different things.",
     sections: [
       {
         id: "supported-agents",
@@ -52,8 +52,8 @@ export const guides = [
             ],
             [
               "Codex",
-              "ChatGPT device code or API key",
-              "ChatGPT device-code login must be available for your account. This is not a localhost browser redirect flow.",
+              "ChatGPT sign-in with a one-time code, or API key",
+              "Signing in with a code must be allowed for your ChatGPT account. If it is not, use an API key.",
             ],
             [
               "Cursor",
@@ -72,33 +72,33 @@ export const guides = [
         id: "models-and-providers",
         title: "How do agents, models and providers differ?",
         paragraphs: [
-          "An agent is the CLI that reads files, runs tools and manages a coding task. Models and providers supply its underlying inference. Supporting an agent does not mean every model or compatible endpoint has been tested.",
-          "Team-managed sign-ins can configure a gateway address for Claude Code, Codex and Gemini CLI. Cursor does not have a documented custom-address setting here. Compatibility depends on the agent protocol, gateway and chosen model; configuration support is not an end-to-end compatibility guarantee.",
-          "More agent and model integrations are planned, including Kimi Code, GLM Code and MiniMax. These names describe the intended direction, not verified built-in availability today.",
+          "An agent is the program that reads files, runs tools and carries out a coding task. A model is the AI behind it, and a provider is the company that runs the model. Supporting an agent does not mean every model it can use has been tested.",
+          "A team can send its agents' requests through a gateway of its own (a service the team runs between its agents and the provider) for Claude Code, Codex and Gemini CLI, but not for Cursor. Whether a particular gateway and model work together is for the team to check; Benchyard does not guarantee it.",
+          "More agents and models are planned, including Kimi Code, GLM Code and MiniMax. They are not available today.",
         ],
       },
       {
         id: "approvals",
         title: "Do all agents use the same approval controls?",
         paragraphs: [
-          "No. Benchyard presents approvals from each agent’s protocol. The available modes, edit approvals, planning and subagent behavior depend on that integration. Cursor does not provide the same Ask first edit-approval behavior as Claude Code or Codex.",
-          "A session's mode is Ask first, Accept edits, Full auto or Plan, where the agent supports it. A waiting approval pauses the action that needs permission. A notification opens the session; the decision is made inside the signed-in application.",
+          "No. Benchyard shows the approvals each agent asks for, and agents differ in what they ask. Cursor does not ask before each edit in the way Claude Code and Codex do in Ask first mode.",
+          "A session's mode is Ask first, Accept edits, Full auto or Plan, where the agent has it. While an approval waits, the action that needs it does not happen. A notification opens the session, and you decide there, signed in.",
         ],
       },
       {
         id: "steering",
         title: "Can I change direction while an agent is working?",
         paragraphs: [
-          "Codex supports native steering during a turn. Other integrations use stopping the current turn and sending a new message. Do not assume that every integration can accept an in-progress instruction in the same way.",
-          "One device drives messages in a session at a time. Another signed-in device can observe and approve. Separate sessions and Git worktrees can help keep parallel tasks apart; they do not imply automatic cooperation between agents.",
+          "Codex can take a new instruction while it is working. With the other agents you stop what it is doing and send a new message.",
+          "One device sends the messages in a session at a time; your other signed-in devices can watch and approve. Separate sessions, each with its own copy of the code if you like, keep tasks apart. Agents in different sessions do not coordinate with each other by themselves.",
         ],
       },
       {
         id: "credentials",
         title: "Where do the credentials come from?",
         paragraphs: [
-          "Use your supported provider subscription or API key, or credentials made available by your team. Benchyard access does not include an agent subscription or promise a provider allowance.",
-          "API keys for the providers Benchyard knows, subscription sign-ins for Claude Code, Codex and Cursor, and secrets that name their hosts are held by credential keepers outside the workspace. Whoever runs the installation can read stored credentials and session content. Read the security guide before choosing how to provide secrets.",
+          "Use your own subscription or API key for the agent, or a sign-in your team provides. Benchyard does not include an agent subscription.",
+          "Agent sign-ins for Claude Code, Codex and Cursor, API keys for the services Benchyard knows, and secrets you tie to a service's address are held by credential keepers outside the workspace, so the agent uses them without seeing them. Whoever runs the installation can read stored credentials and the content of sessions. Read the security guide before choosing how to provide secrets.",
         ],
         link: ["/guides/security/", "Read the security and credentials guide"],
       },
@@ -109,34 +109,34 @@ export const guides = [
     title: "How Benchyard workspaces work",
     description:
       "Understand persistent workspaces, stopping and resuming, phone approvals, browser previews and notifications in Benchyard.",
-    lead: "A workspace is the running environment for your coding sessions, project files and tools. You access it from the browser on your computer or phone.",
+    lead: "A workspace is where your agents work: it holds your project's files, your sessions and the tools they use. You reach it from the browser on your computer or phone.",
     sections: [
       {
         id: "lifecycle",
         title: "What persists when I leave?",
         paragraphs: [
-          "Closing a browser tab or laptop does not stop a running workspace. A running agent can continue until it finishes, needs input, encounters a failure or the workspace stops.",
-          "Stopping a workspace ends its terminals and running programs. Its files, conversations and sign-ins are kept. A machine can also be suspended: what was running is kept in the machine's memory and goes on when it starts again. A container is stopped, not suspended. The workspace's card says which happened and why.",
+          "Closing a browser tab or your laptop does not stop a running workspace. An agent keeps working until it finishes, needs you, fails, or the workspace stops.",
+          "Stopping a workspace ends its terminals and running programs. Its files, conversations and sign-ins are kept. A machine can also be suspended: what was running is kept and carries on when it starts again. A container is stopped, not suspended. The workspace's card says which happened and why.",
           "Opening a session of a stopped or suspended workspace does not start it. Sending a message does: the message is held and sent once the workspace is up, and you can take it back before then. Opening the terminal, the files, the desktop or a preview also starts it.",
-          "A workspace is stopped when idle only if you ask for it. The setting is Never unless you choose 30 minutes, 1 hour, 4 hours or 1 day; a machine type can carry a time of its own, and Keep running exempts one workspace. Idle means no agent is at work or waiting for you, nothing is running in its terminals or in the background, and you have not had it open for a while.",
+          "A workspace is stopped when idle only if you ask for it. The setting is Never unless you choose 30 minutes, 1 hour, 4 hours or 1 day; a size of workspace can have a time of its own, and Keep running exempts one workspace. Idle means no agent is at work or waiting for you, nothing is running in its terminals or in the background, and you have not had it open for a while.",
         ],
       },
       {
         id: "environments",
         title: "Where does the workspace run?",
         paragraphs: [
-          'A machine type is the size of a workspace. Shared types share their host\'s cores with other workspaces and read "up to" their size; Dedicated types have their cores and memory reserved. A machine type also says whether it has a desktop. Which types you can choose depends on your installation and account.',
+          "A machine type is the size of a workspace: how many processors and how much memory it has. Shared types share processing power with other workspaces, so their size reads “up to”; Dedicated types have their processors and memory reserved. A machine type also says whether it has a desktop. Which types you can choose depends on your installation and account.",
         ],
         table: {
           head: ["Kind", "What it is"],
           rows: [
             [
               "Container",
-              "A container for each workspace. When stopped, what was running ends and its files are kept. Whether you can become root is set by its machine type.",
+              "A light, isolated environment for each workspace. When stopped, what was running ends and its files are kept.",
             ],
             [
               "Machine",
-              "A virtual machine for each workspace, with a disk of its own. It can be suspended when idle, keeping what was running in memory.",
+              "A virtual computer for each workspace, with its own disk. It can be suspended when idle, so that what was running carries on when it starts again.",
             ],
           ],
         },
@@ -145,34 +145,34 @@ export const guides = [
         id: "tools",
         title: "What can I do inside a workspace?",
         paragraphs: [
-          "The terminal in the browser is a session that stays when you close the tab, and several tabs or devices can share it. The file editor shows the open folder as a tree, opens text files up to 2 MB, and uploads or downloads one file at a time.",
-          "For SSH, install the benchyard command on your computer, sign in with it, add a public key in the app, and connect with ssh to the workspace's name. Shell, scp, rsync, sftp and local forwards work; no port is opened on the workspace. The connection is relayed through the server, which supplies the workspace's host key.",
-          "Where a machine type has a desktop, it opens in the browser. It has no sound and is drawn in software. All of these belong to the workspace's owner.",
+          "The terminal in the browser keeps going when you close the tab, and you can open the same terminal from several tabs or devices. The file browser shows the project's folder, edits text files, and uploads or downloads one file at a time.",
+          "To use your own terminal or editor, connect over SSH: install the benchyard command on your computer, sign in with it, add your public key in the app, and connect to the workspace by its name. The usual tools for copying files work too. The connection is encrypted and passes through Benchyard's server; it is not protection against whoever runs the installation.",
+          "Where a workspace includes a desktop, it opens in the browser. It has no sound, and programs that need a graphics card run slowly. Only the workspace's owner can use any of these.",
         ],
       },
       {
         id: "snapshots",
         title: "How do snapshots and rollback work?",
         paragraphs: [
-          "A snapshot holds the workspace's disk at one moment, not what was running. You can take up to ten by hand, and choose a daily one that is taken while the workspace is idle or stopped. Only the workspace's owner can use them.",
-          "A rollback asks you to confirm, saves the present state as a snapshot first, and then puts the disk back. Sessions and messages from after the snapshot leave the history. Rolling back to the saved state undoes it. A new workspace can also be made from a snapshot.",
-          "Where a snapshot is kept depends on the storage, and the app says which. On a cloud provider's disks the storage provider keeps it apart from the disk, so it survives losing the disk. An installation on storage that keeps snapshots beside the disk says so: there a snapshot undoes mistakes and is lost with that storage. Whether snapshots are offered depends on the installation.",
+          "A snapshot is a saved copy of the workspace's files at one moment. It does not hold what was running. You can take up to ten yourself, and choose a daily one that is taken while the workspace is idle or stopped. Only the workspace's owner can use them.",
+          "Going back to a snapshot (a rollback) asks you to confirm, saves the present state as a snapshot first, and then puts the files back as they were. Sessions and messages from after the snapshot leave the history. Rolling back to the saved state undoes it. You can also make a new workspace from a snapshot.",
+          "Where a snapshot is kept depends on the installation's storage, and the app says which. On a cloud provider's storage it is kept separately from the workspace's disk, so it survives if the disk is lost. An installation whose storage keeps snapshots alongside the disk says so: there a snapshot undoes mistakes but is lost if that storage is. Whether snapshots are offered depends on the installation.",
         ],
       },
       {
         id: "devices",
         title: "How do I continue on my phone?",
         paragraphs: [
-          "Sign in on the other device and open the same workspace and session. One device drives messages at a time; other signed-in devices can watch and approve.",
-          "On an iPhone, add Benchyard to the Home Screen before enabling push notifications. Push is enabled per device and requires that device’s permission. Notifications open the session, where you inspect and approve the request.",
+          "Sign in on the other device and open the same workspace and session. One device sends the messages at a time; your other signed-in devices can watch and approve.",
+          "On an iPhone, add Benchyard to the Home Screen before turning on notifications. You turn them on for each device, and the device asks your permission. A notification opens the session, where you look at the request and approve it.",
         ],
       },
       {
         id: "previews",
         title: "How do browser previews work?",
         paragraphs: [
-          "When previews are configured, the Ports list offers Open in browser for the development server running inside a workspace. The preview opens on a separate origin from the console.",
-          "Previews require the workspace owner’s sign-in. They are not public links or a way to share the app with other team members. A stopped workspace may start when its preview is opened, but the development server must still be running on the port.",
+          "Where previews are available, the Ports list offers Open in browser for an app running inside a workspace. The preview opens at an address of its own, separate from the Benchyard app.",
+          "A preview opens only for the workspace's owner, signed in. It is not a public link or a way to share the app with other team members. Opening a preview starts a stopped workspace, but the app itself has to be started again before there is anything to see.",
         ],
       },
       {
@@ -183,25 +183,25 @@ export const guides = [
           rows: [
             [
               "Device push",
-              "Approvals, plans, completion, failure, agent notes and workspace-ready events.",
-              "Opt in on each device. iPhone requires adding the app to the Home Screen.",
+              "An approval is needed, a plan is ready, a task finished or failed, a note from the agent, a workspace is ready.",
+              "Turn it on for each device. On an iPhone, add the app to the Home Screen first.",
             ],
             [
               "Email",
-              "Approvals, plans to review, failed turns and expired agent sign-ins. No completion or agent-note mail.",
-              "Opt in, confirm your email address, and use a deployment with SMTP configured.",
+              "An approval is needed, a plan is ready to review, a task failed, an agent needs you to sign in again. Not for finished tasks or agent notes.",
+              "Turn it on and confirm your email address. The installation must have mail set up.",
             ],
           ],
         },
         paragraphs: [
-          "Email notifications are suppressed while you are viewing the session and throttled to avoid repeated mail within ten minutes. Email and push delivery are not availability guarantees.",
+          "No email is sent while you have the session open, and at most one per session in ten minutes. Delivery of email and notifications is not guaranteed.",
         ],
       },
       {
         id: "demo-transcript",
         title: "The demo, step by step",
         paragraphs: [
-          "The demo on the homepage is a replay drawn for the website, not the live app. Its diff, files, test output and issue board come from a real run in Benchyard with demo data; npm's notice of a newer npm and a Node warning are left out of the output. The agent's replies are scripted, and the board runs in a frame on the page.",
+          "The demo on the homepage is a replay drawn for the website, not the live app. The changes, files, test results and issue board in it come from a real run in Benchyard with demo data; two lines of unrelated notices are left out of the test output. The agent's replies are scripted.",
         ],
         transcript: true,
       },
@@ -211,72 +211,72 @@ export const guides = [
     slug: "security",
     title: "Security and data boundaries",
     description:
-      "Learn what Benchyard servers and agents can read, how credential keepers work, and how workspace and team boundaries differ.",
-    lead: "Benchyard runs code and holds session data. These boundaries explain the current design so you can decide which environment and credentials fit your work.",
+      "What the operator and your agents can read, how your sign-ins and keys are kept away from agents, and how workspaces and teams are kept apart.",
+    lead: "Benchyard runs code for you and holds your sessions. This page says plainly what is protected and what is not, so you can decide what to trust it with.",
     sections: [
       {
         id: "server-access",
         title: "What can the operator read?",
         paragraphs: [
-          "Whoever runs the installation can read provider sign-ins, stored API keys and secrets, and session content. There is no end-to-end encryption that keeps these from the operator.",
-          "Stored credentials are encrypted with a key for each person and each team, and those keys are wrapped by a master key the operator holds. That protects a copy of the database; it does not change the trust relationship. Passwords are stored as hashes.",
+          "Whoever runs the installation can read your agent sign-ins, stored API keys and secrets, and the content of your sessions. Benchyard is not end-to-end encrypted: nothing keeps these from the operator.",
+          "Stored credentials are encrypted, with a separate key for each person and each team, and the operator holds the key that unlocks them. That protects them if a copy of the database is taken; it does not protect them from the operator. Passwords are stored in a form that cannot be read back.",
         ],
       },
       {
         id: "keepers",
         title: "What do credential keepers protect?",
         paragraphs: [
-          "For a credential the keepers hold, the workspace receives a placeholder. A keeper outside the workspace holds the real value and puts it only into the declared fields of requests to that credential's hosts. The agent can use the credential at those hosts while the workspace runs, without receiving its value.",
-          "The keepers hold: a secret that names its hosts; your own API key for a provider Benchyard knows; a subscription sign-in for Claude Code, Codex or Cursor; a team's key when the team gives no gateway address; and a token for git over HTTPS.",
-          "They do not hold: a secret that names no hosts, which is a plain variable in the workspace; a team's key sent to a gateway address of the team's own; cloud access keys, private keys and database passwords; and anything saved in files in the home. An agent can read all of these.",
-          "Other limits: a program that ignores proxy settings does not go through a keeper, and a host that repeats what it is sent gives the value back to whoever asked.",
+          "An agent needs your sign-ins and keys to do its work, but it does not need to see them. For a protected credential the workspace gets a stand-in. A credential keeper outside the workspace holds the real value and adds it only to requests for the service that credential belongs to. The agent can use the credential at that service while the workspace runs, without ever having its value.",
+          "Protected this way: your subscription sign-in for Claude Code, Codex or Cursor; your own API key for a service Benchyard knows; a secret you tie to a service's address; a team's key, unless the team sends it through a gateway of its own; and the access token you use for GitHub or GitLab.",
+          "Not protected: a secret that is not tied to a service's address; a team's key that goes through the team's own gateway; access keys for cloud accounts, private keys and database passwords; and anything saved in a file in the workspace. An agent can read all of these.",
+          "Two more limits. Some programs do not send their requests by way of the keeper, and a protected credential does not work in them. And a service that repeats back what it is sent would show the value to whoever asked.",
         ],
       },
       {
         id: "isolation",
         title: "Is every workspace isolated the same way?",
         paragraphs: [
-          "No. A container workspace is a pod of its own with its own network rules, in a gVisor sandbox unless the operator chose another runtime. A machine workspace is a virtual machine of its own that accepts nothing inbound.",
-          "Where a machine type lets people become root, the agent can affect more of the container or machine, including the workspace daemon. Team administration gives no access to another member's workspace.",
+          "No. A container workspace runs in a sandbox of its own, with its own network rules. A machine workspace is a virtual computer of its own that accepts no incoming connections.",
+          "Where a workspace gives you administrator rights, an agent working for you has them too, and can change more of the workspace, including the parts of Benchyard that run inside it. Being a team's administrator gives no access to another member's workspace.",
         ],
       },
       {
         id: "network",
         title: "What can a workspace reach on the network?",
         paragraphs: [
-          "Any public address. Requests to private network ranges and outgoing mail on port 25 are refused. There is no list of allowed hosts, so anything an agent can read could be sent out.",
-          "Each workspace has a traffic allowance: a count of what it sends, which refills over time. Whether an empty allowance restricts the workspace is a setting of the installation's admins, and it is off unless they turn it on. When a restriction applies, connections that are already open are not ended.",
+          "The public internet. It cannot reach addresses inside private networks, and it cannot send email directly. There is no list of allowed destinations, so anything an agent can read could be sent out.",
+          "Each workspace has a traffic allowance: a limit on how much it can send, which fills up again over time. Whether running out restricts the workspace is up to the installation's administrators, and it does not unless they turn that on. A restriction stops new connections; ones that are already open carry on.",
         ],
       },
       {
         id: "teams",
         title: "What can a team administrator access?",
         paragraphs: [
-          "Teams can share rules, skills, tools and managed credentials and review usage. Workspaces remain individually owned: team administration does not grant access to another member’s workspace contents or controls to start and stop it.",
-          "Shared tools can execute code and need member approval. Shared instructions are useful configuration, not a promise of an enforced security policy.",
+          "A team can share rules, skills, tools and agent sign-ins, and see its usage. Each workspace still belongs to the person who made it: a team's administrator cannot open another member's workspace, or start and stop it.",
+          "A shared tool that runs code reaches a member's workspaces only after that member allows it. Shared rules guide agents; they are not an enforced security policy.",
         ],
       },
       {
         id: "preview-boundary",
         title: "How are previews separated from the console?",
         paragraphs: [
-          "Configured browser previews use a different origin from the console, with separate authentication cookies. Access currently belongs to the workspace owner.",
-          "The application being previewed is still code running in the workspace. Preview separation does not make arbitrary application content trustworthy or turn the preview into a public sharing link.",
+          "A preview opens at an address separate from the Benchyard app, with a sign-in of its own, and only for the workspace's owner.",
+          "What you see in a preview is still a program running in the workspace. Keeping it at a separate address does not make it trustworthy, and does not make it a link you can share.",
         ],
       },
       {
         id: "sign-in",
         title: "How do people sign in, and what is recorded?",
         paragraphs: [
-          "People sign in with a username and password or with a passkey. Two-factor authentication uses a passkey, an authenticator app, approval from a device that is already signed in, or a recovery code; an installation can require it. Single sign-on is not available. Signed-in devices are listed and can be signed out one by one.",
-          "Installation admins have an audit log of what was done to accounts, sign-ins, teams and settings, and by whom. It does not record what happens inside workspaces and sessions, and it never holds secret values. An Events page shows them what went wrong inside the installation. No retention period is set for either.",
+          "You sign in with a username and password or with a passkey. For two-factor authentication you can use a passkey, an authenticator app, approval from a device where you are already signed in, or a recovery code; an installation can require it. Signing in through a company's single sign-on is not available. The devices you are signed in on are listed, and you can sign any of them out.",
+          "An installation's administrators have a record of what was done to accounts, sign-ins, teams and settings, and by whom. It does not cover what happens inside workspaces and sessions, and it never holds secret values. They also have a list of problems the installation ran into. Neither has a set period after which entries are removed.",
         ],
       },
       {
         id: "availability",
         title: "What assurances are offered here?",
         paragraphs: [
-          "This page describes product behavior, not a certification, uptime agreement or compliance attestation. Contact us to discuss your requirements, available environments and operational arrangements before requesting access.",
+          "This page describes how the product behaves. It is not a certification, an uptime agreement or a statement of compliance. Contact us to discuss your requirements before requesting access.",
         ],
         link: ["mailto:hello@benchyard.com", "Discuss your requirements"],
       },

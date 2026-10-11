@@ -192,7 +192,7 @@ export function demo(boardHref) {
     <pre class="rp-term" tabindex="0" aria-label="Recorded terminal output">$ ${esc(data.test.command)}\n${esc(data.test.output)}</pre>
    </div>
    <div class="rp-panel" id="rp-panel-ports" role="tabpanel" aria-labelledby="rp-tab-ports" data-panel="ports">
-    <p class="rp-panel-note">Programs listening in the workspace.</p>
+    <p class="rp-panel-note">Apps running in the workspace.</p>
     <div class="rp-port"><b>${data.port}</b><code>node server.mjs</code><button type="button" data-open>${icons.open}Open in browser</button></div>
     <p class="rp-panel-note">Opens the issue board the agent changed. On this page it runs in a frame; in the app it opens at an address of its own that only you can open.</p>
    </div>

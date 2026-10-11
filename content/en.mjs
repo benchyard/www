@@ -39,13 +39,13 @@ export default {
     ],
     [
       "Check the result",
-      "Read the diff, inspect the test output and open the running app in your browser.",
+      "Read what changed, look at the test results and open the running app in your browser.",
     ],
   ],
   tour: [
     [
       "Review the changes",
-      "Read each file's diff beside the conversation while the agent waits for your decision.",
+      "See exactly what the agent changed in each file, beside the conversation, while it waits for your decision.",
       "session-approval",
       "Codex session with three changed files, a readable filter diff and a test command awaiting approval.",
     ],
@@ -56,8 +56,8 @@ export default {
       "Completed Codex task with the output of the approved test command and three file changes.",
     ],
     [
-      "Open a port",
-      "Ports lists what is listening in the workspace. Where the installation has previews, Open in browser shows it at an address of its own, which only you can open.",
+      "Open the running app",
+      "Ports lists the apps running in the workspace. Where previews are available, Open in browser shows one at an address of its own, which only you can open.",
       "ports",
       "The workspace Ports panel offers Open in browser for the running issue-board development server.",
     ],
@@ -69,7 +69,7 @@ export default {
     ],
     [
       "Keep every project in reach",
-      "Each workspace lists its sessions and says whether it is running, with its SSH name beside it.",
+      "Each workspace lists its sessions and says whether it is running.",
       "workspaces",
       "Benchyard workspace list with the running issue-board workspace and its connected agent sessions.",
     ],
@@ -80,11 +80,11 @@ export default {
     items: [
       [
         "Review the changes",
-        "Read file diffs beside the conversation, inspect files and use a terminal in the workspace.",
+        "See what changed beside the conversation, look through the files and use a terminal in the workspace.",
       ],
       [
         "Keep work in context",
-        "Separate tasks into sessions and use Git worktrees when parallel work needs separate working copies.",
+        "Give each task its own session. Tasks that run side by side can each work on their own copy of the code.",
       ],
       [
         "Return when you are ready",
@@ -94,33 +94,33 @@ export default {
     tools: [
       [
         "Terminal and files in the browser",
-        "A terminal that outlives a closed tab, and a file tree with an editor for the open folder.",
+        "A terminal that keeps going when you close the tab, and a file browser with an editor.",
       ],
       [
-        "SSH from your own computer",
-        "Add a public key and connect with ssh, scp, rsync or sftp through the benchyard command. No port is opened on the workspace.",
+        "Connect from your own computer",
+        "Prefer your own terminal or editor? Connect to a workspace over SSH and copy files with the tools you already use.",
       ],
       [
         "Snapshots and rollback",
-        "Take a snapshot of the workspace's disk by hand, or daily while it is idle. A rollback saves the present state first, so it can be undone.",
+        "Save the state of a workspace's files whenever you like, or once a day automatically. Going back to a snapshot saves the present state first, so you can undo it.",
       ],
       [
-        "A desktop where the machine type has one",
-        "Open a graphical desktop in the browser to look at what an agent built. It has no sound and is drawn in software.",
+        "A desktop when you need one",
+        "On workspaces that include a desktop, open it in the browser to look at what an agent built. It has no sound.",
       ],
     ],
     locations: [
       [
         "Containers",
-        "A container for each workspace. Stopping one ends what was running and keeps its files.",
+        "A light, isolated environment for each workspace. Stopping one ends what was running and keeps its files.",
       ],
       [
         "Machines",
-        "A virtual machine for each workspace, with a disk of its own. An idle machine can be suspended, which keeps what was running in its memory.",
+        "A virtual computer for each workspace, with its own disk. An idle machine can be suspended, so that what was running carries on when it starts again.",
       ],
       [
         "Shared or Dedicated",
-        "Each machine type says which it is. Shared types share their host's cores with other workspaces; Dedicated types have cores and memory reserved for them.",
+        "Each size of workspace says which it is. Shared sizes share processing power with other workspaces; Dedicated sizes have processors and memory reserved for them.",
       ],
     ],
   },
@@ -138,7 +138,7 @@ export default {
       [
         "codex",
         "Codex",
-        "Connect ChatGPT through a device code, or use an API key.",
+        "Sign in to ChatGPT with a one-time code, or use an API key.",
       ],
       [
         "cursor",
@@ -158,11 +158,11 @@ export default {
     items: [
       [
         "Shared instructions and tools",
-        "Share rules, skills and tools. Members approve shared tools that run code.",
+        "Share rules, skills and tools. A shared tool that runs code reaches a member only after that member allows it.",
       ],
       [
         "Managed sign-ins and usage",
-        "Manage the credentials available in team workspaces and review usage across your team.",
+        "Provide the agent sign-ins your team's workspaces use, and see usage across the team.",
       ],
       [
         "Individual workspaces",
@@ -179,12 +179,12 @@ export default {
     body: [
       "Business and your role",
       "Where should it run: Benchyard's hosted service, your own infrastructure, or both?",
-      "What should be tailored: agents, machine types, limits, network, or something else?",
+      "What should be tailored: agents, workspace sizes, limits, network, or something else?",
     ],
     items: [
       [
         "A tailored installation",
-        "Agents, machine types, limits and how the deployment is set up are agreed for your business. This page is not a catalog, and it does not promise a feature that is not agreed.",
+        "Agents, workspace sizes, limits and how the installation is set up are agreed for your business. This page is not a catalog, and it does not promise a feature that is not agreed.",
       ],
       [
         "On your infrastructure",
@@ -195,66 +195,66 @@ export default {
   },
   security: {
     title: "Keep secrets outside the workspace.",
-    lead: "For the credentials the keepers hold, agents receive placeholders. A credential keeper outside the workspace adds the real value only to requests for that credential's hosts.",
+    lead: "An agent needs your sign-ins and keys to do its work, but it does not need to see them. For protected credentials the agent gets a stand-in, and a credential keeper outside the workspace adds the real value only to requests for the service it belongs to.",
     items: [
       [
         "Credentials outside the workspace",
-        "The keepers hold secrets that name their hosts, API keys for the providers Benchyard knows, and subscription sign-ins for Claude Code, Codex and Cursor. The workspace holds a placeholder.",
+        "Protected this way: agent sign-ins for Claude Code, Codex and Cursor, API keys for the services Benchyard knows, and any secret you tie to a service's address.",
       ],
       [
         "What the operator can read",
-        "Whoever runs the installation can read stored credentials and session content. Stored credentials are encrypted with keys the operator holds. This is not end-to-end encryption.",
+        "Whoever runs the installation can read stored credentials and the content of sessions. Credentials are stored encrypted, and the operator holds the keys. This is not end-to-end encryption.",
       ],
       [
         "Secrets need care",
-        "A secret that names no hosts, a team key for the team's own gateway, private keys and anything saved in files can be read by the agent.",
+        "A secret that is not tied to a service, a private key, and anything saved in a file in the workspace can be read by the agent.",
       ],
       [
-        "Environment matters",
-        "Containers and machines are isolated in different ways. Where a machine type lets people become root, the protection boundary changes.",
+        "Workspaces are kept apart",
+        "Each workspace is isolated from the others. Where a workspace gives you administrator rights, an agent working for you has them too.",
       ],
       [
         "Network and traffic",
-        "A workspace can reach any public address; private network ranges are refused. Each workspace has an allowance for what it sends, and installation admins decide whether an empty one restricts it.",
+        "A workspace can reach the public internet, but not addresses inside private networks. Each workspace has an allowance for how much it sends, and an installation's administrators decide whether running out restricts it.",
       ],
       [
         "Sign-in and records",
-        "Sign in with a password or a passkey, with two-factor authentication. Installation admins have an audit log of changes to accounts, sign-ins, teams and settings.",
+        "Sign in with a password or a passkey, with two-factor authentication. An installation's administrators have a record of changes to accounts, sign-ins, teams and settings.",
       ],
     ],
   },
   faq: [
     [
       "What is Benchyard?",
-      "Benchyard is a persistent workspace for coding agents. It brings sessions, files, terminals, diffs and browser previews together, with access from a computer or phone.",
+      "Benchyard is a workspace in the cloud for coding agents. It keeps the conversation, the files, a terminal, the changes and a preview of the running app together, and you reach it from a computer or a phone.",
     ],
     [
       "Does work continue when I close my laptop?",
-      "It can continue while the workspace remains running. Closing the browser does not stop it. A task that needs approval waits for your decision; stopping the workspace ends its running processes.",
+      "Yes, while the workspace is running. Closing the browser does not stop it. A task that needs your approval waits for your decision; stopping the workspace ends what was running in it.",
     ],
     [
       "What happens when a workspace is stopped?",
-      "Its files, conversations and sign-ins are kept; terminals and running programs end. Opening a session does not start it. Sending a message does, and the message is held until the workspace is up. An idle machine may be suspended instead, which keeps what was running in its memory.",
+      "Its files, conversations and sign-ins are kept; terminals and running programs end. Opening a session does not start it. Sending a message does, and the message is held until the workspace is up. An idle machine may be suspended instead, and then what was running carries on when it starts again.",
     ],
     [
       "Can I approve from a second device?",
-      "Yes. One device drives messages at a time, and another signed-in device can watch and approve. Open the session from a notification to make the decision.",
+      "Yes. One device sends the messages at a time, and any other device you are signed in on can watch and approve. Open the session from a notification to make the decision.",
     ],
     [
       "Are agents and models the same thing?",
-      "No. An agent is the tool that works on your code; a model is what powers it. Model and provider choices depend on the agent and its configuration. The integrations shown here are the current ones, not a limit on Benchyard’s future direction.",
+      "No. An agent is the tool that works on your code; a model is the AI behind it. Which models you can use depends on the agent and how it is set up. The agents shown here are the current ones, and more are planned.",
     ],
     [
       "Do I need a separate agent account?",
-      "Yes. Bring the subscription or API key supported by your agent, or use credentials supplied by your team. Agent provider charges and access requirements are separate.",
+      "Yes. Bring the subscription or API key your agent accepts, or use a sign-in your team provides. What the agent's provider charges is separate from Benchyard.",
     ],
     [
       "Can I share a preview with my team?",
-      "Browser previews currently require the workspace owner’s sign-in. They are not public or team-sharing links. Preview availability depends on the deployment.",
+      "No. A preview opens only for the workspace's owner, signed in. It is not a public link or a way to share with a team. Whether previews are available depends on the installation.",
     ],
     [
       "What gets sent by email?",
-      "When enabled and configured, email is for approvals, plans needing review, failed turns and expired agent sign-ins. Completion and agent notes are not sent by email.",
+      "If you turn email on, you get one when an agent needs your approval, has a plan for you to review, fails, or needs you to sign in again. Finished tasks and agent notes are not emailed.",
     ],
     [
       "How is workspace use counted?",
@@ -262,7 +262,7 @@ export default {
     ],
     [
       "How do I get access?",
-      "Request an invitation and tell us which agents you use and what you want to work on. We will discuss availability, supported environments and pricing before you start.",
+      "Request an invitation and tell us which agents you use and what you want to work on. We will discuss availability and pricing before you start.",
     ],
     [
       "Can a business run Benchyard itself?",
