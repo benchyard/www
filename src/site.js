@@ -45,20 +45,58 @@
     for (const el of tour.children)
       el.classList.toggle("on", (el.dataset.tour ?? el.dataset.shot) === i);
   };
-  // The picture follows a step that stays in the middle, not every step a
-  // fast scroll passes on its way somewhere (a link in the menu, a flick).
-  let settle;
-  const middle = new IntersectionObserver(
-    (entries) => {
-      for (const e of entries)
-        if (e.isIntersecting) {
-          clearTimeout(settle);
-          settle = setTimeout(show, 160, e.target.dataset.tour);
-        }
+  // The picture follows the step nearest the middle of the screen. When a
+  // link takes the page somewhere (the menu, "Play the demo"), the picture is
+  // put away for the way there and comes back once the page has come to rest,
+  // with the step it has arrived at: nothing is flipped through in passing.
+  // Scrolling by hand ends that at once.
+  const texts = [...tour.querySelectorAll("[data-tour]")];
+  const nearest = () => {
+    const mid = innerHeight / 2;
+    let best = texts[0];
+    let gap = Infinity;
+    for (const el of texts) {
+      const r = el.getBoundingClientRect();
+      const d = Math.abs((r.top + r.bottom) / 2 - mid);
+      if (d < gap) [best, gap] = [el, d];
+    }
+    show(best.dataset.tour);
+  };
+  let rest;
+  let asked = false;
+  const arrive = () => {
+    clearTimeout(rest);
+    nearest();
+    tour.classList.remove("moving");
+  };
+  addEventListener("click", (e) => {
+    if (!e.target.closest?.('a[href*="#"]')) return;
+    tour.classList.add("moving");
+    clearTimeout(rest);
+    rest = setTimeout(arrive, 300);
+  });
+  for (const input of ["wheel", "touchstart", "keydown"])
+    addEventListener(
+      input,
+      () => tour.classList.contains("moving") && arrive(),
+      { passive: true },
+    );
+  addEventListener(
+    "scroll",
+    () => {
+      if (tour.classList.contains("moving")) {
+        clearTimeout(rest);
+        rest = setTimeout(arrive, 140);
+      } else if (!asked) {
+        asked = true;
+        requestAnimationFrame(() => {
+          asked = false;
+          nearest();
+        });
+      }
     },
-    { rootMargin: "-45% 0px -45% 0px" },
+    { passive: true },
   );
-  for (const el of tour.querySelectorAll("[data-tour]")) middle.observe(el);
   show("0");
 })();
 (() => {
