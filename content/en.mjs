@@ -202,8 +202,8 @@ export default {
         "Protected this way: agent sign-ins for Claude Code, Codex and Cursor, API keys for the services Benchyard knows, and any secret you tie to a service's address.",
       ],
       [
-        "What the operator can read",
-        "Whoever runs the installation can read stored credentials and the content of sessions. Credentials are stored encrypted, and the operator holds the keys. This is not end-to-end encryption.",
+        "Encrypted in storage",
+        "Your sign-ins, keys and secrets are stored encrypted, with a separate key for each person and team. Benchyard is not end-to-end encrypted: the party that runs the service can access what it stores.",
       ],
       [
         "Secrets need care",

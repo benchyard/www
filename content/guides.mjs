@@ -98,7 +98,7 @@ export const guides = [
         title: "Where do the credentials come from?",
         paragraphs: [
           "Use your own subscription or API key for the agent, or a sign-in your team provides. Benchyard does not include an agent subscription.",
-          "Agent sign-ins for Claude Code, Codex and Cursor, API keys for the services Benchyard knows, and secrets you tie to a service's address are held by credential keepers outside the workspace, so the agent uses them without seeing them. Whoever runs the installation can read stored credentials and the content of sessions. Read the security guide before choosing how to provide secrets.",
+          "Agent sign-ins for Claude Code, Codex and Cursor, API keys for the services Benchyard knows, and secrets you tie to a service's address are held by credential keepers outside the workspace, so the agent uses them without seeing them. They are stored encrypted. Benchyard is not end-to-end encrypted; the security guide says what that means before you choose how to provide secrets.",
         ],
         link: ["/guides/security/", "Read the security and credentials guide"],
       },
@@ -146,7 +146,7 @@ export const guides = [
         title: "What can I do inside a workspace?",
         paragraphs: [
           "The terminal in the browser keeps going when you close the tab, and you can open the same terminal from several tabs or devices. The file browser shows the project's folder, edits text files, and uploads or downloads one file at a time.",
-          "To use your own terminal or editor, connect over SSH: install the benchyard command on your computer, sign in with it, add your public key in the app, and connect to the workspace by its name. The usual tools for copying files work too. The connection is encrypted and passes through Benchyard's server; it is not protection against whoever runs the installation.",
+          "To use your own terminal or editor, connect over SSH: install the benchyard command on your computer, sign in with it, add your public key in the app, and connect to the workspace by its name. The usual tools for copying files work too. The connection is encrypted and passes through Benchyard's server. Like the rest of Benchyard, it is not end-to-end encrypted.",
           "Where a workspace includes a desktop, it opens in the browser. It has no sound, and programs that need a graphics card run slowly. Only the workspace's owner can use any of these.",
         ],
       },
@@ -211,17 +211,9 @@ export const guides = [
     slug: "security",
     title: "Security and data boundaries",
     description:
-      "What the operator and your agents can read, how your sign-ins and keys are kept away from agents, and how workspaces and teams are kept apart.",
+      "How your sign-ins and keys are kept away from agents, how what you store is protected, and how workspaces and teams are kept apart.",
     lead: "Benchyard runs code for you and holds your sessions. This page says plainly what is protected and what is not, so you can decide what to trust it with.",
     sections: [
-      {
-        id: "server-access",
-        title: "What can the operator read?",
-        paragraphs: [
-          "Whoever runs the installation can read your agent sign-ins, stored API keys and secrets, and the content of your sessions. Benchyard is not end-to-end encrypted: nothing keeps these from the operator.",
-          "Stored credentials are encrypted, with a separate key for each person and each team, and the operator holds the key that unlocks them. That protects them if a copy of the database is taken; it does not protect them from the operator. Passwords are stored in a form that cannot be read back.",
-        ],
-      },
       {
         id: "keepers",
         title: "What do credential keepers protect?",
@@ -230,6 +222,14 @@ export const guides = [
           "Protected this way: your subscription sign-in for Claude Code, Codex or Cursor; your own API key for a service Benchyard knows; a secret you tie to a service's address; a team's key, unless the team sends it through a gateway of its own; and the access token you use for GitHub or GitLab.",
           "Not protected: a secret that is not tied to a service's address; a team's key that goes through the team's own gateway; access keys for cloud accounts, private keys and database passwords; and anything saved in a file in the workspace. An agent can read all of these.",
           "Two more limits. Some programs do not send their requests by way of the keeper, and a protected credential does not work in them. And a service that repeats back what it is sent would show the value to whoever asked.",
+        ],
+      },
+      {
+        id: "server-access",
+        title: "How is what I store protected?",
+        paragraphs: [
+          "Your agent sign-ins, API keys and secrets are stored encrypted, with a separate key for each person and each team. Passwords are stored in a form that cannot be read back.",
+          "Benchyard is not end-to-end encrypted. The service has to use your credentials on your behalf and show you your sessions, so the party that runs it can access them. On the hosted service that is Benchyard; on an installation your company runs, it is your company.",
         ],
       },
       {
