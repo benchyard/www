@@ -1,6 +1,27 @@
 // The homepage's one script. It plays the replay (src/demo.mjs drew the
 // finished session; this shows it step by step and waits for the visitor's
 // approval). Without it the page shows the finished session as it is.
+// What follows the scroll: an element with data-fx gets --p, from 0 as its
+// top comes into view to 1 when it has come up most of the way. The page
+// scrolls as the visitor scrolls it; this only reads where it is.
+(() => {
+  const parts = [...document.querySelectorAll("[data-fx]")];
+  if (!parts.length || matchMedia("(prefers-reduced-motion: reduce)").matches)
+    return;
+  let asked = false;
+  const read = () => {
+    asked = false;
+    const h = innerHeight;
+    for (const el of parts) {
+      const p = (h - el.getBoundingClientRect().top) / (h * 0.6);
+      el.style.setProperty("--p", Math.max(0, Math.min(1, p)).toFixed(3));
+    }
+  };
+  const ask = () => asked || ((asked = true), requestAnimationFrame(read));
+  addEventListener("scroll", ask, { passive: true });
+  addEventListener("resize", ask);
+  read();
+})();
 (() => {
   const root = document.querySelector("[data-replay]");
   if (!root) return;

@@ -42,7 +42,7 @@ const phone = (content) =>
 const cards = (items) =>
   `<ul class="cards">${items.map(([title, body]) => `<li><h3>${esc(title)}</h3><p>${esc(body)}</p></li>`).join("")}</ul>`;
 const heading = (label, title, lead = "") =>
-  `<div class="section-heading"><p class="eyebrow">${label}</p><h2>${esc(title)}</h2>${lead ? `<p class="lead">${esc(lead)}</p>` : ""}</div>`;
+  `<div class="section-heading"><h2>${esc(title)}</h2>${lead ? `<p class="lead">${esc(lead)}</p>` : ""}</div>`;
 function shell(
   t,
   at,
@@ -82,10 +82,7 @@ export function render(t, { asset } = {}) {
     "Codex session with three changed files, a readable filter diff and a test command awaiting approval.",
     1440,
     900,
-    {
-      priority: true,
-      sizes: "(min-width: 1200px) 980px, (min-width: 701px) 85vw, 92vw",
-    },
+    { sizes: "(min-width: 1200px) 980px, (min-width: 701px) 85vw, 92vw" },
   );
   desktop = desktop.replace(
     "<picture>",
@@ -97,14 +94,14 @@ export function render(t, { asset } = {}) {
     "The same Codex session on a phone, with Deny and Approve controls for npm test.",
     390,
     740,
-    { eager: true, sizes: "(min-width: 701px) 248px, 278px" },
+    { sizes: "(min-width: 701px) 248px, 278px" },
   );
   return shell(
     t,
     at,
     `
- <section class="hero" id="top"><div class="wrap"><div class="hero-copy"><div><h1>${esc(t.hero.title)} <span class="hero-tagline">${esc(t.hero.tagline)}</span></h1></div><div><p class="lead hero-lead">${t.hero.lead}</p><p class="actions">${button(t)}<a class="btn btn-text" href="#demo"><span aria-hidden="true">▷</span> Play the demo</a></p><p class="note">${t.hero.note}</p></div></div><div class="agent-strip" aria-label="Agent integrations and planned additions">${names}</div><figure class="stage"><div class="frame frame-desktop">${desktop}</div><div class="hero-phone">${phone(mobile)}</div><figcaption>One workspace, across your devices. Real interface with fictional demo data.</figcaption></figure></div></section>
- <section id="demo" class="band"><div class="wrap">${heading("SEE IT IN ACTION", "From task to preview, wherever you are.", "Play one task: the agent adds a status filter and asks before it runs the tests. Approve it, then look through what changed and open the running app.")}${demo(at("demo-board.html"))}<p id="demo-description" class="caption">A replay drawn for this page, not the live app. The diff, files, test output and issue board come from a real run with demo data. The agent’s replies are scripted. <a href="/guides/workspaces/#demo-transcript">Read it as text</a>.</p><ol class="steps">${t.steps.map(([title, body], i) => `<li><span class="step-number">0${i + 1}</span><h3>${title}</h3><p>${body}</p></li>`).join("")}</ol></div></section>
+ <section class="lede" id="top"><div class="wrap"><h1>${esc(t.hero.title)}</h1><p class="lede-tag">${esc(t.hero.tagline)}</p><p class="lead">${t.hero.lead}</p><p class="actions">${button(t)}<a class="btn btn-text" href="#demo"><span aria-hidden="true">▷</span> Play the demo</a></p><p class="note">${t.hero.note}</p><div class="agent-strip" aria-label="Agent integrations and planned additions">${names}</div></div><div class="lede-stage" id="demo" data-fx><div class="lede-play"><h2 class="visually-hidden">Play one task from start to finish</h2>${demo(at("demo-board.html"))}<p id="demo-description" class="caption">A replay drawn for this page, not the live app. The diff, files, test output and issue board come from a real run with demo data. The agent’s replies are scripted. <a href="/guides/workspaces/#demo-transcript">Read it as text</a>.</p></div></div></section>
+ <section id="devices" class="band"><div class="wrap">${heading("", "The same session on every device.", "One device drives a session while the others watch and approve. These are pictures of the app itself.")}<figure class="stage"><div class="frame frame-desktop">${desktop}</div><div class="hero-phone">${phone(mobile)}</div><figcaption>The real interface, with fictional demo data.</figcaption></figure><ol class="steps">${t.steps.map(([title, body], i) => `<li><span class="step-number">0${i + 1}</span><h3>${title}</h3><p>${body}</p></li>`).join("")}</ol></div></section>
  <section id="workspace"><div class="wrap">${heading("THE WORKSPACE", t.workspace.title, t.workspace.lead)}${cards(t.workspace.items)}<figure class="frame workspace-shot">${shot(at, "workspaces", "Benchyard workspace list with the running issue-board workspace and its connected agent sessions.")}<figcaption>Keep projects and sessions in reach.</figcaption></figure><div class="locations"><h3>Work in it your way.</h3><p>Each of these belongs to the workspace's owner.</p>${cards(t.workspace.tools)}</div><div class="locations"><h3>Choose where it runs.</h3><p>Which machine types you can choose depends on your installation and account.</p>${cards(t.workspace.locations)}</div><a class="text-link" href="/guides/workspaces/">Explore workspace behavior <span aria-hidden="true">→</span></a></div></section>
  <section id="preview" class="band"><div class="wrap"><div class="split-heading">${heading("BROWSER PREVIEWS", "See the change working.", "Open a development server from Ports and try the app in your browser. Previews use a separate origin and require the workspace owner’s sign-in.")}<p class="aside-note">Available where previews are configured. Preview links are not public or team-sharing links.</p></div><div class="preview-grid"><figure class="frame">${shot(at, "ports", "The workspace Ports panel offers Open in browser for the running issue-board development server.", 1440, 900, { sizes: "(min-width: 900px) 540px, 92vw" })}<figcaption>01 &nbsp; Open the workspace port</figcaption></figure><figure class="frame">${shot(at, "preview", "The running issue-board application with All issues, In progress and Done filters and six fictional issues.", 1440, 900, { sizes: "(min-width: 900px) 540px, 92vw" })}<figcaption>02 &nbsp; Try the result</figcaption></figure></div></div></section>
  <section id="agents"><div class="wrap">${heading("CURRENT INTEGRATIONS", t.agents.title, t.agents.lead)}<ul class="agent-cards">${t.agents.items.map(([id, name, body]) => `<li>${agentMark(id)}<h3>${name}</h3><p>${body}</p></li>`).join("")}</ul><div class="integration-future"><h3>Room for what comes next.</h3><div class="agent-strip" aria-label="Planned integrations">${t.agents.planned.map(([id, name]) => `<span class="agent-name">${agentMark(id)}${name}<small class="agent-status">Planned</small></span>`).join("")}</div><p>${t.agents.future}</p></div><a class="text-link" href="/guides/agents/">Compare sign-ins and capabilities <span aria-hidden="true">→</span></a></div></section>

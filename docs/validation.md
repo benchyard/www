@@ -36,13 +36,13 @@ Date: 2026-10-09 (Asia/Shanghai).
 
 Three cold-context samples per viewport, local Chromium, 150ms network latency, 1.6Mbps download and 4× CPU throttling. Bytes below are uncompressed file sizes, including the poster. Source: `docs/validation/performance.json`.
 
-| Measurement | Mobile 390px | Desktop 1280px |
-| --- | --- | --- |
-| LCP samples | 960 / 968 / 972ms | 1860 / 1844 / 1852ms |
-| CLS | 0.0002 | 0.0005 |
-| Initial resource bytes | 289,791 | 334,529 |
-| Selected page image bytes, including poster | 232,024 | 326,052 |
-| MP4 fetched before play | No | No |
+| Measurement                                 | Mobile 390px      | Desktop 1280px       |
+| ------------------------------------------- | ----------------- | -------------------- |
+| LCP samples                                 | 960 / 968 / 972ms | 1860 / 1844 / 1852ms |
+| CLS                                         | 0.0002            | 0.0005               |
+| Initial resource bytes                      | 289,791           | 334,529              |
+| Selected page image bytes, including poster | 232,024           | 326,052              |
+| MP4 fetched before play                     | No                | No                   |
 
 Both resource budgets passed: initial resources below 1MB, selected page images below 3MB. These are local lab results, not real-user p75 measurements. INP and production CDN latency were not measured. These measurements precede the lock-screen CSS revision; image and font assets remain unchanged, while HTML/CSS byte totals may differ slightly.
 
@@ -88,3 +88,13 @@ The website and Benchyard application share locally bundled artwork for all six 
 The application production build and lint passed, with 223 unit tests passing and one skipped. Its actual AgentGlyph and both AgentMark sizes were rendered and inspected in light and dark themes. All 18 images loaded in each theme. Website inline gradients have ten distinct IDs and no unresolved references. The temporary application preview page and development server were removed after inspection.
 
 Final verification passed: all 14 website pages, all 21 Playwright checks, and full 60-second playback in Chromium, Firefox and WebKit with fullscreen, eight subtitle cues and no media errors.
+
+## Product facts, the replay and the new opening — 2026-10-11
+
+The sections above describe the 60-second video, which is gone: the homepage's demo is a replay drawn on the page (README, "The demo, and screenshot production"). Their video measurements are history.
+
+- **Facts.** Every claim on the homepage and in the guides was checked against product main `44744a98` and `docs/claims.md` rewritten with where. Clouds are no longer named and a person's own machine is not mentioned; `check.mjs` refuses both outside the legal pages.
+- **Capture.** `npm run demo:capture` ran the fictional task in the real app at product commit `ed818788`, built from a detached worktree under `.cache/` (removed afterwards), in a disposable container that the script removed. It wrote the screenshots and `content/demo.json`. Every screenshot and the JSON were read: fictional data only. The capture itself tried the board's filters (3, 3, 6). A picture of a stopped workspace was tried and not got: the Stop button was not found within the wait, and it was left out.
+- **Checks.** `npm run check`: 14 pages. `npm test`: 29 passed, 1 skipped (WebKit reaches buttons with Tab only by an OS setting), in Chromium, Firefox and WebKit. The tests drive the replay at 1440 and 390 pixels: it waits at the approval and goes no further by itself; Deny runs nothing and Ask again brings the request back; Approve from the phone and from the desktop; each of Changes, Files, Terminal and Ports; the board in its frame shows 3, 3 and 6; no page error. Keyboard only and reduced motion in Chromium and Firefox. Without scripts the finished session is on the page. Axe: no WCAG 2 A/AA or 2.1 AA violations on the homepage and guides at 360, 390 and 1280 pixels.
+- **Performance** (`npm run measure`, same method as above; `docs/validation/performance.json`): mobile LCP 1280 to 1308 ms, CLS 0.0008, 191,412 initial bytes; desktop LCP 1300 to 1328 ms, CLS 0.002, 263,858 initial bytes. Budgets passed. Mobile LCP is slower than the video page's 960 to 972 ms; desktop is faster than its 1844 to 1860 ms. The script is 10,949 bytes and the board 5,354 bytes, fetched only when opened.
+- **Not verified:** a real phone or tablet; the production host; anything at a real cloud or on Kubernetes; real model calls, mail or push. The scroll-linked settling of the replay was looked at in Chromium only.

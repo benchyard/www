@@ -780,7 +780,6 @@ pre.rp-code {
   outline-offset: 2px;
 }
 
-
 @media (max-width: 1100px) {
   .rp-window {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

@@ -1512,3 +1512,74 @@ figcaption {
 .integration-future .agent-strip {
   margin-top: 16px;
 }
+
+/* The opening: the headline leads straight into the demo, which is the
+   page's first picture and can be played where it stands. */
+.top {
+  background: color-mix(in srgb, var(--bg) 76%, transparent);
+  -webkit-backdrop-filter: saturate(1.6) blur(18px);
+  backdrop-filter: saturate(1.6) blur(18px);
+}
+.lede {
+  padding: clamp(56px, 8vw, 116px) 0 0;
+  text-align: center;
+  overflow: hidden;
+}
+.lede h1 {
+  max-width: 19ch;
+  margin-inline: auto;
+  font-size: clamp(42px, 6.6vw, 96px);
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+.lede-tag {
+  margin-top: clamp(16px, 2vw, 26px);
+  font: 500 clamp(22px, 2.7vw, 36px) / 1.15 var(--display);
+  letter-spacing: -0.02em;
+  color: var(--muted);
+  text-wrap: balance;
+}
+.lede .lead {
+  max-width: 58ch;
+  margin-inline: auto;
+}
+.lede .actions,
+.lede .agent-strip {
+  justify-content: center;
+}
+.lede .agent-strip {
+  margin-top: 34px;
+}
+.lede-stage {
+  width: min(1360px, 100% - 32px);
+  margin: clamp(40px, 5vw, 72px) auto 0;
+  padding-bottom: clamp(56px, 7vw, 96px);
+  scroll-margin-top: 96px;
+}
+/* The window settles into place as it is scrolled to (site.js sets --p from
+   0 to 1; without it, it is in place). */
+.lede-play {
+  transform-origin: 50% 0;
+  transform: translateY(calc((1 - var(--p, 1)) * 56px))
+    scale(calc(0.92 + 0.08 * var(--p, 1)));
+}
+.lede-play .rp-window {
+  box-shadow:
+    0 2px 6px rgba(20, 30, 25, 0.06),
+    0 40px 90px -30px rgba(20, 30, 25, 0.38);
+}
+.lede-play .rp-controls {
+  justify-content: center;
+}
+.lede-play .rp-status {
+  flex: 0 1 auto;
+}
+.lede-play > .caption {
+  max-width: 78ch;
+  margin-inline: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .lede-play {
+    transform: none;
+  }
+}
