@@ -10,15 +10,15 @@ This document distinguishes providers engaged by Benchyard from services custome
 
 The actual production inventory has not yet been supplied for this revision. The following rows identify the information needed; they do not assert that a particular supplier or processing country has been selected. Complete each applicable row from the actual contract and deployment, and remove unused rows.
 
-| Function | Data potentially processed | Required production entry |
-| --- | --- | --- |
-| Workspace hosting and snapshots | Code, files, agent context, credentials stored in workspaces, execution and resource records | Provider legal entity; hosting and access countries; services used; processing agreement; transfer safeguards |
-| Database hosting | Accounts, session mirror, search, protected credentials, settings, usage and audit records | Provider legal entity or underlying host; storage and access countries; processing agreement; transfer safeguards |
-| Object storage and recovery backups | Attachments, session bundles, feedback images, and backed-up data | Provider legal entity; storage, replica and access countries; deletion cycle; processing agreement; transfer safeguards |
-| Network delivery and security | IP addresses, request metadata and content where handled | Provider legal entity; functions and countries; processing agreement; transfer safeguards |
-| Email and support | Contact details, messages, optional support materials and delivery records | Provider legal entity; functions and countries; processing agreement; transfer safeguards |
-| Secrets management | Infrastructure credentials and any customer credentials entrusted to the service | Provider legal entity; actual credential scope; countries; processing agreement; transfer safeguards |
-| Push delivery | Device endpoints and notification payloads | Browser or operating-system service providers; payload protection; locations; applicable roles and terms |
+| Function                            | Data potentially processed                                                                   | Required production entry                                                                                               |
+| ----------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Workspace hosting and snapshots     | Code, files, agent context, credentials stored in workspaces, execution and resource records | Provider legal entity; hosting and access countries; services used; processing agreement; transfer safeguards           |
+| Database hosting                    | Accounts, session mirror, search, protected credentials, settings, usage and audit records   | Provider legal entity or underlying host; storage and access countries; processing agreement; transfer safeguards       |
+| Object storage and recovery backups | Attachments, session bundles, feedback images, and backed-up data                            | Provider legal entity; storage, replica and access countries; deletion cycle; processing agreement; transfer safeguards |
+| Network delivery and security       | IP addresses, request metadata and content where handled                                     | Provider legal entity; functions and countries; processing agreement; transfer safeguards                               |
+| Email and support                   | Contact details, messages, optional support materials and delivery records                   | Provider legal entity; functions and countries; processing agreement; transfer safeguards                               |
+| Secrets management                  | Infrastructure credentials and any customer credentials entrusted to the service             | Provider legal entity; actual credential scope; countries; processing agreement; transfer safeguards                    |
+| Push delivery                       | Device endpoints and notification payloads                                                   | Browser or operating-system service providers; payload protection; locations; applicable roles and terms                |
 
 A directly operated database is not a separate legal-entity subprocessor merely because it is separate software. Identify its underlying host and Benchyard's own access. Include remote support and administrative access in the location assessment. Consolidate suppliers performing multiple functions without losing the full data scope.
 

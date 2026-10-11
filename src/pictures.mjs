@@ -42,13 +42,14 @@ async function kept(source, how, make) {
 export async function pictures() {
   const out = [];
   for (const name of (await readdir(from))
-    .filter((n) => n.endsWith(".png") && n !== "demo-poster-dark.png")
+    .filter((n) => n.endsWith(".png"))
     .sort()) {
     const source = await readFile(new URL(name, from));
     const stem = name.slice(0, -4);
     const { width } = await sharp(source).metadata();
-    for (const [w, how] of stem === "demo-poster-light"
-      ? [[width, full]]
+    // The card's artwork is published as the card only.
+    for (const [w, how] of stem === card.of
+      ? []
       : [
           [width, full],
           [Math.round(width / 2), half],

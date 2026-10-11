@@ -1,0 +1,850 @@
+/* The replay: a drawn copy of the app's session screen. Colours are the
+   app's own tokens; the ones the site's pages don't use are named here. */
+.rp {
+  --ok: #2f7d4f;
+  --ok-soft: #ddefe3;
+  --warn-line: #b5791f;
+  --crit: #b3261e;
+  --crit-soft: #f6dad7;
+  --info-soft: #dce7f1;
+  font: 13px/1.45 var(--sans);
+  color: var(--fg);
+}
+@media (prefers-color-scheme: dark) {
+  .rp {
+    --ok: #5cc88a;
+    --ok-soft: #173222;
+    --warn-line: #a67a33;
+    --crit: #f0857c;
+    --crit-soft: #3c1a17;
+    --info-soft: #16283a;
+  }
+}
+.rp [hidden] {
+  display: none !important;
+}
+.rp p,
+.rp ul,
+.rp dl,
+.rp pre {
+  margin: 0;
+}
+.rp ul {
+  padding: 0;
+  list-style: none;
+}
+.rp button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.rp code,
+.rp pre,
+.rp-code {
+  font: 12px/1.65 var(--mono);
+}
+.rp-icon {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+.rp-window {
+  position: relative;
+  display: grid;
+  grid-template-columns: 208px minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas: "side head tabs" "side chat dock";
+  height: min(680px, 78vh);
+  min-height: 520px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+
+/* Sidebar: where the session sits among the workspace's others. */
+.rp-side {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 10px;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  min-width: 0;
+}
+.rp-who {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  padding: 0 4px 8px;
+  line-height: 1.2;
+}
+.rp-who small {
+  display: block;
+  color: var(--muted);
+}
+.rp-who b {
+  font: 600 15px var(--display);
+}
+.rp-avatar {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 11px;
+}
+.rp-search,
+.rp-new {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 7px 10px;
+  border-radius: 7px;
+}
+.rp-search {
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+}
+.rp-new {
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-weight: 600;
+}
+.rp-label {
+  padding: 12px 6px 2px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.rp-ws {
+  padding: 4px 6px;
+  font-weight: 600;
+}
+.rp-ws i {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+  vertical-align: middle;
+}
+.rp-side li {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  border-radius: 7px;
+}
+.rp-side li span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.rp-side li.rp-current {
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 500;
+}
+.rp-side .agent-mark,
+.rp-agent .agent-mark {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+.rp-device {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: auto !important;
+  padding: 10px 6px 0;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+.rp-device b {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+/* The session's head and the tabs of what belongs to it. */
+.rp-head {
+  grid-area: head;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-height: 58px;
+  padding: 8px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+.rp-head > div {
+  flex: 1;
+  min-width: 0;
+}
+.rp-agent {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  flex: none;
+}
+.rp-title {
+  font: 600 17px/1.2 var(--display);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rp-sub {
+  color: var(--muted);
+  font-size: 12px;
+}
+.rp-sub span {
+  margin: 0 5px 0 12px;
+}
+.rp-pill {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 99px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.rp-pill::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.rp-pill[data-kind="approval"] {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+.rp-pill[data-kind="running"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.rp-tabs {
+  grid-area: tabs;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  overflow-x: auto;
+}
+.rp-tabs button {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.rp-tabs button[aria-selected="true"] {
+  background: var(--surface-2);
+  color: var(--fg);
+  font-weight: 600;
+}
+.rp-tabs button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+#rp-tab-chat {
+  display: none;
+}
+.rp:not(.rp-on) .rp-tabs button:not([aria-selected="true"]) {
+  display: none;
+}
+
+/* The conversation. */
+.rp-chat {
+  grid-area: chat;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+.rp-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 18px;
+  scroll-behavior: smooth;
+}
+.rp-log {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+.rp-log > * {
+  animation: rp-in 0.28s ease-out;
+}
+@keyframes rp-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.rp-user {
+  align-self: flex-end;
+  max-width: 85%;
+  padding: 8px 13px;
+  border-radius: 12px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  font-size: 14px;
+}
+.rp-say {
+  font-size: 14.5px;
+  line-height: 1.55;
+}
+.rp-say ul {
+  padding-left: 20px;
+  list-style: disc;
+}
+.rp-card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.rp-card-head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 12px;
+  min-width: 0;
+}
+.rp-card-head code {
+  flex: 1;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rp-card-head b {
+  font: 600 12px var(--mono);
+}
+.rp-tick {
+  color: var(--ok);
+  display: flex;
+}
+.rp-chip {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  margin: 0 12px 10px !important;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.rp-card-foot {
+  padding: 7px 12px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+.rp-shell-body {
+  padding: 0 12px 10px;
+}
+.rp-shell dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 14px;
+  margin: 6px 0;
+  font: 12px/1.7 var(--mono);
+}
+.rp-shell dt {
+  color: var(--muted);
+}
+.rp-shell dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.rp-cmd,
+.rp-out,
+.rp-term {
+  background: var(--term-bg);
+  color: var(--term-fg);
+  border-radius: 7px;
+  padding: 8px 10px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.rp-out {
+  max-height: 190px;
+  overflow-y: auto;
+}
+.rp-shell[data-state="waiting"] {
+  border-color: var(--warn-line);
+}
+.rp-shell[data-state="waiting"] .rp-card-foot {
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-weight: 500;
+  border-color: var(--warn-line);
+}
+.rp-shell[data-state="waiting"] .rp-shell-body,
+.rp-shell[data-state="denied"] .rp-shell-body,
+.rp-shell:not([data-state="done"]) .rp-tick {
+  display: none;
+}
+.rp-shell[data-state="denied"] .rp-card-foot {
+  color: var(--crit);
+}
+.rp-approval {
+  padding: 12px 18px 14px;
+  background: var(--warn-soft);
+  border-top: 1px solid var(--warn-line);
+  animation: rp-in 0.25s ease-out;
+}
+.rp-approval-title {
+  color: var(--warn);
+  font-weight: 600;
+}
+.rp-command {
+  margin: 6px 0 10px !important;
+  font: 13px var(--mono);
+}
+.rp-approval-actions {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 8px;
+}
+.rp-approval button {
+  padding: 10px;
+  border: 0;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.rp-deny {
+  background: var(--crit-soft);
+  color: var(--crit) !important;
+}
+.rp-approve {
+  background: var(--accent);
+  color: var(--accent-fg) !important;
+}
+.rp-waiting .rp-approve {
+  animation: rp-ask 1.8s ease-in-out infinite;
+}
+@keyframes rp-ask {
+  50% {
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 28%, transparent);
+  }
+}
+.rp-composer {
+  padding: 12px 18px 14px;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+.rp-composer p {
+  padding: 10px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.rp-composer p.rp-typed {
+  color: var(--fg);
+}
+.rp-start {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 14px 24px 14px 20px;
+  border: 0;
+  border-radius: 99px;
+  background: var(--accent);
+  color: var(--accent-fg) !important;
+  font: 600 16px var(--sans) !important;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease-out;
+}
+.rp-start:hover {
+  transform: translate(-50%, -50%) scale(1.04);
+}
+.rp-start .rp-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* The dock: changes, files, terminal, ports. */
+.rp-dock {
+  grid-area: dock;
+  min-height: 0;
+  min-width: 0;
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+}
+.rp-panel {
+  display: none;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+.rp[data-dock="changes"] [data-panel="changes"],
+.rp[data-dock="files"] [data-panel="files"],
+.rp[data-dock="terminal"] [data-panel="terminal"],
+.rp[data-dock="ports"] [data-panel="ports"] {
+  display: flex;
+}
+.rp-panel-note {
+  padding: 10px 14px;
+  color: var(--muted);
+}
+.rp-rows,
+.rp-tree {
+  border-bottom: 1px solid var(--line);
+}
+.rp-rows button,
+.rp-tree button {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 5px 14px;
+  border: 0;
+  background: none;
+  font: 12.5px/1.6 var(--mono);
+  text-align: left;
+}
+.rp-rows button span:first-of-type,
+.rp-tree button span {
+  flex: 1;
+}
+.rp-rows b {
+  color: var(--warn);
+}
+.rp-rows button[aria-pressed="true"],
+.rp-tree button[aria-pressed="true"] {
+  background: var(--accent-soft);
+}
+.rp-rows button:hover,
+.rp-tree button:hover {
+  background: var(--surface-2);
+}
+.rp-plus {
+  color: var(--ok);
+}
+.rp-minus {
+  color: var(--crit);
+}
+.rp-diff,
+.rp-file {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.rp-path {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font: 12px var(--mono);
+}
+.rp-code {
+  flex: 1;
+  overflow: auto;
+  margin: 0;
+}
+pre.rp-code {
+  padding: 10px 14px;
+  white-space: pre;
+}
+.rp-code table {
+  border-collapse: collapse;
+  min-width: 100%;
+}
+.rp-code td {
+  padding: 0 6px;
+  white-space: pre;
+  vertical-align: top;
+}
+.rp-code td:nth-child(-n + 2) {
+  width: 1%;
+  min-width: 30px;
+  text-align: right;
+  color: var(--muted);
+  user-select: none;
+}
+.rp-add {
+  background: var(--ok-soft);
+}
+.rp-del {
+  background: var(--crit-soft);
+}
+.rp-hunk {
+  background: var(--info-soft);
+  color: var(--muted);
+}
+.rp-term {
+  flex: 1;
+  margin: 0 10px 10px !important;
+  overflow: auto;
+}
+.rp-port {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin: 0 14px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+.rp-port code {
+  flex: 1;
+  color: var(--muted);
+}
+.rp-port button {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 7px;
+  background: var(--accent);
+  color: var(--accent-fg) !important;
+  font-weight: 600 !important;
+}
+
+/* The phone: shown while a decision waits, because it can be made there. */
+.rp-phone {
+  position: absolute;
+  right: 26px;
+  bottom: 0;
+  width: 286px;
+  padding: 14px 8px 0;
+  border: 1px solid var(--line-strong);
+  border-bottom: 0;
+  border-radius: 34px 34px 0 0;
+  background: var(--surface);
+  box-shadow: 0 -8px 50px #0004;
+  animation: rp-phone 0.5s cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+@keyframes rp-phone {
+  from {
+    transform: translateY(100%);
+  }
+}
+.rp-phone-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 0 0;
+  border-radius: 24px 24px 0 0;
+  background: var(--bg);
+  overflow: hidden;
+}
+.rp-phone-screen > * {
+  margin-inline: 12px !important;
+}
+.rp-phone-head {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  font: 600 15px var(--display);
+}
+.rp-driving {
+  display: flex;
+  gap: 8px;
+  margin-inline: 0 !important;
+  padding: 8px 12px;
+  background: var(--warn-soft);
+  color: var(--warn);
+  font-size: 12px;
+}
+.rp-phone .rp-say {
+  font-size: 13px;
+}
+.rp-phone .rp-approval {
+  margin-inline: 0 !important;
+  padding-inline: 12px;
+}
+.rp-phone-files {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px !important;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.rp-phone-files b {
+  flex: 1;
+}
+
+/* The running app, opened from Ports. */
+.rp-browser {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  animation: rp-in 0.25s ease-out;
+}
+.rp-browser-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+  font: 12px var(--mono);
+  color: var(--muted);
+}
+.rp-browser-bar button {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 7px;
+  background: var(--surface);
+  font: 500 12px var(--sans) !important;
+}
+.rp-browser iframe {
+  flex: 1;
+  width: 100%;
+  border: 0;
+  background: #f2f3ef;
+}
+
+/* The replay's own controls, outside the drawn app. */
+/* Its room is kept while the script has not taken over, so nothing below
+   it moves when it does. */
+.rp:not(.rp-on) .rp-controls {
+  visibility: hidden;
+}
+.rp-controls {
+  min-height: 42px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-top: 16px;
+  font-size: 15px;
+}
+.rp-controls button {
+  padding: 8px 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: 99px;
+  background: var(--surface);
+  font-weight: 500;
+}
+.rp-controls button:first-child {
+  min-width: 92px;
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg) !important;
+}
+.rp-controls button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.rp-status {
+  flex: 1 1 280px;
+  color: var(--muted);
+}
+.rp :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+@media (max-width: 1100px) {
+  .rp-window {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "head tabs" "chat dock";
+  }
+  .rp-side {
+    display: none;
+  }
+}
+/* On a narrow screen the session is laid out as the app's phone view: one
+   part at a time, chosen by the tabs. */
+@media (max-width: 760px) {
+  .rp-window {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto minmax(0, 1fr);
+    grid-template-areas: "head" "tabs" "chat";
+    height: min(640px, 82vh);
+  }
+  .rp-tabs {
+    border-left: 0;
+  }
+  .rp.rp-on #rp-tab-chat {
+    display: flex;
+  }
+  .rp-dock {
+    grid-area: chat;
+    border-left: 0;
+  }
+  .rp.rp-on[data-view="chat"] .rp-dock,
+  .rp.rp-on[data-view="dock"] .rp-chat,
+  .rp-phone {
+    display: none !important;
+  }
+  /* Without the script the finished session is laid out to be read, one part
+     under the other. On a wide screen it keeps the window's height, so the
+     page doesn't move when the script takes over. */
+  .rp:not(.rp-on) .rp-window {
+    grid-template-areas: "head" "tabs" "chat" "dock";
+    grid-template-rows: auto;
+    height: auto;
+  }
+  .rp:not(.rp-on) .rp-dock {
+    grid-area: dock;
+    border-top: 1px solid var(--line);
+  }
+  .rp-scroll {
+    padding: 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rp *,
+  .rp-log > * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .rp-scroll {
+    scroll-behavior: auto;
+  }
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

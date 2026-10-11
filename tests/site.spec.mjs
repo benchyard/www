@@ -28,9 +28,7 @@ for (const theme of ["light", "dark"])
           `${route} overflows at ${width}`,
         ).toBe(true);
         await expect(page.locator("h1")).toHaveCount(1);
-        const video = page.locator("video");
-        if (route === "/")
-          await expect(video).toHaveAttribute("preload", "none");
+        await expect(page.locator("script")).toHaveCount(route === "/" ? 1 : 0);
         if (width === 360 || width === 390 || width === 1280) {
           if (route === "/") {
             await mkdir(
@@ -66,10 +64,7 @@ for (const theme of ["light", "dark"])
       JSON.stringify(report, null, 2),
     );
   });
-test("navigation, keyboard, captions and native video controls", async ({
-  page,
-  browserName,
-}) => {
+test("navigation and keyboard", async ({ page, browserName }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await page.keyboard.press(browserName === "webkit" ? "Alt+Tab" : "Tab");
@@ -88,34 +83,104 @@ test("navigation, keyboard, captions and native video controls", async ({
     "open",
     "",
   );
-  const video = page.locator("video");
-  await video.scrollIntoViewIfNeeded();
-  await expect(video).toHaveAttribute("controls", "");
-  await expect(video).toHaveAttribute("playsinline", "");
-  await video.evaluate(async (v) => {
-    v.muted = true;
-    await v.play();
+});
+for (const [name, width, where] of [
+  ["a desktop", 1440, "phone"],
+  ["a phone", 390, "desktop"],
+])
+  test(`the replay waits for approval, then opens its parts: ${name}`, async ({
+    page,
+  }) => {
+    const errors = [];
+    page.on("pageerror", (e) => errors.push(e.message));
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/#demo");
+    const replay = page.locator("[data-replay]");
+    const status = replay.getByRole("status");
+    await expect(status).toContainText("Press Play");
+    await expect(replay.locator(".rp-log > :visible")).toHaveCount(0);
+    await expect(replay.getByRole("tab", { name: "Files" })).toBeDisabled();
+    await replay.getByRole("button", { name: "Play the task" }).click();
+    // It stops at the request and goes no further by itself.
+    await expect(status).toContainText("Waiting for you", { timeout: 20000 });
+    await page.waitForTimeout(1500);
+    await expect(replay.locator("[data-output]")).toBeHidden();
+    await expect(replay.locator("[data-phone]")).toBeVisible({
+      visible: width > 760,
+    });
+    // Denied: the command is not run, and it can be asked for again.
+    await replay.locator('[data-deny="desktop"]').click();
+    await expect(status).toContainText("was not run");
+    await expect(replay.getByText("Denied from MacBook")).toBeVisible();
+    await expect(replay.locator("[data-output]")).toBeHidden();
+    await replay.getByRole("button", { name: "Ask again" }).click();
+    await replay.locator(`[data-approve="${where}"]`).click();
+    await expect(status).toContainText("has finished", { timeout: 20000 });
+    await expect(
+      replay.getByText(
+        `Approved from ${where === "phone" ? "iPhone" : "MacBook"}`,
+      ),
+    ).toBeVisible();
+    await expect(replay.locator("[data-output]")).toContainText("# pass 4");
+    // Changes: each file opens its own diff.
+    if (width <= 760)
+      await replay.getByRole("tab", { name: /Changes/ }).click();
+    await replay.getByRole("button", { name: /filter\.test\.mjs/ }).click();
+    await expect(
+      replay.getByRole("region", { name: "Changes to filter.test.mjs" }),
+    ).toContainText("empty board stays empty");
+    await replay.getByRole("tab", { name: "Files" }).click();
+    await replay.getByRole("button", { name: "package.json" }).click();
+    await expect(replay.getByLabel("package.json")).toContainText(
+      "issue-board",
+    );
+    await replay.getByRole("tab", { name: "Terminal" }).click();
+    await expect(replay.getByLabel("Recorded terminal output")).toContainText(
+      "# fail 0",
+    );
+    // Ports: the board of the recorded run, whose filters really filter.
+    await replay.getByRole("tab", { name: "Ports" }).click();
+    await replay.getByRole("button", { name: "Open in browser" }).click();
+    const board = replay.frameLocator("iframe");
+    for (const [filter, count] of [
+      ["In progress", 3],
+      ["Done", 3],
+      ["All issues", 6],
+    ]) {
+      await board.getByRole("button", { name: filter, exact: true }).click();
+      await expect(board.locator("article:visible")).toHaveCount(count);
+    }
+    await replay.getByRole("button", { name: "Close the preview" }).click();
+    await expect(replay.locator("[data-browser]")).toBeHidden();
+    await replay.getByRole("button", { name: "Replay" }).click();
+    await expect(status).toContainText("working");
+    expect(errors).toEqual([]);
   });
-  await expect
-    .poll(() => video.evaluate((v) => v.currentTime))
-    .toBeGreaterThan(0.1);
-  await video.evaluate((v) => v.pause());
-  await expect.poll(() => video.evaluate((v) => v.paused)).toBe(true);
-  await video.evaluate((v) => (v.currentTime = 29));
-  await expect
-    .poll(() => video.evaluate((v) => v.currentTime))
-    .toBeGreaterThan(28);
-  expect(await video.evaluate((v) => v.duration)).toBeCloseTo(60, 0);
-  // Safari respects the OS subtitle preference; explicitly select the native track.
-  await video.evaluate((v) => {
-    v.textTracks[0].mode = "showing";
-  });
-  await expect
-    .poll(() => video.evaluate((v) => v.textTracks[0]?.cues?.length || 0))
-    .toBe(8);
-  await video.screenshot({
-    path: `studio/output/video-phone-${browserName}.png`,
-  });
+test("the replay by keyboard, and with reduced motion", async ({
+  page,
+  browserName,
+}) => {
+  test.skip(
+    browserName === "webkit",
+    "Tab reaches buttons only by an OS setting",
+  );
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/#demo");
+  const replay = page.locator("[data-replay]");
+  await replay.getByRole("button", { name: "Play", exact: true }).focus();
+  await page.keyboard.press("Enter");
+  // With reduced motion nothing is drawn out: it is at the request at once,
+  // and whoever started it from the controls is taken to the decision.
+  await expect(replay.locator('[data-approve="desktop"]')).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(replay.getByRole("status")).toContainText("has finished");
+  await replay.getByRole("tab", { name: /Changes/ }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(replay.getByRole("tab", { name: "Files" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
 });
 test("works without scripts and reflows at 200% text size", async ({
   browser,
@@ -129,8 +194,14 @@ test("works without scripts and reflows at 200% text size", async ({
   await page.goto(baseURL + "/");
   await page.locator(".mobile-nav summary").click();
   await expect(page.locator(".mobile-nav[open]")).toBeVisible();
-  await expect(page.locator("video")).toHaveAttribute("controls", "");
-  await expect(page.locator("script")).toHaveCount(0);
+  // Without scripts the replay is the finished session, there to be read.
+  const replay = page.locator("[data-replay]");
+  await expect(replay.getByText("Four filter tests passed")).toBeVisible();
+  await expect(replay.locator("[data-output]")).toContainText("# pass 4");
+  await expect(
+    replay.getByRole("region", { name: "Changes to filter.mjs" }),
+  ).toBeVisible();
+  await expect(replay.locator("[data-controls]")).toBeHidden();
   await context.close();
   const normal = await browser.newPage({
     viewport: { width: 640, height: 900 },
@@ -146,36 +217,19 @@ test("works without scripts and reflows at 200% text size", async ({
   ).toBe(true);
   await normal.close();
 });
-test("media byte ranges, MIME and cache headers", async ({ request }) => {
+test("the script, the board and cache headers", async ({ request }) => {
   const html = await (await request.get("/")).text();
-  const movie = /<source src="([^"]+)" type="video\/mp4"/.exec(html)[1];
-  const partial = await request.get(movie, {
-    headers: { Range: "bytes=0-99" },
-  });
-  expect(partial.status()).toBe(206);
-  expect((await partial.body()).length).toBe(100);
-  expect(partial.headers()["content-type"]).toBe("video/mp4");
-  expect(partial.headers()["content-range"]).toMatch(/^bytes 0-99\/\d+$/);
-  expect(partial.headers()["cache-control"]).toContain("immutable");
-  const suffix = await request.get(movie, { headers: { Range: "bytes=-100" } });
-  expect(suffix.status()).toBe(206);
-  expect((await suffix.body()).length).toBe(100);
-  expect(
-    (
-      await request.get(movie, { headers: { Range: "bytes=999999999-" } })
-    ).status(),
-  ).toBe(416);
-  expect(
-    (await request.get(movie, { headers: { Range: "bytes=-0" } })).status(),
-  ).toBe(416);
-  const head = await request.head(movie);
-  expect(head.status()).toBe(200);
-  expect((await head.body()).length).toBe(0);
-  expect(Number(head.headers()["content-length"])).toBeGreaterThan(100);
-  const track = /<track[^>]*src="([^"]+)"/.exec(html)[1];
-  expect((await request.get(track)).headers()["content-type"]).toContain(
-    "text/vtt",
-  );
+  const script = /<script defer src="([^"]+)"/.exec(html)[1];
+  const board = /data-board="([^"]+)"/.exec(html)[1];
+  for (const [path, type] of [
+    [script, "javascript"],
+    [board, "text/html"],
+  ]) {
+    const got = await request.get(path);
+    expect(got.status(), path).toBe(200);
+    expect(got.headers()["content-type"]).toContain(type);
+    expect(got.headers()["cache-control"]).toContain("immutable");
+  }
   for (const path of [
     ...routes,
     ...policies.map((policy) => `/legal/${policy.slug}/`),
@@ -185,9 +239,7 @@ test("media byte ranges, MIME and cache headers", async ({ request }) => {
     );
   expect((await request.get("/does-not-exist/")).status()).toBe(404);
 });
-test("a business can contact Benchyard from the homepage", async ({
-  page,
-}) => {
+test("a business can contact Benchyard from the homepage", async ({ page }) => {
   for (const width of [1120, 1280]) {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/");

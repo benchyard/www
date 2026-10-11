@@ -21,8 +21,7 @@ const types = {
   ".ico": "image/x-icon",
   ".woff2": "font/woff2",
   ".md": "text/plain; charset=utf-8",
-  ".mp4": "video/mp4",
-  ".vtt": "text/vtt; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
 };
 const port = Number(process.env.PORT || 4321);
 const reload = `<script>new EventSource("/__livereload").onmessage=()=>location.reload()</script>`;

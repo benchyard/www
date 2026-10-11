@@ -9,12 +9,9 @@
     "dev": "node build.mjs && node serve.mjs",
     "test": "playwright test",
     "format:check": "prettier --check content/*.mjs src/*.mjs src/*.css build.mjs check.mjs serve.mjs studio/*.mjs studio/fixture/*.mjs studio/fixture/board.html tests/*.mjs playwright.config.mjs",
-    "demo:start": "bash studio/start.sh",
-    "demo:capture": "node studio/capture.mjs",
-    "demo:render": "node studio/render-video.mjs",
-    "demo:poster": "node studio/render-poster.mjs",
     "measure": "node studio/measure.mjs",
-    "verify:media": "node studio/verify-media.mjs"
+    "demo:capture": "sg docker -c \"bash studio/record.sh\"",
+    "card": "node studio/render-poster.mjs"
   },
   "engines": {
     "node": ">=20"

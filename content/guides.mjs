@@ -1,44 +1,34 @@
 export const reviewed = "2026-10-11";
 export const transcript = [
   [
-    "00:00",
-    "Your workspace keeps working.",
-    "A Benchyard workspace holds the project and separate agent sessions.",
+    "1",
+    "A task is sent.",
+    "In the issue-board workspace, Alice asks Codex to add a status filter to a fictional issue board and test it. The session is in Ask first mode.",
   ],
   [
-    "00:05",
-    "Start a task with your preferred agent.",
-    "Codex receives a request to add a status filter to a fictional issue board and test it.",
+    "2",
+    "The agent edits three files.",
+    "Codex changes filter.mjs, filter.test.mjs and index.html. Each edit appears in the conversation and under Changes, with its diff.",
   ],
   [
-    "00:13",
-    "Step away while your workspace stays running.",
-    "The workspace has real changes in three files. It remains available independently of the browser.",
+    "3",
+    "It asks before running the tests.",
+    "The session shows Approval needed for the command npm test and waits. The same request appears on a signed-in phone, which can watch and approve while the MacBook drives.",
   ],
   [
-    "00:21",
-    "Get notified when a decision needs you.",
-    "A simulated phone notification points back to the session. The notification itself does not approve the command.",
+    "4",
+    "You decide.",
+    "Approve, and the command runs: four filter tests pass. Deny, and it is not run; the replay lets you ask for the request again.",
   ],
   [
-    "00:28",
-    "Review and approve from your phone.",
-    "The signed-in phone opens the same session and approves npm test. The command waits until approval.",
+    "5",
+    "You look through the result.",
+    "Changes holds the three diffs, Files the project's files, and Terminal the recorded output of the command. Ports lists the development server on port 4173.",
   ],
   [
-    "00:38",
-    "Check what changed and what passed.",
-    "The command runs four real filter tests. The session contains the result and the file diff.",
-  ],
-  [
-    "00:47",
-    "Open your running app in the browser.",
-    "A workspace port opens the issue board. In progress and Done each display three matching issues.",
-  ],
-  [
-    "00:55",
-    "Your agents. Your workspace.",
-    "Current integrations include Claude Code, Codex, Cursor and Gemini CLI. More agent and model integrations are planned. Request access to discuss your setup.",
+    "6",
+    "You open the running app.",
+    "Open in browser shows the issue board. In progress and Done each show three issues, All issues shows six.",
   ],
 ];
 export const guides = [
@@ -146,7 +136,7 @@ export const guides = [
             ],
             [
               "Machine",
-              "A virtual machine for each workspace, with a disk of its own. It can be suspended when idle, keeping what was running in memory. The app does not say which provider a machine is at.",
+              "A virtual machine for each workspace, with a disk of its own. It can be suspended when idle, keeping what was running in memory.",
             ],
           ],
         },
@@ -209,9 +199,9 @@ export const guides = [
       },
       {
         id: "demo-transcript",
-        title: "60-second demo: task to preview",
+        title: "The demo, step by step",
         paragraphs: [
-          "Recorded in Benchyard with demo data. Agent responses are scripted; timing is edited. The lock-screen notification is simulated. File changes, tests and preview interactions are real.",
+          "The demo on the homepage is a replay drawn for the website, not the live app. Its diff, files, test output and issue board come from a real run in Benchyard with demo data; npm's notice of a newer npm and a Node warning are left out of the output. The agent's replies are scripted, and the board runs in a frame on the page.",
         ],
         transcript: true,
       },

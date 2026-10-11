@@ -90,18 +90,18 @@ The order or other acceptance record must identify each party's authorized repre
 
 ## Schedule A Processing details
 
-| Item | Scope |
-| --- | --- |
-| Subject matter | Hosting persistent development workspaces and operating authorized agent, file, terminal, synchronization, notification, usage, and support functions |
-| Duration | The Agreement's service period plus agreed return, deletion, and legally justified retention periods |
-| Nature and purpose | Receive, store, retrieve, organize, index, display, transmit, execute instructed operations on, secure, export, and delete Customer Personal Data to provide the agreed Service |
-| Data subjects | Customer's staff, contractors, authorized users, repository contributors, and other persons whose data Customer lawfully includes in its workspace content |
-| Data categories | Names and identifiers in code or records; business contact information; prompts and outputs; files and attachments; command and activity records; integration and credential information; other ordinary personal data lawfully supplied for the agreed purpose |
-| Sensitive data | Not an intended use. Special-category, criminal-offence, regulated health, and other specially regulated data require prior written approval and additional safeguards; credentials receive appropriate security regardless of this restriction |
-| Frequency | Continuous storage and event-driven processing while the Service is active, including scheduled execution authorized by Customer |
-| Controller rights and duties | Determine lawful purposes and instructions, authorize recipients, supply notices, respond to individuals with assistance, and choose return or deletion |
-| Retention and role exceptions | [CUSTOMER_RETENTION_DETAILS], including treatment of identifying usage and audit records; no automatic exemption for logs |
-| Customer contact | Customer address and privacy contact identified in the accepted order |
+| Item                          | Scope                                                                                                                                                                                                                                                           |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Subject matter                | Hosting persistent development workspaces and operating authorized agent, file, terminal, synchronization, notification, usage, and support functions                                                                                                           |
+| Duration                      | The Agreement's service period plus agreed return, deletion, and legally justified retention periods                                                                                                                                                            |
+| Nature and purpose            | Receive, store, retrieve, organize, index, display, transmit, execute instructed operations on, secure, export, and delete Customer Personal Data to provide the agreed Service                                                                                 |
+| Data subjects                 | Customer's staff, contractors, authorized users, repository contributors, and other persons whose data Customer lawfully includes in its workspace content                                                                                                      |
+| Data categories               | Names and identifiers in code or records; business contact information; prompts and outputs; files and attachments; command and activity records; integration and credential information; other ordinary personal data lawfully supplied for the agreed purpose |
+| Sensitive data                | Not an intended use. Special-category, criminal-offence, regulated health, and other specially regulated data require prior written approval and additional safeguards; credentials receive appropriate security regardless of this restriction                 |
+| Frequency                     | Continuous storage and event-driven processing while the Service is active, including scheduled execution authorized by Customer                                                                                                                                |
+| Controller rights and duties  | Determine lawful purposes and instructions, authorize recipients, supply notices, respond to individuals with assistance, and choose return or deletion                                                                                                         |
+| Retention and role exceptions | [CUSTOMER_RETENTION_DETAILS], including treatment of identifying usage and audit records; no automatic exemption for logs                                                                                                                                       |
+| Customer contact              | Customer address and privacy contact identified in the accepted order                                                                                                                                                                                           |
 
 ## Schedule B Security measures
 
@@ -128,16 +128,16 @@ Primary hosting: [HOSTING_COUNTRIES]. Backup locations: [BACKUP_COUNTRIES]. Supp
 
 **No transfer mechanism is activated by an incomplete entry. Use current official instruments and complete their required annexes before the relevant transfer.**
 
-| Required decision | Completion field |
-| --- | --- |
-| Transfer route, exporter, importer, roles, and contacts | [TRANSFER_PARTIES_AND_ROUTE] |
-| Mechanism and legal applicability | [TRANSFER_MECHANISM]; identify adequacy, eligible SCCs, UK instrument, or other valid mechanism |
-| EU SCCs where applicable | Select the legally appropriate module; ordinarily Module 2 for controller-to-processor or Module 3 for processor-to-subprocessor. Verify instrument eligibility for the importer and actual flow |
-| SCC options | [SCC_OPTIONS]: docking, subprocessor authorization and notice, optional redress, competent authority, governing law, and courts; use eligible EU law and courts for EU SCCs rather than copying the main Agreement's venue |
-| SCC annexes | Attach parties/signatures and processing in Annex I, actual technical measures in Annex II, and required subprocessor details in Annex III; completed Schedules A–C may supply information through an express mapping |
-| UK transfers | [UK_TRANSFER_INSTRUMENT]; complete the approved Addendum tables and mandatory clauses, or a valid IDTA, as applicable |
-| Swiss transfers | [SWISS_TRANSFER_ADAPTATIONS], where required for the applicable instrument |
-| Assessment and supplementary measures | [TRANSFER_ASSESSMENT_RECORD], including government-access risks, onward transfers, and support access |
-| Approval and signature | [TRANSFER_APPROVAL_RECORD] with date and authorized parties |
+| Required decision                                       | Completion field                                                                                                                                                                                                           |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Transfer route, exporter, importer, roles, and contacts | [TRANSFER_PARTIES_AND_ROUTE]                                                                                                                                                                                               |
+| Mechanism and legal applicability                       | [TRANSFER_MECHANISM]; identify adequacy, eligible SCCs, UK instrument, or other valid mechanism                                                                                                                            |
+| EU SCCs where applicable                                | Select the legally appropriate module; ordinarily Module 2 for controller-to-processor or Module 3 for processor-to-subprocessor. Verify instrument eligibility for the importer and actual flow                           |
+| SCC options                                             | [SCC_OPTIONS]: docking, subprocessor authorization and notice, optional redress, competent authority, governing law, and courts; use eligible EU law and courts for EU SCCs rather than copying the main Agreement's venue |
+| SCC annexes                                             | Attach parties/signatures and processing in Annex I, actual technical measures in Annex II, and required subprocessor details in Annex III; completed Schedules A–C may supply information through an express mapping      |
+| UK transfers                                            | [UK_TRANSFER_INSTRUMENT]; complete the approved Addendum tables and mandatory clauses, or a valid IDTA, as applicable                                                                                                      |
+| Swiss transfers                                         | [SWISS_TRANSFER_ADAPTATIONS], where required for the applicable instrument                                                                                                                                                 |
+| Assessment and supplementary measures                   | [TRANSFER_ASSESSMENT_RECORD], including government-access risks, onward transfers, and support access                                                                                                                      |
+| Approval and signature                                  | [TRANSFER_APPROVAL_RECORD] with date and authorized parties                                                                                                                                                                |
 
 Official reference instruments: [European Commission SCC resources](https://commission.europa.eu/law/law-topic/data-protection/international-dimension-data-protection/standard-contractual-clauses-scc_en) and [ICO transfer clauses guidance and instruments](https://ico.org.uk/for-organisations/uk-gdpr-guidance-and-resources/international-transfers/appropriate-safeguards/what-are-standard-data-protection-clauses-the-uk-idta-and-the-addendum/). These links identify resources; they do not execute an instrument.

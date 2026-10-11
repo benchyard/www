@@ -27,6 +27,7 @@ import { pictures } from "./src/pictures.mjs";
 import { guides } from "./content/guides.mjs";
 import { policies } from "./content/legal.mjs";
 import { renderMarkdown } from "./src/markdown.mjs";
+import { board } from "./src/demo.mjs";
 
 // The first language is served at /, the others at /<code>/.
 const languages = ["en"];
@@ -69,17 +70,18 @@ for (const { path, bytes } of await pictures()) {
   if (path.startsWith("img/")) await publish(path, bytes);
   else await writeFile(new URL(path, out), bytes);
 }
-for (const name of (await readdir(here("./media/"))).filter((n) =>
-  /\.(mp4|vtt)$/.test(n),
-)) {
-  await publish(`media/${name}`, await readFile(here(`./media/${name}`)));
-}
+// The homepage's script, and the issue board that the replay's Ports panel
+// opens: the page of the recorded run, in a frame.
+await publish("site.js", await readFile(here("./src/site.js")));
+await publish("demo-board.html", Buffer.from(board()));
 // The stylesheet names its fonts as the pages do; in assets/ they are beside
 // it. Then it is minified, and named by what it has become.
 const css = (
   (await readFile(here("./src/styles.css"), "utf8")) +
   "\n" +
-  (await readFile(here("./src/lock-screen.css"), "utf8"))
+  (await readFile(here("./src/lock-screen.css"), "utf8")) +
+  "\n" +
+  (await readFile(here("./src/demo.css"), "utf8"))
 ).replace(
   /url\("([^"]+)"\)/g,
   (_, name) => `url("${asset(name).slice("assets/".length)}")`,

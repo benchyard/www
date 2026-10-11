@@ -40,9 +40,9 @@ for (const device of [
       resources: performance
         .getEntriesByType("resource")
         .map((r) => new URL(r.name).pathname),
-      videoFetched: performance
+      boardFetched: performance
         .getEntriesByType("resource")
-        .some((r) => r.name.endsWith(".mp4")),
+        .some((r) => r.name.includes("demo-board")),
     }));
     const bytes = await Promise.all(
       [...new Set(first.resources)].map((p) =>
@@ -66,7 +66,6 @@ for (const device of [
     const selected = await page
       .locator("img")
       .evaluateAll((imgs) => imgs.map((i) => i.currentSrc).filter(Boolean));
-    selected.push(await page.locator("video").evaluate((v) => v.poster));
     const sizes = await Promise.all(
       [...new Set(selected)].map((u) =>
         stat("dist" + new URL(u).pathname).then(
@@ -82,7 +81,7 @@ for (const device of [
       cls: Number(first.cls.toFixed(4)),
       initialUncompressedResourceBytes: bytes.reduce((a, b) => a + b, 0),
       selectedPageImageBytes: sizes.reduce((a, b) => a + b, 0),
-      videoFetchedBeforePlay: first.videoFetched,
+      boardFetchedBeforeOpened: first.boardFetched,
     });
     await context.close();
     console.log(results.at(-1));
@@ -106,7 +105,7 @@ if (
     (r) =>
       r.initialUncompressedResourceBytes > 1000000 ||
       r.selectedPageImageBytes > 3000000 ||
-      r.videoFetchedBeforePlay,
+      r.boardFetchedBeforeOpened,
   )
 )
   process.exitCode = 1;

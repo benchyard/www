@@ -9,14 +9,14 @@ const root = new URL("../", import.meta.url);
 const data = async (path) =>
   (await readFile(new URL(path, root))).toString("base64");
 
-// Posters are artwork, not controls. The native video player owns playback UI.
+// The artwork of the card other sites show beside a link to the homepage.
 export async function renderPosters(page) {
   const font = await data(
     "src/fonts/bricolage-grotesque-latin-wght-normal.woff2",
   );
   const sans = await data("src/fonts/ibm-plex-sans-latin-400-normal.woff2");
   await page.setViewportSize({ width: 1920, height: 1080 });
-  for (const theme of ["light", "dark"]) {
+  for (const theme of ["light"]) {
     const dark = theme === "dark";
     const screen = await data(`src-img/session-approval-${theme}.png`);
     await page.setContent(`<!doctype html><html lang="en"><head><meta charset="utf-8"><style>
@@ -40,10 +40,10 @@ export async function renderPosters(page) {
       .screen {position: absolute; width: 1070px; left: 770px; top: 210px; border: 1px solid ${dark ? "#343e36" : "#d6dad2"}; border-radius: 16px; box-shadow: 0 24px 64px #0002}
       footer {position: absolute; bottom: 42px; left: 80px; font-size: 17px; color: ${dark ? "#aab6ae" : "#5e655f"}}
     </style></head><body>
-      <header><div class="brand">${mark}<span>Benchyard</span></div><span class="duration">60-SECOND DEMO</span></header>
-      <main><div class="copy"><span class="eyebrow">SEE IT IN ACTION</span><h1>From task<br>to preview.</h1><p>Wherever you are.</p><div class="agents">${content.agents.items.map(([id]) => agentMark(id)).join("")}</div><div class="planned"><small>PLANNED</small>${content.agents.planned.map(([id, name]) => `<span>${agentMark(id)}${name}</span>`).join("")}</div></div>
+      <header><div class="brand">${mark}<span>Benchyard</span></div></header>
+      <main><div class="copy"><h1>From task<br>to preview.</h1><p>Wherever you are.</p><div class="agents">${content.agents.items.map(([id]) => agentMark(id)).join("")}</div><div class="planned"><small>Planned</small>${content.agents.planned.map(([id, name]) => `<span>${agentMark(id)}${name}</span>`).join("")}</div></div>
       <img class="screen" src="data:image/png;base64,${screen}" alt="Benchyard workspace showing a status filter task, approval request and file changes."></main>
-      <footer>Recorded in Benchyard with demo data. Agent responses are scripted; timing is edited.</footer>
+      <footer>The real interface with fictional demo data.</footer>
     </body></html>`);
     await page.evaluate(async () => {
       await document.fonts.ready;
@@ -62,9 +62,7 @@ if (
   const browser = await chromium.launch();
   try {
     await renderPosters(await browser.newPage());
-    console.log(
-      "Light and dark demo posters are ready (native playback controls only).",
-    );
+    console.log("The social card's artwork is ready.");
   } finally {
     await browser.close();
   }

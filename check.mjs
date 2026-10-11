@@ -117,10 +117,6 @@ for (const [route, { name, html }] of pages) {
           !src.endsWith(".webp")
         )
           say(`image is not WebP: ${src}`);
-        if (tag.includes('type="video/mp4"') && !src.endsWith(".mp4"))
-          say(`invalid video source: ${src}`);
-        if (tag.startsWith("<track") && !src.endsWith(".vtt"))
-          say(`invalid caption source: ${src}`);
       }
     }
     if (tag.startsWith("<img")) {
@@ -130,16 +126,6 @@ for (const [route, { name, html }] of pages) {
       if (!tag.includes("srcset=") || !tag.includes("sizes="))
         say("image needs responsive sources and sizes");
     }
-    if (
-      tag.startsWith("<video") &&
-      (!/\bcontrols\b/.test(tag) ||
-        !/\bplaysinline\b/.test(tag) ||
-        !tag.includes('preload="none"') ||
-        /\b(?:autoplay|loop)\b/.test(tag))
-    )
-      say(
-        "video must have controls, playsinline, preload=none, and no autoplay or loop",
-      );
   }
   const canonical = /<link rel="canonical" href="([^"]+)"/.exec(html)?.[1];
   if (canonical !== site + route) say("incorrect canonical");
@@ -161,7 +147,18 @@ for (const [route, { name, html }] of pages) {
   }
   if ((html.match(/<h1\b/g) || []).length !== 1) say("expected one h1");
   if (!/<html lang="en"/.test(html)) say("missing language");
-  if (/<script\b/i.test(html)) say("client scripts are not allowed");
+  // One script on the site: the homepage's, from this site, by its hashed
+  // name. No page carries script text of its own.
+  const scripts = html.match(/<script\b[^>]*>[^<]*/gi) || [];
+  if (route === "/") {
+    if (
+      scripts.length !== 1 ||
+      !/^<script defer src="\/assets\/site\.[0-9a-f]{8}\.js">$/.test(scripts[0])
+    )
+      say("the homepage carries exactly one script, the site's own");
+    for (const [, href] of html.matchAll(/\sdata-board="([^"]+)"/g))
+      await asset(href.slice(1), say);
+  } else if (scripts.length) say("client scripts are not allowed");
   if (/github\.com|\u2026/i.test(html)) say("forbidden public text");
   // People are not told which cloud a machine is at, and a person's own
   // machine is not offered publicly. The legal pages name their own providers.
@@ -221,15 +218,16 @@ const metadata = await sharp(join(root, "social-card.png")).metadata();
 if (metadata.width !== card.width || metadata.height !== card.height)
   errors.push("social card dimensions mismatch");
 if (!(await exists("robots.txt"))) errors.push("missing robots.txt");
-const captions = [...loaded].find((x) => x.endsWith(".vtt"));
-if (
-  !captions ||
-  !(await readFile(join(root, captions), "utf8")).startsWith("WEBVTT\n")
-)
-  errors.push("missing or invalid WebVTT captions");
-const movie = [...loaded].find((x) => x.endsWith(".mp4"));
-if (!movie || (await stat(join(root, movie))).size > 15 * 1024 * 1024)
-  errors.push("missing video or exceeds 15MB budget");
+// What the replay adds to a visit stays small: the script is read on every
+// load of the homepage, the board only when someone opens it.
+for (const [what, limit] of [
+  [".js", 24 * 1024],
+  ["demo-board", 16 * 1024],
+]) {
+  const file = [...loaded].find((x) => x.includes(what));
+  if (!file || (await stat(join(root, file))).size > limit)
+    errors.push(`missing ${what} or over its ${limit} byte budget`);
+}
 if (errors.length) {
   console.error(errors.join("\n"));
   process.exit(1);

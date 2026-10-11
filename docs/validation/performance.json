@@ -4,56 +4,56 @@
     {
       "device": "mobile",
       "run": 1,
-      "lcpMs": 960,
-      "cls": 0.0002,
-      "initialUncompressedResourceBytes": 289791,
-      "selectedPageImageBytes": 232024,
-      "videoFetchedBeforePlay": false
+      "lcpMs": 1448,
+      "cls": 0.0008,
+      "initialUncompressedResourceBytes": 213606,
+      "selectedPageImageBytes": 140284,
+      "boardFetchedBeforeOpened": false
     },
     {
       "device": "mobile",
       "run": 2,
-      "lcpMs": 968,
-      "cls": 0.0002,
-      "initialUncompressedResourceBytes": 289791,
-      "selectedPageImageBytes": 232024,
-      "videoFetchedBeforePlay": false
+      "lcpMs": 1448,
+      "cls": 0.0008,
+      "initialUncompressedResourceBytes": 213606,
+      "selectedPageImageBytes": 140284,
+      "boardFetchedBeforeOpened": false
     },
     {
       "device": "mobile",
       "run": 3,
-      "lcpMs": 972,
-      "cls": 0.0002,
-      "initialUncompressedResourceBytes": 289791,
-      "selectedPageImageBytes": 232024,
-      "videoFetchedBeforePlay": false
+      "lcpMs": 1452,
+      "cls": 0.0008,
+      "initialUncompressedResourceBytes": 213606,
+      "selectedPageImageBytes": 140284,
+      "boardFetchedBeforeOpened": false
     },
     {
       "device": "desktop",
       "run": 1,
-      "lcpMs": 1860,
-      "cls": 0.0005,
-      "initialUncompressedResourceBytes": 334529,
-      "selectedPageImageBytes": 326052,
-      "videoFetchedBeforePlay": false
+      "lcpMs": 1700,
+      "cls": 0.0289,
+      "initialUncompressedResourceBytes": 261900,
+      "selectedPageImageBytes": 226144,
+      "boardFetchedBeforeOpened": false
     },
     {
       "device": "desktop",
       "run": 2,
-      "lcpMs": 1844,
-      "cls": 0.0005,
-      "initialUncompressedResourceBytes": 334529,
-      "selectedPageImageBytes": 326052,
-      "videoFetchedBeforePlay": false
+      "lcpMs": 1696,
+      "cls": 0.0289,
+      "initialUncompressedResourceBytes": 261900,
+      "selectedPageImageBytes": 226144,
+      "boardFetchedBeforeOpened": false
     },
     {
       "device": "desktop",
       "run": 3,
-      "lcpMs": 1852,
-      "cls": 0.0005,
-      "initialUncompressedResourceBytes": 334529,
-      "selectedPageImageBytes": 326052,
-      "videoFetchedBeforePlay": false
+      "lcpMs": 1684,
+      "cls": 0.0015,
+      "initialUncompressedResourceBytes": 261900,
+      "selectedPageImageBytes": 226144,
+      "boardFetchedBeforeOpened": false
     }
   ]
 }
