@@ -66,3 +66,17 @@ The mobile session screenshot keeps the real application colors. Its surrounding
 ## Credential protection diagram revision
 
 The security diagram now shows the specific protected-credential path from main’s `docs/features.md`, “Credentials and the keeper”: the agent sees a placeholder, the keeper holds and inserts the real credential outside the workspace, and the configured host receives the request. The service response is shown returning separately. Plain environment variables, custom gateway keys and file secrets remain explicitly outside this guarantee, and server readability is still disclosed. The security guide uses the same explanation. Section subheadings now wrap naturally without fixed narrow measures or manual line breaks. All 15 browser tests passed; light, dark and mobile diagram captures were inspected.
+
+## Poster playback control correction — 2026-10-11
+
+The extra teal play symbol was baked into the poster and overlapped the browser's native controls. Both poster sources now omit playback UI. The artwork uses the site's brand mark, Bricolage/IBM Plex fonts, neutral background and teal accents, with static demo duration metadata instead of a video chapter counter. `studio/render-poster.mjs` is shared by the full render and `npm run demo:poster`, so regeneration preserves the correction.
+
+Validation: `npm run check` passed for all 14 routes. Nine focused Playwright checks passed across Chromium, Firefox and WebKit, covering media playback/pause/seek, captions, script-free markup, reflow, Range requests, MIME and caching. Poster screenshots were inspected at 1440px and 390px, with light/dark page themes. Before interaction, the poster-only load made zero MP4 requests. In the actual in-app browser, clicking the native play control started playback and the timeline advanced beyond eight seconds; the page was then restored to its poster. Review captures are in ignored `studio/output/poster-review/`. The MP4 is byte-for-byte unchanged.
+
+## Color agent branding — 2026-10-11
+
+Codex now uses the locally vendored LobeHub color variant throughout the homepage, agent guide, poster, app screenshots and video. Kimi Code and GLM Code color marks are included in the hero strip, planned-integration section, guide, poster and outro, with explicit Planned labels. Source and license provenance is recorded in `docs/asset-licenses.md`. SVG gradient references were checked for unique identifiers and valid targets.
+
+The demo was recaptured using the existing isolated Linux demo binaries from product commit `6ebde5e2d4e081f9b57c87751a7a14c0e5ebb8b8`; only glyph appearance is normalized during capture. No product checkout changes were made. The disposable demo container was removed after capture. The new website MP4 is 789,079 bytes, 60 seconds, 1280×720, 30fps, yuv420p; the 1080p master was regenerated under ignored studio output.
+
+`npm run check` passed for 14 pages. All 21 Playwright tests passed across Chromium, Firefox and WebKit, including light/dark layouts at 320–1440px, accessibility, keyboard, no-script behavior, captions and native playback. `npm run verify:media` completed the full 60-second video in each engine, with eight subtitle cues, working fullscreen and no media errors. The poster, agent strips and result/outro video frames were visually inspected.

@@ -17,7 +17,7 @@ export default {
     ["agents", "Agents"],
     ["notifications", "Notifications"],
     ["teams", "For Teams"],
-    ["organizations", "Organizations"],
+    ["business", "For Business"],
     ["security", "Security"],
   ],
   access: {
@@ -78,7 +78,11 @@ export default {
     title: "Your choice of agent. One familiar workspace.",
     lead: "Start with the agent you use today. These are the current integrations; each keeps its own sign-in requirements and capabilities.",
     future:
-      "More agent and model integrations are planned, including Kimi, GLM and MiniMax. Tell us what you would like to use. Availability will be documented as each integration is verified.",
+      "More agent and model integrations are planned, including Kimi Code, GLM Code and MiniMax. Tell us what you would like to use. Availability will be documented as each integration is verified.",
+    planned: [
+      ["kimi", "Kimi Code"],
+      ["glm", "GLM Code"],
+    ],
     items: [
       ["claude", "Claude Code", "Connect a Claude subscription or an API key."],
       [
@@ -116,14 +120,14 @@ export default {
       ],
     ],
   },
-  organization: {
-    eyebrow: "FOR ORGANIZATIONS",
-    title: "Run Benchyard the way your organization works.",
+  business: {
+    eyebrow: "FOR BUSINESS",
+    title: "Run Benchyard the way your business works.",
     lead: "Contact us about a hosted account, an installation on infrastructure you operate, or Linux machines your people already have. We agree the shape before anything starts.",
-    subject: "Benchyard for an organization",
+    subject: "Benchyard for business",
     cta: "Contact us",
     body: [
-      "Organization and your role",
+      "Business and your role",
       "Where should it run: Benchyard's hosted service, your own infrastructure, or both?",
       "Do people need to attach Linux machines they already run?",
       "What should be tailored: agents, machine types, limits, network, or something else?",
@@ -131,11 +135,11 @@ export default {
     items: [
       [
         "A tailored installation",
-        "Agents, machine types, limits and how the deployment is set up are agreed for your organization. This page is not a catalog, and it does not promise a feature that is not agreed.",
+        "Agents, machine types, limits and how the deployment is set up are agreed for your business. This page is not a catalog, and it does not promise a feature that is not agreed.",
       ],
       [
         "On your infrastructure",
-        "Benchyard can run on infrastructure your organization operates. That installation is licensed separately from the hosted service, and the operator's own privacy notice applies to it.",
+        "Benchyard can run on infrastructure your business operates. That installation is licensed separately from the hosted service, and the operator's own privacy notice applies to it.",
       ],
       [
         "Bring your own machine",
@@ -200,8 +204,8 @@ export default {
       "Request an invitation and tell us which agents you use and what you want to work on. We will discuss availability, supported environments and pricing before you start.",
     ],
     [
-      "Can an organization run Benchyard itself?",
-      "Yes, as an installation you agree, on infrastructure you operate. You can also use the hosted service, and where enabled attach Linux machines people already run. Contact us with the organization, where it should run, and what should be tailored.",
+      "Can a business run Benchyard itself?",
+      "Yes, as an installation you agree, on infrastructure you operate. You can also use the hosted service, and where enabled attach Linux machines people already run. Contact us with the business, where it should run, and what should be tailored.",
     ],
   ],
 };

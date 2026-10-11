@@ -2,6 +2,7 @@
 import { chromium, expect } from "@playwright/test";
 import { readFile, mkdir } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
+import { installAgentBranding } from "./agent-branding.mjs";
 export async function refineEvidence(page, context, out) {
   async function clip(name, seconds, current, action) {
     const dir = `${out}/frames/${name}`;
@@ -107,6 +108,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
     viewport: { width: 1440, height: 900 },
     colorScheme: "light",
   });
+  await installAgentBranding(context);
   const page = await context.newPage();
   try {
     const { session } = JSON.parse(await readFile(out + "/session.json"));

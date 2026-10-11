@@ -5,8 +5,7 @@ import sharp from "sharp";
 import { lockScreenMarkup, statusIcons } from "../src/lock-screen.mjs";
 import { endCard, lockScreenCss } from "./surfaces.mjs";
 import { transcript } from "../content/guides.mjs";
-import { agentMark } from "../src/agents.mjs";
-import content from "../content/en.mjs";
+import { renderPosters } from "./render-poster.mjs";
 const root = new URL("../", import.meta.url).pathname;
 const out = root + "studio/output";
 await mkdir(root + "media", { recursive: true });
@@ -148,17 +147,7 @@ for (const theme of ["light", "dark"]) {
   await sharp(root + `src-img/session-approval-${theme}.png`)
     .extract({ left: 880, top: 0, width: 560, height: 400 })
     .toFile(root + `src-img/hero-detail-${theme}.png`);
-  const data = (
-    await readFile(root + `src-img/session-approval-${theme}.png`)
-  ).toString("base64");
-  await page.setContent(
-    frame(0, false, theme === "dark").replace(
-      "</body>",
-      `<div style="position:absolute;left:80px;top:200px;width:600px"><span class="label">THE 60-SECOND TOUR</span><h1>From task<br>to preview.</h1><p>Wherever you are.</p><div>${content.agents.items.map(([id]) => agentMark(id)).join("")}</div></div><img src="data:image/png;base64,${data}" style="position:absolute;width:1070px;left:770px;top:180px;border:1px solid #8885;border-radius:16px;box-shadow:0 25px 75px #0003"><div style="position:absolute;left:1230px;top:470px;width:130px;height:130px;background:#1f6b6b;border:3px solid #fff;border-radius:50%;display:grid;place-content:center;color:white;font-size:55px;padding-left:10px">▶</div></body>`,
-    ),
-  );
-  await page.evaluate(() => document.fonts.ready);
-  await page.screenshot({ path: root + `src-img/demo-poster-${theme}.png` });
 }
+await renderPosters(page);
 await browser.close();
 console.log("Video master, web video, captions and posters are ready.");

@@ -1,4 +1,5 @@
 import { chromium, expect } from "@playwright/test";
+import { installAgentBranding } from "./agent-branding.mjs";
 import { mkdir, writeFile } from "node:fs/promises";
 const baseURL = process.env.DEMO_URL || "http://localhost:18080";
 const out = new URL("./output/", import.meta.url).pathname;
@@ -19,6 +20,8 @@ const mobile = await browser.newContext({
   isMobile: true,
   hasTouch: true,
 });
+await installAgentBranding(desktop);
+await installAgentBranding(mobile);
 const page = await desktop.newPage();
 const phone = await mobile.newPage();
 page.setDefaultTimeout(30000);

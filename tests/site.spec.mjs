@@ -185,7 +185,7 @@ test("media byte ranges, MIME and cache headers", async ({ request }) => {
     );
   expect((await request.get("/does-not-exist/")).status()).toBe(404);
 });
-test("an organization can contact Benchyard from the homepage", async ({
+test("a business can contact Benchyard from the homepage", async ({
   page,
 }) => {
   for (const width of [1120, 1280]) {
@@ -198,21 +198,21 @@ test("an organization can contact Benchyard from the homepage", async ({
       `homepage overflows at ${width}`,
     ).toBe(true);
   }
-  await page.goto("/#organizations");
+  await page.goto("/#business");
   const contact = page.getByRole("link", { name: "Contact us", exact: true });
   await expect(contact).toBeVisible();
   const href = await contact.getAttribute("href");
   expect(href.startsWith("mailto:hello@benchyard.com?")).toBe(true);
   expect(decodeURIComponent(href)).toContain("your own infrastructure");
   await page.getByRole("link", { name: "contact us", exact: true }).click();
-  await expect(page).toHaveURL(/#organizations$/);
+  await expect(page).toHaveURL(/#business$/);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await page.locator(".mobile-nav summary").click();
   await expect(
     page
       .locator(".mobile-nav")
-      .getByRole("link", { name: "Organizations", exact: true }),
+      .getByRole("link", { name: "For Business", exact: true }),
   ).toBeVisible();
 });
 test("legal policies fit the page and can be opened from the footer", async ({

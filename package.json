@@ -12,6 +12,7 @@
     "demo:start": "bash studio/start.sh",
     "demo:capture": "node studio/capture.mjs",
     "demo:render": "node studio/render-video.mjs",
+    "demo:poster": "node studio/render-poster.mjs",
     "measure": "node studio/measure.mjs",
     "verify:media": "node studio/verify-media.mjs"
   },

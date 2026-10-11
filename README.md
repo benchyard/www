@@ -51,6 +51,8 @@ npm run check
 docker rm -f benchyard-www-demo
 ```
 
+To update only the poster artwork from the existing app screenshots, run `npm run demo:poster` followed by `npm run check`. The full video render uses the same poster generator. Keep playback icons out of the artwork: the native player supplies the controls, including when JavaScript is disabled.
+
 Use a fresh named demo container for another capture. The start command refuses a name collision. Container data is disposable; it is not mounted from a real user's application data. Only port 18080 on host loopback is exposed, and the studio mount is read-only. Generated binaries, frames, session metadata and the 1080p master are ignored under `studio/output/`.
 
 Outputs:
@@ -61,7 +63,7 @@ Outputs:
 - `/guides/workspaces/#demo-transcript`: readable transcript and disclosure.
 - Screenshot originals at 1440×900 and 390×740; mobile hero uses a generated crop of the real desktop diff. Source dimensions and responsive descriptors must remain in sync.
 
-The intro uses a still of the recorded workspace, followed by actual task interactions. Timing is edited to the storyboard. Device decoration and the closing card are rendered separately. Neither runtime controls nor agent messages are painted over the application screenshots.
+The intro uses a still of the recorded workspace, followed by actual task interactions. Timing is edited to the storyboard. Device decoration and the closing card are rendered separately. Neither runtime controls nor agent messages are painted over the application screenshots. Agent branding is normalized during capture by `studio/agent-branding.mjs`, using the same local color Codex SVG as the site; this changes only the glyph appearance. Kimi Code and GLM Code marks in the marketing artwork remain labeled Planned.
 
 ## Assets, caching and deployment
 

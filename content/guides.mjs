@@ -84,7 +84,7 @@ export const guides = [
         paragraphs: [
           "An agent is the CLI that reads files, runs tools and manages a coding task. Models and providers supply its underlying inference. Supporting an agent does not mean every model or compatible endpoint has been tested.",
           "Team-managed sign-ins can configure a gateway address for Claude Code, Codex and Gemini CLI. Cursor does not have a documented custom-address setting here. Compatibility depends on the agent protocol, gateway and chosen model; configuration support is not an end-to-end compatibility guarantee.",
-          "More agent and model integrations are planned, including Kimi, GLM and MiniMax. These names describe the intended direction, not verified built-in availability today.",
+          "More agent and model integrations are planned, including Kimi Code, GLM Code and MiniMax. These names describe the intended direction, not verified built-in availability today.",
         ],
       },
       {

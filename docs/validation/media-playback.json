@@ -1,6 +1,6 @@
 [
   {
-    "browser": "webkit",
+    "browser": "chromium",
     "fullscreen": true,
     "duration": 60,
     "ended": true,
@@ -8,7 +8,7 @@
     "captionCount": 8
   },
   {
-    "browser": "chromium",
+    "browser": "webkit",
     "fullscreen": true,
     "duration": 60,
     "ended": true,
