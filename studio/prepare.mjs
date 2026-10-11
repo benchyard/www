@@ -69,7 +69,7 @@ await writeFile(
       commit: execFileSync("git", ["-C", app, "rev-parse", "HEAD"], {
         encoding: "utf8",
       }).trim(),
-      recorded: "2026-10-09",
+      recorded: new Date().toISOString().slice(0, 10),
       scripted: true,
     },
     null,
