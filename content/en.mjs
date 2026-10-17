@@ -7,8 +7,8 @@ export default {
       "Build with your agents in a persistent cloud workspace. Guide tasks, review changes and approve next steps from your laptop, tablet or phone.",
   },
   hero: {
-    title: "A secure cloud workspace yard for agents.",
-    tagline: "Build from any device, solo or with your team.",
+    title: "Secure cloud workspaces for agents and teams.",
+    tagline: "Build from any device, on your own or together.",
     lead: "Keep code, terminals and previews in a workspace that runs independently of your browser. Guide your agents, review changes and approve the next step anytime, anywhere, from your laptop, tablet or phone.",
     note: "Access by invitation. Bring your agent subscription or API key.",
   },
@@ -68,7 +68,7 @@ export default {
       "The running issue-board application with All issues, In progress and Done filters and six fictional issues.",
     ],
     [
-      "Keep every project in reach",
+      "Keep every workspace in reach",
       "Each workspace lists its sessions and says whether it is running.",
       "workspaces",
       "Benchyard workspace list with the running issue-board workspace and its connected agent sessions.",
