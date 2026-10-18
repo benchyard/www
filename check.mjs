@@ -147,20 +147,21 @@ for (const [route, { name, html }] of pages) {
   }
   if ((html.match(/<h1\b/g) || []).length !== 1) say("expected one h1");
   if (!/<html lang="en"/.test(html)) say("missing language");
-  // The homepage carries the site's own two scripts by their hashed names:
-  // the mark made before the page is drawn, and the rest, deferred. No page
-  // carries script text of its own, and no other page carries a script.
+  // Every page gets only the shared navigation/walkthrough enhancement.
+  // Homepage additionally gets its motion marker and task replay.
   const scripts = html.match(/<script\b[^>]*>[^<]*/gi) || [];
+  const shared = /^<script defer src="\/assets\/navigation\.[0-9a-f]{8}\.js">$/;
+  if (!shared.test(scripts[0] || "")) say("missing shared navigation script");
   if (route === "/") {
     if (
-      scripts.length !== 2 ||
-      !/^<script src="\/assets\/fx\.[0-9a-f]{8}\.js">$/.test(scripts[0]) ||
-      !/^<script defer src="\/assets\/site\.[0-9a-f]{8}\.js">$/.test(scripts[1])
+      scripts.length !== 3 ||
+      !/^<script src="\/assets\/fx\.[0-9a-f]{8}\.js">$/.test(scripts[1]) ||
+      !/^<script defer src="\/assets\/site\.[0-9a-f]{8}\.js">$/.test(scripts[2])
     )
-      say("the homepage carries exactly the site's own two scripts");
+      say("unexpected homepage scripts");
     for (const [, href] of html.matchAll(/\sdata-board="([^"]+)"/g))
       await asset(href.slice(1), say);
-  } else if (scripts.length) say("client scripts are not allowed");
+  } else if (scripts.length !== 1) say("unexpected content-page scripts");
   if (/github\.com|\u2026/i.test(html)) say("forbidden public text");
   // People are not told which cloud a machine is at, and a person's own
   // machine is not offered publicly. The legal pages name their own providers.
@@ -224,6 +225,7 @@ if (!(await exists("robots.txt"))) errors.push("missing robots.txt");
 // load of the homepage, the board only when someone opens it.
 for (const [what, limit] of [
   ["site.", 24 * 1024],
+  ["navigation.", 10 * 1024],
   ["fx.", 1024],
   ["demo-board", 16 * 1024],
 ]) {

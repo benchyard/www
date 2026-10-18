@@ -1,8 +1,12 @@
 # Benchyard public website
 
-A static homepage, three public guides, and the customer legal policies for persistent coding-agent workspaces. Plain HTML and CSS, local fonts and responsive WebP. The homepage carries two small scripts of the site's own (one marks the page for motion before it is drawn, the other plays the demo and moves things); guides and legal pages carry none, and every page reads whole without scripts. No third-party embeds, trackers or runtime framework.
+A static homepage, a guide directory, four public guides and the customer legal policies for secure cloud workspaces for agents and teams. Plain HTML and CSS, local fonts and responsive WebP. Every page includes the small shared navigation/walkthrough enhancement; the homepage additionally includes its motion marker and interactive task replay. Every page remains readable without scripts. No third-party embeds, trackers or runtime framework.
 
-The homepage describes a workspace for coding agents, not a product limited to a fixed list of models. `content/en.mjs` holds the current integration registry. Kimi, GLM and MiniMax are identified as future directions, not verified current integrations. Model/provider compatibility and agent support are separate concepts.
+`content/en.mjs` is the current integration registry used by the hero, agent cards and guide. Kimi is supported through Kimi For Coding or Moonshot API keys. DeepSeek Harness is labelled Integration in progress on the homepage and agent guide; it is not in the supported strip. Planned integrations appear only in the guide. General agent positioning does not imply support for every agent. Team configuration is shared, while workspaces remain individually owned.
+
+`content/device-setup.mjs` supplies both homepage and guide setup instructions. The Mac/iPhone scenes are labelled illustrative walkthroughs, not OS screenshots or proof of physical-device delivery. They point at the console, never request browser notification permission on this website, and distinguish adding a web app from granting push permission.
+
+`src/navigation.mjs` defines feature destinations. `src/navigation.js` adds 150 ms hover opening, 200 ms pointer-leave grace, keyboard/click disclosures, mobile navigation and manually stepped device setup. Top-level links remain available without JavaScript. Direct `#device-setup` navigation expands the instructions.
 
 ## Build and preview
 
@@ -12,7 +16,7 @@ Requires Node 20+. The lockfile pins build and development dependencies.
 npm ci
 npm run check
 npm run dev                          # localhost:4321, live reload in responses only
-PORT=4322 LIVE_RELOAD=0 node serve.mjs # script-free local acceptance preview
+PORT=4322 LIVE_RELOAD=0 node serve.mjs # local preview without development live reload
 npx playwright install chromium firefox webkit
 npm test                             # use the acceptance preview above
 npm run measure                      # six local performance samples
@@ -36,7 +40,7 @@ npm run format:check
 - `docs/claims.md`: internal product-fact evidence, reviewed against the product main branch.
 - `docs/validation.md`: checks, measured results and release limitations.
 
-Routes: `/`, `/guides/agents/`, `/guides/workspaces/`, `/guides/security/`, and `/legal/<policy>/` for each customer policy. Every route has its own title, description and canonical URL. The sitemap is generated from these routes. Cross-page fragments, resource hashes, the one allowed script, text the site must not carry (a cloud's name, a person's own machine) and cache headers are checked by `check.mjs`.
+Routes: `/`, `/guides/`, `/guides/getting-started/`, `/guides/agents/`, `/guides/workspaces/`, `/guides/security/`, and `/legal/<policy>/` for each customer policy. Every route has its own title, description and canonical URL. The sitemap is generated from these routes. Cross-page fragments, resource hashes, the per-page script allowlist, text the site must not carry (a cloud's name, a person's own machine) and cache headers are checked by `check.mjs`.
 
 ## The demo, and screenshot production
 

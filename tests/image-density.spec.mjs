@@ -25,6 +25,8 @@ for (const colorScheme of ["light", "dark"])
           details.open = true;
         });
         for (const img of await page.locator("picture img").all()) {
+          // The desktop companion phone is intentionally absent on narrow screens.
+          if (!(await img.isVisible())) continue;
           await img.scrollIntoViewIfNeeded();
           await expect
             .poll(() =>

@@ -8,7 +8,7 @@
     "check": "node build.mjs && node check.mjs",
     "dev": "node build.mjs && node serve.mjs",
     "test": "playwright test",
-    "format:check": "prettier --check content/*.mjs src/*.mjs src/*.css build.mjs check.mjs serve.mjs studio/*.mjs studio/fixture/*.mjs studio/fixture/board.html tests/*.mjs playwright.config.mjs",
+    "format:check": "prettier --check content/*.mjs src/*.mjs src/*.js src/*.css build.mjs check.mjs serve.mjs studio/*.mjs studio/fixture/*.mjs studio/fixture/board.html tests/*.mjs playwright.config.mjs",
     "measure": "node studio/measure.mjs",
     "demo:capture": "sg docker -c \"bash studio/record.sh\"",
     "card": "node studio/render-poster.mjs"

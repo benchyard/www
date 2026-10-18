@@ -7,6 +7,8 @@ const colors = {
   codex: "codex-color",
   kimi: "kimi-color",
   glm: "chatglm-color",
+  deepseek: "deepseek-color",
+  minimax: "minimax-color",
 };
 const artwork = Object.fromEntries(
   Object.entries(colors).map(([id, file]) => {

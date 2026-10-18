@@ -22,7 +22,13 @@ import {
   writeFile,
 } from "node:fs/promises";
 import { transform } from "lightningcss";
-import { render, renderGuide, renderLegal, site } from "./src/page.mjs";
+import {
+  render,
+  renderGuide,
+  renderLegal,
+  renderGuideIndex,
+  site,
+} from "./src/page.mjs";
 import { pictures } from "./src/pictures.mjs";
 import { guides } from "./content/guides.mjs";
 import { policies } from "./content/legal.mjs";
@@ -72,6 +78,7 @@ for (const { path, bytes } of await pictures()) {
 }
 // The homepage's script, and the issue board that the replay's Ports panel
 // opens: the page of the recorded run, in a frame.
+await publish("navigation.js", await readFile(here("./src/navigation.js")));
 await publish("site.js", await readFile(here("./src/site.js")));
 await publish("fx.js", await readFile(here("./src/fx.js")));
 await publish("demo-board.html", Buffer.from(board()));
@@ -110,6 +117,12 @@ for (const [i, code] of languages.entries()) {
 }
 
 const english = (await import("./content/en.mjs")).default;
+await mkdir(new URL("guides/", out), { recursive: true });
+await writeFile(
+  new URL("guides/index.html", out),
+  renderGuideIndex(english, { asset }),
+);
+pages.push("/guides/");
 for (const guide of guides) {
   const path = `guides/${guide.slug}/`;
   await mkdir(new URL(path, out), { recursive: true });

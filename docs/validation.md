@@ -116,3 +116,41 @@ The capture takes desktop screenshots at 4× and phone screenshots at 3×, and t
 - **Capture.** `npm run demo:capture` ran the task again in the real app at product commit `f93793b8`, from a detached worktree that was removed afterwards, in a container the script removed. The screenshots (4× on the desktop, 3× on the phone) and `content/demo.json` are from that run. The capture approved `npm test` from the phone while the MacBook drove, and tried the board's filters (3, 3, 6).
 - **The replay** was redrawn to the app's shape at that commit: the menu with its bell, search, New session, Schedules, Rules, skills & tools, Secrets and the workspaces; on the phone the quiet line "MacBook is driving. Sending from here takes over." in place of the bar with Take over. It was compared with the new screenshots by eye at 1440 pixels.
 - **Words.** "Credits" in place of "machine credits" on the site and in the two policies that said it. The site no longer says credits can be bought: buying was run only in the payment provider's sandbox. Which device drives a session is said as the app says it.
+
+## Clarity-first website — 2026-10-18
+
+Implemented general-agent positioning, persistent/team/security proof points, a unified desktop/phone scene, verified-only hero integrations, feature dropdown navigation and stable subsection anchors. Notifications now include shared Mac/iPhone setup instructions and original HTML/CSS illustrations, manual device/step controls, direct-link expansion and a no-script fallback. Added the guide directory and invited-user getting-started guide. Updated social artwork and metadata. The current integration registry feeds both homepage and agent guide.
+
+All 16 routes pass `npm run check`; `npm run format:check` and `git diff --check` pass. The full browser run passed 42 tests, skipped the existing WebKit replay keyboard test, and exposed two mobile navigation failures in WebKit. Safari can emit focusout with a null relatedTarget during a pointer action; immediate dismissal was swallowing link activation. Dismissal now preserves that action, while explicit outside clicks and focus moving elsewhere still close menus. A subsequent focused run passed all 15 navigation, walkthrough, responsive-layout and accessibility checks across Chromium, Firefox and WebKit, including both formerly failing cases. Existing replay, density, cache and policy checks passed in the full run. The WebKit keyboard skip is an existing OS Tab-navigation limitation, not a claim of physical-device coverage.
+
+The new desktop-disclosure tests also caught low-contrast fading in the old scroll-following tour. Text and section content now remain fully readable during anchor navigation. Visual inspection covered the desktop header and disclosure, the workspace/phone scene, light/dark mobile hero, mobile Add to Home Screen and launch illustrations, and the regenerated social card. The 1120px screenshot candidate avoids transferring a 1440px lossless image to a smaller 1× desktop display while preserving high-density variants.
+
+### Remaining release checks
+
+These are not represented by automated browser results:
+
+- **Comprehension study:** recruit five target users unfamiliar with Benchyard. After five seconds ask “What is Benchyard?” Target: four identify an agent cloud workspace, rather than a new model or notification utility. After twenty seconds ask why they would use it and how their team participates. Target: four describe cloud execution and notification-led return; three recognize shared team configuration. After exploration ask whether teammates can open each other's workspaces and whether every secret is protected. Target: no unsupported assumption. Record verbatim responses and revise the hero if category understanding fails. No participants have been recruited or results collected by this implementation.
+- **Physical devices:** on a real Mac and iPhone, add the console as a web app, grant permission, send a supported task event and verify that its notification opens the correct authenticated session. Check denied permission and signed-out handling. No native delivery claim is made from desktop Playwright or illustrated scenes.
+- **Production:** verify HTTPS, canonical redirects, direct guide routes, resource MIME and cache headers, and confirm existing contact mailboxes work. This change has not been deployed. Preserve old hashed assets during rollout; roll back the static deployment if routing or resources regress.
+
+The historical product review date remains unchanged because this website revision is not a complete new backend audit. No analytics, application backend, pricing, Cloud API or product authentication change was made.
+
+### Final local performance
+
+`npm run measure` passed all six cold-context samples after adding the 1120px image candidate. Local Chromium, 150 ms network latency, 1.6 Mbps download and 4× CPU throttling:
+
+| Metric | Mobile (390px) | Desktop (1280px) |
+| --- | --- | --- |
+| LCP samples | 1476 / 1452 / 1440 ms | 1548 / 1572 / 1564 ms |
+| CLS | 0.0135 | 0.0027 |
+| Initial uncompressed resource bytes | 263,735 | 341,845 |
+| Selected page image bytes | 194,256 | 293,864 |
+| Preview board fetched before opening | No | No |
+
+These are lab measurements, not field p75 or INP. `studio/measure.mjs` now enforces the planned LCP ≤ 2.5 seconds and CLS < 0.1 thresholds as well as the existing resource budgets. The earlier desktop measurement of roughly 2.8 seconds failed the new budget and was corrected by image sizing, not by loosening the threshold. The source report is `docs/validation/performance.json`.
+
+A final six-case run passed desktop disclosures and actual emulated touch events in all three browser engines. Touch verification uses `hasTouch: true` and `.tap()` for the menu, setup anchor and device selector; it does not stand in for native push delivery. All changed code passes formatting and whitespace checks.
+
+### Notification presentation restored — 2026-10-18
+
+At the owner's request, restored the phone push-notification and email illustrations, replacing the installed Mac/Home Screen scene. The secondary setup walkthrough remains. No Dock is shown in the hero. Removed the unused app-experience renderer and styles. All 16 routes pass build checks; Chromium dark-theme mobile (390px) and desktop (1440px) layout and accessibility checks pass. Earlier installed-device visual notes describe a superseded design.

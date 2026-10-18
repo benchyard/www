@@ -4,21 +4,20 @@ export default {
   meta: {
     title: "Benchyard | Secure cloud workspaces for agents and teams",
     description:
-      "Build with your agents in a persistent cloud workspace. Guide tasks, review changes and approve next steps from your laptop, tablet or phone.",
+      "Run agents in persistent cloud workspaces. Share team tools, protect supported credentials and get notified when your attention is needed—from any device.",
   },
   hero: {
     title: "Secure cloud workspaces for agents and teams.",
-    tagline: "Build from any device, on your own or together.",
-    lead: "Keep code, terminals and previews in a workspace that runs independently of your browser. Guide your agents, review changes and approve the next step anytime, anywhere, from your laptop, tablet or phone.",
-    note: "Access by invitation. Bring your agent subscription or API key.",
+    tagline: "",
+    lead: "Run your agents in persistent workspaces. Get notified when they need you or finish a task, then review and act from any device.",
+    note: "Access by invitation. Bring a supported agent subscription or API key. Provider charges are separate.",
   },
   nav: [
     ["workspace", "Workspace"],
     ["agents", "Agents"],
-    ["notifications", "Notifications"],
+    ["security", "Security"],
     ["teams", "For Teams"],
     ["business", "For Business"],
-    ["security", "Security"],
   ],
   access: {
     label: "Request access",
@@ -28,6 +27,14 @@ export default {
       "What would you like to work on with Benchyard?",
     ],
   },
+  proof: [
+    ["Persistent work", "Keep projects, sessions and tools together."],
+    ["Team collaboration", "Share instructions, tools and managed sign-ins."],
+    [
+      "Credential protection",
+      "Keep supported credentials outside the workspace.",
+    ],
+  ],
   steps: [
     [
       "Start a task",
@@ -75,7 +82,7 @@ export default {
     ],
   ],
   workspace: {
-    title: "A place for the whole task.",
+    title: "A persistent place for your agents to work.",
     lead: "The conversation, files, terminal and changes stay together. Close your browser and return to the same workspace from another device.",
     items: [
       [
@@ -125,20 +132,21 @@ export default {
     ],
   },
   agents: {
-    title: "Your choice of agent. One familiar workspace.",
-    lead: "Start with the agent you use today. These are the current integrations; each keeps its own sign-in requirements and capabilities.",
+    title: "Bring your agents into one workspace.",
+    lead: "Start with the agent you use today. Explore supported agents and upcoming integrations. Each supported agent keeps its own sign-in requirements and capabilities.",
     future:
-      "More agent and model integrations are planned, including Kimi Code, GLM Code and MiniMax. Tell us what you would like to use. Availability will be documented as each integration is verified.",
+      "More agent and model integrations are planned, including GLM Code and MiniMax. Tell us what you would like to use. Availability will be documented as each integration is verified.",
+    inProgress: [["deepseek", "DeepSeek Harness"]],
     planned: [
-      ["kimi", "Kimi Code"],
       ["glm", "GLM Code"],
+      ["minimax", "MiniMax"],
     ],
     items: [
       ["claude", "Claude Code", "Connect a Claude subscription or an API key."],
       [
         "codex",
         "Codex",
-        "Sign in to ChatGPT with a one-time code, or use an API key.",
+        "Sign in to ChatGPT with a one-time code where your account allows it, or use an API key.",
       ],
       [
         "cursor",
@@ -150,10 +158,11 @@ export default {
         "Gemini CLI",
         "Connect with an API key. Subscription sign-in is not supported here.",
       ],
+      ["kimi", "Kimi", "Connect with a Kimi For Coding or Moonshot API key."],
     ],
   },
   teams: {
-    title: "For teams, with room for individual work.",
+    title: "Shared ways of working. Space for every teammate.",
     lead: "Share the setup your team needs while keeping workspaces individually owned.",
     items: [
       [
@@ -172,7 +181,7 @@ export default {
   },
   business: {
     eyebrow: "FOR BUSINESS",
-    title: "Run Benchyard the way your business works.",
+    title: "Benchyard, configured for your business.",
     lead: "Contact us about a hosted account or an installation on infrastructure you operate. We agree the shape before anything starts.",
     subject: "Benchyard for business",
     cta: "Contact us",
@@ -194,7 +203,7 @@ export default {
     note: "Availability depends on what we agree. Agent subscriptions and API usage stay with their providers.",
   },
   security: {
-    title: "Keep secrets outside the workspace.",
+    title: "Protect credentials. Keep control.",
     lead: "An agent needs your sign-ins and keys to do its work, but it does not need to see them. For protected credentials the agent gets a stand-in, and a credential keeper outside the workspace adds the real value only to requests for the service it belongs to.",
     items: [
       [
@@ -225,8 +234,20 @@ export default {
   },
   faq: [
     [
+      "When will Benchyard notify me?",
+      "With device push enabled, supported events include approval requests, plans ready for review, task completion or failure, agent notes and workspace readiness. Turn notifications on for each device. Delivery depends on your settings; email covers fewer events. Open the session to review and act.",
+    ],
+    [
+      "What can my team share?",
+      "Teams share instructions, skills, tools and managed agent sign-ins, and see usage. Workspaces remain individually owned. A shared tool that runs code needs each member’s permission.",
+    ],
+    [
+      "Who can access my workspace and stored data?",
+      "Team administration does not grant access to another member’s workspace or private previews. The service is not end-to-end encrypted: its operator can access stored data. Credential protection applies to supported credentials, not every secret or file.",
+    ],
+    [
       "What is Benchyard?",
-      "Benchyard is a workspace in the cloud for coding agents. It keeps the conversation, the files, a terminal, the changes and a preview of the running app together, and you reach it from a computer or a phone.",
+      "Benchyard provides secure cloud workspaces for supported agents and teams. It keeps the conversation, the files, a terminal, the changes and a preview of the running app together, and you reach it from a computer or a phone.",
     ],
     [
       "Does work continue when I close my laptop?",
@@ -242,7 +263,7 @@ export default {
     ],
     [
       "Are agents and models the same thing?",
-      "No. An agent is the tool that works on your code; a model is the AI behind it. Which models you can use depends on the agent and how it is set up. The agents shown here are the current ones, and more are planned.",
+      "No. An agent is the tool that carries out tasks; a model is the AI behind it. Which models you can use depends on the agent and how it is set up. The agents shown here are the current ones, and more are planned.",
     ],
     [
       "Do I need a separate agent account?",

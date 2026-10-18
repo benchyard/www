@@ -38,7 +38,7 @@ export async function renderPosters(parentPage) {
       .mark {width: 44px; height: 44px; fill: currentColor}
       .duration, .eyebrow {font-size: 18px; letter-spacing: 2px; color: ${dark ? "#79ccc5" : "#1f6b6b"}}
       .copy {position: absolute; left: 80px; top: 250px; width: 600px}
-      h1 {font: 600 76px/1.08 Bricolage; letter-spacing: -2px; margin: 48px 0}
+      h1 {font: 600 66px/1.08 Bricolage; letter-spacing: -2px; margin: 48px 0}
       p {font-size: 28px; color: ${dark ? "#aab6ae" : "#5e655f"}}
       .agents {display: flex; gap: 28px; margin-top: 44px}
       .agent-mark {width: 44px; height: 44px}
@@ -50,7 +50,7 @@ export async function renderPosters(parentPage) {
       footer {position: absolute; bottom: 42px; left: 80px; font-size: 17px; color: ${dark ? "#aab6ae" : "#5e655f"}}
     </style></head><body>
       <header><div class="brand">${mark}<span>Benchyard</span></div></header>
-      <main><div class="copy"><h1>From task<br>to preview.</h1><p>Wherever you are.</p><div class="agents">${content.agents.items.map(([id]) => agentMark(id)).join("")}</div><div class="planned"><small>Planned</small>${content.agents.planned.map(([id, name]) => `<span>${agentMark(id)}${name}</span>`).join("")}</div></div>
+      <main><div class="copy"><h1>Secure cloud workspaces for agents and teams.</h1><p>Get notified. Review and act from any device.</p><div class="agents">${content.agents.items.map(([id]) => agentMark(id)).join("")}</div></div>
       <img class="screen" src="data:image/png;base64,${screen}" alt="Benchyard workspace showing a status filter task, approval request and file changes."></main>
       <footer>The real interface with fictional demo data.</footer>
     </body></html>`);

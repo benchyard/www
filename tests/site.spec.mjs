@@ -4,6 +4,8 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { policies } from "../content/legal.mjs";
 const routes = [
   "/",
+  "/guides/",
+  "/guides/getting-started/",
   "/guides/agents/",
   "/guides/workspaces/",
   "/guides/security/",
@@ -28,7 +30,7 @@ for (const theme of ["light", "dark"])
           `${route} overflows at ${width}`,
         ).toBe(true);
         await expect(page.locator("h1")).toHaveCount(1);
-        await expect(page.locator("script")).toHaveCount(route === "/" ? 2 : 0);
+        await expect(page.locator("script")).toHaveCount(route === "/" ? 3 : 1);
         if (width === 360 || width === 390 || width === 1280) {
           if (route === "/") {
             await mkdir(
@@ -71,7 +73,7 @@ test("navigation and keyboard", async ({ page, browserName }) => {
   await expect(page.getByText("Skip to content")).toBeFocused();
   await page.keyboard.press("Enter");
   const menu = page.locator(".mobile-nav");
-  await menu.locator("summary").click();
+  await menu.locator(":scope > summary").click();
   await expect(
     menu.getByRole("link", { name: "Workspace", exact: true }),
   ).toBeVisible();

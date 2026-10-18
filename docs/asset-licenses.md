@@ -4,7 +4,7 @@ Agent marks are bundled in `src/icons/` and rendered by `src/agents.mjs`, with n
 
 ## LobeHub color marks
 
-Claude, Codex, Gemini, Kimi and ChatGLM color SVGs are vendored from LobeHub Icons (MIT, Copyright (c) 2023 LobeHub), pinned to commit `c385b2b8d1f9e19aa86e628d4e23c91ee1111a47`, under `packages/static-svg/icons/`. The MIT notice is redistributed in `public/fonts/LICENSES.md` alongside the font notices.
+Claude, Codex, Gemini, Kimi, ChatGLM, DeepSeek and MiniMax color SVGs are vendored from LobeHub Icons (MIT, Copyright (c) 2023 LobeHub), pinned to commit `c385b2b8d1f9e19aa86e628d4e23c91ee1111a47`, under `packages/static-svg/icons/`. The MIT notice is redistributed in `public/fonts/LICENSES.md` alongside the font notices.
 
 Source: https://github.com/lobehub/lobe-icons/tree/c385b2b8d1f9e19aa86e628d4e23c91ee1111a47/packages/static-svg/icons
 
@@ -19,4 +19,4 @@ Asset package: https://ptht05hbb1ssoooe.public.blob.vercel-storage.com/assets/br
 
 ## Captures
 
-Application screenshots use real Benchyard with fictional data. `studio/agent-branding.mjs` normalizes the four agent glyphs in recordings of the SVG-based UI to the same local artwork. Account state, text, approvals and results are unchanged. Kimi Code and GLM Code appear only in marketing artwork as planned integrations. Device surfaces, lock-screen notifications, email illustration and video composition are authored for this site. No third-party website screenshots or personal notifications are redistributed.
+Application screenshots use real Benchyard with fictional data. `studio/agent-branding.mjs` normalizes the four agent glyphs in recordings of the SVG-based UI to the same local artwork. Account state, text, approvals and results are unchanged. Kimi is a supported integration. GLM Code and MiniMax cards are labelled Planned; DeepSeek Harness is labelled In progress. The DeepSeek provider mark identifies the upcoming harness integration. Device surfaces, lock-screen notifications, email illustration and video composition are authored for this site. No third-party website screenshots or personal notifications are redistributed.

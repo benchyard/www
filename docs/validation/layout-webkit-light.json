@@ -1,37 +1,37 @@
 [
   {
     "width": 320,
-    "routes": 4,
+    "routes": 6,
     "overflow": false
   },
   {
     "width": 360,
-    "routes": 4,
+    "routes": 6,
     "overflow": false
   },
   {
     "width": 390,
-    "routes": 4,
+    "routes": 6,
     "overflow": false
   },
   {
     "width": 768,
-    "routes": 4,
+    "routes": 6,
     "overflow": false
   },
   {
     "width": 1024,
-    "routes": 4,
+    "routes": 6,
     "overflow": false
   },
   {
     "width": 1280,
-    "routes": 4,
+    "routes": 6,
     "overflow": false
   },
   {
     "width": 1440,
-    "routes": 4,
+    "routes": 6,
     "overflow": false
   }
 ]

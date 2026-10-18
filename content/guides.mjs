@@ -33,39 +33,83 @@ export const transcript = [
 ];
 export const guides = [
   {
-    slug: "agents",
-    title: "Coding agents in Benchyard",
+    slug: "getting-started",
+    title: "Get started with Benchyard",
     description:
-      "Compare supported sign-ins, approvals and steering for Claude Code, Codex, Cursor and Gemini CLI in Benchyard.",
-    lead: "Benchyard gives your coding agent a workspace that keeps running. The agents share one interface, but each signs in its own way and can do different things.",
+      "A first-task guide for invited users: connect an agent, prepare a workspace, review decisions and inspect the result.",
+    lead: "Already have an invitation? Start with one small task and an agent you know. Benchyard provides the workspace; your agent carries out the task.",
+    sections: [
+      {
+        id: "access",
+        title: "Sign in after you are invited",
+        paragraphs: [
+          "Access is by invitation. If you do not have access yet, use Request access. Available environments depend on your account.",
+        ],
+        link: ["https://console.benchyard.com", "Open the console"],
+      },
+      {
+        id: "connect",
+        title: "Connect a supported agent",
+        paragraphs: [
+          "Choose a supported integration and connect the subscription or API key it accepts, or use a sign-in your team provides. Provider charges are separate.",
+        ],
+        link: ["/guides/agents/", "Compare supported agents"],
+      },
+      {
+        id: "prepare",
+        title: "Prepare a workspace and project",
+        paragraphs: [
+          "Create or select a workspace available to your account. Prepare a project you are comfortable using for a trial. If you use the browser file tools, upload the files your task needs; you can also use the workspace terminal to prepare your project.",
+        ],
+      },
+      {
+        id: "task",
+        title: "Give the agent a small task",
+        paragraphs: [
+          "For a project with a test suite, ask the agent to explain one existing test and propose a small improvement. State the intended result and ask it to seek approval before running commands where the integration supports that control. Approval behavior differs between agents.",
+        ],
+      },
+      {
+        id: "review",
+        title: "Review decisions and results",
+        paragraphs: [
+          "Read requests in context before approving. Inspect Changes and Files, check command output and use Ports to open a running app where previews are enabled. A preview is accessible only to the workspace owner.",
+        ],
+      },
+      {
+        id: "return",
+        title: "Step away and return",
+        paragraphs: [
+          "Closing the browser does not stop a running workspace. Tasks may wait for approval, fail or end when the workspace stops. Enable notifications for the devices you use, then return to the same session to inspect the result.",
+        ],
+        link: [
+          "/guides/workspaces/#device-setup",
+          "Set up Mac or iPhone notifications",
+        ],
+      },
+      {
+        id: "team",
+        title: "Share your team setup",
+        paragraphs: [
+          "Teams can share instructions, skills, tools and managed sign-ins, and see usage. Workspaces remain individually owned. Team administration does not grant access to another member’s workspace or preview.",
+        ],
+        link: ["/guides/security/#teams", "Understand team boundaries"],
+      },
+    ],
+  },
+  {
+    slug: "agents",
+    title: "Agents in Benchyard",
+    description:
+      "Compare supported sign-ins, approvals and steering for Claude Code, Codex, Cursor, Gemini CLI and Kimi in Benchyard.",
+    lead: "Benchyard gives your supported agents persistent cloud workspaces. The agents share one interface, but each signs in its own way and can do different things.",
     sections: [
       {
         id: "supported-agents",
         title: "Which agents and sign-ins are supported?",
         table: {
-          head: ["Agent", "Supported sign-in", "Important detail"],
-          rows: [
-            [
-              "Claude Code",
-              "Claude subscription or API key",
-              "Use the subscription or key that provides your agent access.",
-            ],
-            [
-              "Codex",
-              "ChatGPT sign-in with a one-time code, or API key",
-              "Signing in with a code must be allowed for your ChatGPT account. If it is not, use an API key.",
-            ],
-            [
-              "Cursor",
-              "Cursor account or API key",
-              "Account sign-in may need renewing after approximately 60 days.",
-            ],
-            [
-              "Gemini CLI",
-              "API key",
-              "Subscription sign-in is not supported in Benchyard.",
-            ],
-          ],
+          head: ["Agent", "Supported sign-in"],
+          rows: [], // Filled from the shared integration registry by the renderer.
         },
       },
       {
@@ -73,8 +117,8 @@ export const guides = [
         title: "How do agents, models and providers differ?",
         paragraphs: [
           "An agent is the program that reads files, runs tools and carries out a coding task. A model is the AI behind it, and a provider is the company that runs the model. Supporting an agent does not mean every model it can use has been tested.",
-          "A team can send its agents' requests through a gateway of its own (a service the team runs between its agents and the provider) for Claude Code, Codex and Gemini CLI, but not for Cursor. Whether a particular gateway and model work together is for the team to check; Benchyard does not guarantee it.",
-          "More agents and models are planned, including Kimi Code, GLM Code and MiniMax. They are not available today.",
+          "A team can send its agents' requests through a gateway of its own (a service the team runs between its agents and the provider) for Claude Code, Codex, Gemini CLI and Kimi, but not for Cursor. Whether a particular gateway and model work together is for the team to check; Benchyard does not guarantee it.",
+          "More agents and models are planned, including GLM Code and MiniMax. They are not available today.",
         ],
       },
       {
@@ -196,6 +240,14 @@ export const guides = [
         paragraphs: [
           "No email is sent while you have the session open, and at most one per session in ten minutes. Delivery of email and notifications is not guaranteed.",
         ],
+      },
+      {
+        id: "device-setup",
+        title: "How do I add Benchyard to my Dock or Home Screen?",
+        paragraphs: [
+          "No separate app download is needed. Add the Benchyard console as a web app, then enable notifications on each device. The steps below are illustrative; menu wording varies by operating system version.",
+        ],
+        setup: true,
       },
       {
         id: "demo-transcript",

@@ -103,6 +103,8 @@ await writeFile(
 if (
   results.some(
     (r) =>
+      r.lcpMs > 2500 ||
+      r.cls >= 0.1 ||
       r.initialUncompressedResourceBytes > 1000000 ||
       r.selectedPageImageBytes > 3000000 ||
       r.boardFetchedBeforeOpened,

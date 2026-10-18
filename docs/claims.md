@@ -47,3 +47,21 @@ Nothing here was run at a real cloud, on Kubernetes or on a real iPhone, and no 
 ## Research informing presentation
 
 Official marketing pages reviewed 2026-10-09: Claude Code, ChatGPT overview, OpenAI Codex, Cursor Cloud, Ona and Replit. Their capabilities are not evidence of Benchyard capabilities. Adopted presentation ideas: task-led storytelling, readable UI, result-first previews, concise positioning and useful explanatory guides.
+
+## Clarity-first website revision — 2026-10-18
+
+The product category is now “secure cloud workspaces for agents and teams.” This is positioning, not a claim of arbitrary agent compatibility. The current integration registry remains the supported-agent source for the hero, cards and guide. Planned integrations remain labelled in the guide.
+
+Team collaboration means shared rules, skills, tools, managed sign-ins and usage visibility. Individual ownership and private previews are unchanged. Notification copy differentiates push from email; adding a web app does not grant push permission.
+
+New Mac/iPhone setup instructions use the existing console origin. The console's English `shell.json` push strings were checked for “Turn on,” per-device permission, unsupported browsers, and the iPhone Home Screen requirement. Setup graphics are original HTML/CSS illustrations, not native screenshots or delivery recordings. Platform prerequisites derive from Apple's Mac web app guide (https://support.apple.com/en-ie/104996), iPhone web app guide (https://support.apple.com/en-kw/guide/iphone/iphea86e5236/27/ios/27), and web push documentation (https://developer.apple.com/documentation/usernotifications/sending-web-push-notifications-in-web-apps-and-browsers), consulted during planning. Mac Dock apps require macOS Sonoma 14 or later; Home Screen web push requires iOS 16.4 or later. Menu wording varies with OS version.
+
+No physical-device delivery or production-host verification is implied by these changes. The historical product-fact review date is retained rather than implying a new full backend audit.
+
+### Integration status correction — 2026-10-18
+
+Kimi is now in the supported registry, as confirmed by the owner and the current product `docs/features.md` (agent-kimi feature, Kimi runtime, Kimi For Coding and Moonshot key types). Public authentication copy is limited to those key options. DeepSeek Harness is explicitly “Integration in progress. Not yet available.” based on the owner's update; it is excluded from supported agents and the social card. Homepage and guide reuse the same status copy.
+
+### Installed web app presentation — 2026-10-18
+
+The device section now leads with the installed web app experience: a dedicated Mac window and Dock icon, and an iPhone Home Screen icon opening the session. Badge support is implemented in the product's `web/src/App.tsx` (`navigator.setAppBadge` / `clearAppBadge`) and `web/public/sw.js` (push badge update). The displayed count of 3 and OS surfaces are illustrations, not live delivery evidence. Platform support and notification permission are stated beside the scene. The marketing site does not claim a separately distributed native application.

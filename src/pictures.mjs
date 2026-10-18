@@ -24,7 +24,7 @@ const candidates = {
   "hero-detail": [280, 560, 1120, 2240],
   "phone-approval": [195, 390, 780, 1170],
 };
-const desktopCandidates = [720, 1440, 2880, 4320];
+const desktopCandidates = [720, 1120, 1440, 2880, 4320];
 
 function layoutWidth(name) {
   if (name.startsWith("hero-detail")) return 560;
