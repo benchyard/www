@@ -1,9 +1,16 @@
 export const destinations = {
+  pricing: [
+    ["/#pricing", "Pricing overview"],
+    ["/#pricing-usage", "How usage is billed"],
+    ["/#offers", "Trial & offers"],
+  ],
   workspace: [
     ["/#workspace", "Overview"],
     ["/#preview", "Previews"],
-    ["/#workspace-persistence", "Persistence & recovery"],
-    ["/#workspace-tools", "Files & terminal"],
+    ["/#workspace-context", "Sessions & context"],
+    ["/#workspace-operations", "Schedules & recovery"],
+    ["/#workspace-tools", "Workbench & tools"],
+    ["/#workspace-machines", "Machines & sudo"],
     ["/#notifications", "Notifications"],
     ["/#device-setup", "Mac & iPhone setup"],
   ],

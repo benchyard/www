@@ -36,16 +36,17 @@ export const guides = [
     slug: "getting-started",
     title: "Get started with Benchyard",
     description:
-      "A first-task guide for invited users: connect an agent, prepare a workspace, review decisions and inspect the result.",
-    lead: "Already have an invitation? Start with one small task and an agent you know. Benchyard provides the workspace; your agent carries out the task.",
+      "A first-task guide for new users: connect an agent, prepare a workspace, review decisions and inspect the result.",
+    lead: "Create an account, then start with one small task and an agent you know. Benchyard provides the workspace; your agent carries out the task.",
     sections: [
       {
         id: "access",
-        title: "Sign in after you are invited",
+        title: "Create your account",
         paragraphs: [
-          "Access is by invitation. If you do not have access yet, use Request access. Available environments depend on your account.",
+          "Registration is open. Choose Sign up, enter your email and follow the link in your inbox to create your account. If a friend shared a referral link, open it before signing up. Available environments depend on your account.",
+          "Eligible new accounts receive 3 trial credits after email confirmation, valid for 7 days from the grant. A friend's referral link adds 2 credits, valid for 30 days. Confirm your email within 7 days of creating the account to qualify; these rewards are once per account and email address. Billing shows your credits, expiry dates and any additional offers. Agent subscriptions and API usage are separate.",
         ],
-        link: ["https://console.benchyard.com", "Open the console"],
+        link: ["https://console.benchyard.com/register", "Sign up"],
       },
       {
         id: "connect",
@@ -152,7 +153,7 @@ export const guides = [
     slug: "workspaces",
     title: "How Benchyard workspaces work",
     description:
-      "Understand persistent workspaces, stopping and resuming, phone approvals, browser previews and notifications in Benchyard.",
+      "Understand persistent workspaces, machine types and sudo, SSH, ports, containers, previews and notifications in Benchyard.",
     lead: "A workspace is where your agents work: it holds your project's files, your sessions and the tools they use. You reach it from the browser on your computer or phone.",
     sections: [
       {
@@ -166,10 +167,33 @@ export const guides = [
         ],
       },
       {
+        id: "session-continuity",
+        title: "How do agents, models and context carry across sessions?",
+        paragraphs: [
+          "Each session has its own agent and model selection from the options available to your account. Multiple sessions can work in one workspace. Choose a separate Git worktree when they should edit independent copies; merging their branches remains up to you or an agent.",
+          "Continue with another agent starts a new session in the same workspace. With your first message, the new agent receives a record of the old session's messages, answers and tool calls. Tool results may be clipped, and long conversations keep the beginning and most recent portion, up to about 60,000 characters. The original session stays as it was. This transfers a conversation record, not the other model's internal state.",
+          "Move to another workspace continues the same session with the same agent, its saved record and timeline. Wait for the task to finish or stop it, and start the destination workspace first. Project files and Git worktrees are not copied: prepare the project in the destination, for example on the same branch. Resumption depends on the agent's saved record and support for it.",
+          "Fork from here creates a new session from a point in the conversation, keeping the original. It uses the agent's native fork where supported, or supplies the conversation record. Files are not rolled back. You can also bring Claude Code or Codex sessions from your computer through Bring them over or Benchyard's MCP tools where available; those imports carry session records, not project files.",
+        ],
+        link: ["/#workspace-context", "Explore session workflows"],
+      },
+      {
+        id: "ongoing-work",
+        title: "How do I schedule, guide and recover ongoing work?",
+        paragraphs: [
+          "A schedule combines a workspace, agent, optional model, prompt, permission mode and timing. Choose hourly, daily, weekdays, weekly or a cron expression. Each run creates an ordinary session you can read and continue; it can start in a selected folder or a new Git worktree. A stopped workspace starts for the run, and the option to stop it afterwards waits for the workspace to become quiet.",
+          "Queue holds your next message until the current turn ends. Steer sends a correction into the running turn: Claude Code and Codex can accept it without stopping; other supported paths may interrupt and resend. You can inspect running commands and stop them, and review approval requests before allowing an action.",
+          "Check results through Ports and available browser previews, or a desktop on types that include one. Container workspaces include rootless Podman with docker commands and compose; machine workspaces with sudo can use Docker.",
+          "Where supported, take a snapshot by hand or enable daily snapshots. Restoring replaces the workspace's disk state and returns its session history to that point; later history is removed from view. Benchyard saves the present state first so the rollback can be undone. Creating a new workspace from a snapshot copies the disk files, not the original session history, and stays on the same platform.",
+        ],
+        link: ["/#workspace-operations", "Explore ongoing work"],
+      },
+      {
         id: "environments",
         title: "Where does the workspace run?",
         paragraphs: [
-          "A machine type is the size of a workspace: how many processors and how much memory it has. Shared types share processing power with other workspaces, so their size reads “up to”; Dedicated types have their processors and memory reserved. A machine type also says whether it has a desktop. Which types you can choose depends on your installation and account.",
+          "A machine type is the size of a workspace: how many processors and how much memory it has. Shared types share processing power with other workspaces, so their size reads “up to”; Dedicated types have their processors and memory reserved. A machine type also says whether it has a desktop and whether it includes sudo. Compare the types available to your account in the workspace picker.",
+          "Each machine type has a disk size. Where the type allows it, you can grow a workspace's disk yourself from its card, in whole gigabytes up to the type's limit; it grows at the next start, and a disk never shrinks. A change of machine type takes effect when the workspace next starts.",
         ],
         table: {
           head: ["Kind", "What it is"],
@@ -186,12 +210,86 @@ export const guides = [
         },
       },
       {
+        id: "configurations",
+        title: "Which workspace configuration should I choose?",
+        paragraphs: [
+          "Choose from container and virtual-machine workspace types with different CPU, memory, disk and feature combinations. The machine picker shows the types available to your account and team, including desktop and sudo options and their rates.",
+          "For everyday editing and agent tasks, start with a size that fits your project's requirements. More CPU can help builds and tests that run in parallel; more memory leaves room for larger projects and several services running together. Check whether a size is Shared or Dedicated when comparing capacity.",
+        ],
+        table: {
+          head: ["Configuration", "What to check"],
+          rows: [
+            [
+              "CPU and memory",
+              "Compare the CPU count and memory shown for each type. Shared capacity is an up-to limit when resources are available; Dedicated capacity is reserved.",
+            ],
+            [
+              "Disk",
+              "Check the included space and maximum disk size. Supported disks can grow in whole gigabytes at the next start and cannot shrink.",
+            ],
+            [
+              "Desktop",
+              "Choose a type that includes a desktop to use graphical apps in the browser.",
+            ],
+            [
+              "Sudo",
+              "Choose a type with sudo for administrator rights. System packages persist on machines; container system changes outside /workspace last until restart.",
+            ],
+            [
+              "Idle behavior",
+              "Check when the type stops or suspends idle workspaces. Available behavior depends on its platform and configuration.",
+            ],
+            [
+              "Traffic and rates",
+              "Check the traffic allowance and the running, stopped or suspended rates shown for the type. Storage can still cost credits while a workspace is stopped.",
+            ],
+          ],
+        },
+        link: ["/#workspace-machines", "See workspace configurations"],
+      },
+      {
         id: "tools",
         title: "What can I do inside a workspace?",
         paragraphs: [
+          "On a wide screen, choose Chat, Dock or Review. Dock puts Changes, Git graph, Files, Terminal and Ports beside the chat; Review puts the tools in the middle, a terminal below and the chat to the side. Resize the panels to suit your work. Your layout choice follows you across devices.",
           "The terminal in the browser keeps going when you close the tab, and you can open the same terminal from several tabs or devices. The file browser shows the project's folder, edits text files, and uploads or downloads one file at a time.",
-          "To use your own terminal or editor, connect over SSH: install the benchyard command on your computer, sign in with it, add your public key in the app, and connect to the workspace by its name. The usual tools for copying files work too. The connection is encrypted and passes through Benchyard's server. Like the rest of Benchyard, it is not end-to-end encrypted.",
-          "Where a workspace includes a desktop, it opens in the browser. It has no sound, and programs that need a graphics card run slowly. Only the workspace's owner can use any of these.",
+          "Where a workspace includes a desktop, it opens in the browser, on a computer or a phone. It has a browser for agents to drive and room for any app with windows. It has no sound, and programs that need a graphics card run slowly. Only the workspace's owner can use any of these.",
+        ],
+      },
+      {
+        id: "software",
+        title: "What is installed, and can I install more?",
+        paragraphs: [
+          "A workspace comes with the supported agents, Git, the GitHub CLI, Node, Python, build tools, the usual command-line tools and clients for PostgreSQL and Redis. Agent and runtime versions are pinned.",
+          "Without administrator rights you can still install most things into your home: mise for language runtimes and command-line tools, pixi for system libraries and programs, uv for Python, and npm or cargo as usual. They are kept with your files.",
+          "Where your machine type includes sudo, you and your agents can become root without a password. On a machine, what you install as root stays on its disk. In a container only /workspace is kept, so a package installed as root lasts until the workspace restarts.",
+        ],
+      },
+      {
+        id: "ssh",
+        title: "How do I connect over SSH?",
+        paragraphs: [
+          "Install the benchyard command on your computer with the line the app shows, sign in with it, write its SSH settings, and add your public key in the app. Then ssh to the workspace by its name, such as api.benchyard. The app's SSH dialog gives the lines to copy, and the steps for setting up another computer.",
+          "A shell, commands, scp, rsync and sftp all work, and so does an editor's remote mode, such as VS Code or Cursor with Remote SSH. A stopped workspace starts when you connect. Forwarding a port of the workspace to your computer works; agent forwarding and forwarding back to your computer do not.",
+          "No port is opened anywhere: the connection goes through Benchyard's address, and Benchyard supplies the workspace's host key, so ssh checks it without asking. The connection is encrypted between your computer and the workspace. Like the rest of Benchyard, it is not end-to-end encrypted.",
+          "In the other direction, each person has a key their workspaces use to sign in to other hosts, such as git over SSH. Benchyard holds its private half, and programs in the workspace can use it while the workspace runs without being able to copy it. Add its public half where you want it to work.",
+        ],
+      },
+      {
+        id: "ports",
+        title: "How do ports reach my computer?",
+        paragraphs: [
+          "Ports lists your programs listening on TCP ports that the workspace can reach over localhost, with their commands, and a session says when a new port opens. Benchyard does not open ports to the internet.",
+          "To use one as localhost on your computer, run benchyard forward with the workspace's name and the port, and keep it running for as long as you need it. It goes over the same SSH connection, so set up SSH first.",
+          "Where available, Open in browser shows the port at an address of its own instead. See browser previews below.",
+        ],
+      },
+      {
+        id: "containers",
+        title: "Can I run containers?",
+        paragraphs: [
+          "Yes. In a container workspace, docker commands use rootless Podman, and podman-compose is included. Images are kept with your files. These containers share the workspace's network: a server in one is on localhost, publishing a port has no effect, and two containers cannot use the same port. Compose services can reach dependencies created before them by name.",
+          "On machine types with sudo, machine workspaces use Docker with its own daemon. Their container networking follows that runtime; the shared-network restrictions above apply to rootless Podman in container workspaces.",
         ],
       },
       {
@@ -233,7 +331,7 @@ export const guides = [
             [
               "Email",
               "An approval is needed, a plan is ready to review, a task failed, an agent needs you to sign in again. Not for finished tasks or agent notes.",
-              "Turn it on and confirm your email address. The installation must have mail set up.",
+              "Turn it on and confirm your email address.",
             ],
           ],
         },
@@ -289,7 +387,8 @@ export const guides = [
         title: "Is every workspace isolated the same way?",
         paragraphs: [
           "No. A container workspace runs in a sandbox of its own, with its own network rules. A machine workspace is a virtual computer of its own that accepts no incoming connections.",
-          "Where a workspace gives you administrator rights, an agent working for you has them too, and can change more of the workspace, including the parts of Benchyard that run inside it. Being a team's administrator gives no access to another member's workspace.",
+          "Where a workspace gives you administrator rights (sudo), an agent working for you has them too, and can change more of the workspace, including the parts of Benchyard that run inside it. In a container, root still cannot read Benchyard's own process or its token, administer the network or mounts, or keep system changes outside /workspace past a restart. Being a team's administrator gives no access to another member's workspace.",
+          "Only the keys you add in the app can connect to your workspaces over SSH; nothing inside a workspace can add one. Removing a key stops new connections at once.",
         ],
       },
       {
@@ -297,7 +396,7 @@ export const guides = [
         title: "What can a workspace reach on the network?",
         paragraphs: [
           "The public internet. It cannot reach addresses inside private networks, and it cannot send email directly. There is no list of allowed destinations, so anything an agent can read could be sent out.",
-          "Each workspace has a traffic allowance: a limit on how much it can send, which fills up again over time. Whether running out restricts the workspace is up to the installation's administrators, and it does not unless they turn that on. A restriction stops new connections; ones that are already open carry on.",
+          "Each workspace has a traffic allowance: a limit on how much it can send, which fills up again over time. The app shows your allowance and any restriction that applies. A restriction stops new connections; ones that are already open carry on.",
         ],
       },
       {

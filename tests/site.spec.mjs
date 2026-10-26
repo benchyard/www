@@ -260,8 +260,8 @@ test("a business can contact Benchyard from the homepage", async ({ page }) => {
   const href = await contact.getAttribute("href");
   expect(href.startsWith("mailto:hello@benchyard.com?")).toBe(true);
   expect(decodeURIComponent(href)).toContain("your own infrastructure");
-  await page.getByRole("link", { name: "contact us", exact: true }).click();
-  await expect(page).toHaveURL(/#business$/);
+  await page.getByRole("link", { name: "Discuss your requirements" }).click();
+  await expect(page).toHaveURL(/#business-contact$/);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   await page.locator(".mobile-nav summary").click();

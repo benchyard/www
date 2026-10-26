@@ -154,3 +154,87 @@ A final six-case run passed desktop disclosures and actual emulated touch events
 ### Notification presentation restored — 2026-10-18
 
 At the owner's request, restored the phone push-notification and email illustrations, replacing the installed Mac/Home Screen scene. The secondary setup walkthrough remains. No Dock is shown in the hero. Removed the unused app-experience renderer and styles. All 16 routes pass build checks; Chromium dark-theme mobile (390px) and desktop (1440px) layout and accessibility checks pass. Earlier installed-device visual notes describe a superseded design.
+
+
+## Workspace feature sync — 2026-10-26
+
+Reviewed against product main `b7ccaed3` (v0.9.0). Both repositories' `origin/main` refs were freshly fetched and already matched their checkouts. Homepage cards, FAQ, workspace and security guides, and workspace navigation now cover machine types, sudo, disk growth, installed tools, Workbench layouts, desktop access, SSH and port forwarding. Container networking is qualified separately from Docker on machine types with sudo. Product evidence is in `docs/claims.md`; screenshots and the interactive replay keep their original capture provenance.
+
+- `npm run check`: passed, all 16 routes, anchors, metadata, media, resource hashes and cache rules.
+- `npm run format:check` and `git diff --check`: passed.
+- Chromium: all 16 existing cases passed across the main run and focused reruns. The light-theme layout/accessibility case needed a 240-second test timeout on this shared workspace.
+- Firefox: all 16 existing cases passed across two runs; the site cases used a 240-second timeout.
+- Coverage includes six page routes at 320/360/390/768/1024/1280/1440px in light/dark themes, axe WCAG checks, keyboard navigation, no-script use, 200% text reflow, replay approval/denial and its issue-board filters, guides, legal links and cache behavior.
+- Additional browser interactions passed at 1440px and 390px: navigation from the guide directory to the workspace section, six machine cards, both new FAQ disclosures, software/SSH/ports/containers table-of-contents links and the security isolation section. Desktop and mobile cards were visually inspected.
+- The workspace lacked browser libraries. They were installed without root in the external Pixi `browser-libs` environment. Chromium's no-script diff initially had zero height because its fallback fonts were not configured; explicit Fontconfig settings resolved it without changing the website's styles. To reproduce browser runs here, prefix commands with `FONTCONFIG_FILE=/workspace/home/.pixi/envs/browser-libs/etc/fonts/fonts.conf FONTCONFIG_PATH=/workspace/home/.pixi/envs/browser-libs/etc/fonts LD_LIBRARY_PATH=/workspace/home/.pixi/envs/browser-libs/lib`.
+- WebKit could not start with the available runtime libraries, so no WebKit result is claimed. No physical-device, live product-runtime or production-host verification was performed.
+
+New local browser captures are under ignored `studio/output/workspace-refresh/`; historical tracked screenshots were preserved. Changes remain uncommitted and unpublished. Local acceptance preview: `http://localhost:4322`; restart with `cd /workspace/project/www && PORT=4322 LIVE_RELOAD=0 node serve.mjs` after building.
+
+
+## Open registration and promotions — 2026-10-26
+
+Product main was pulled again and already matched `origin/main` at `b7ccaed3` (v0.9.0). Existing workspace-feature changes were retained. The hosted public endpoint confirmed open registration, 3 trial credits lasting 7 days and 2 additional referral credits lasting 30 days. Details and reward eligibility are recorded in `docs/claims.md`.
+
+The homepage now has a prominent offer link, two current offer cards and a native disclosure for first-step rewards, referrals, first-purchase bonuses and codes when offered. Shared Sign up CTAs lead to the console's `/register`; getting-started copy, FAQ and the footer match open registration. The link checker now permits the two specific console paths `/register` and `/billing`.
+
+- `npm run check`: all 16 pages passed. `npm run format:check` and `git diff --check`: passed.
+- Seven focused Chromium regression tests passed: desktop disclosure/keyboard behavior, mobile navigation and walkthrough, section order/no-script setup, touch interactions, keyboard navigation, no-script/200% text reflow and business contact navigation.
+- Additional Chromium browser checks passed at 320, 390 and 1440px in light/dark themes: hero offer navigation, visible Sign up CTA, both offer cards and expiry periods, all four additional reward cards, opening the disclosure and the Billing link. No horizontal overflow, JavaScript errors or axe WCAG 2 A/AA and WCAG 2.1 AA violations were reported. Native offer disclosure and registration links also worked with JavaScript disabled.
+- All 16 routes were visited at 390px to verify shared Sign up links, removal of Request access CTAs and page overflow. FAQ and getting-started navigation were exercised.
+- Clicking the getting-started registration link reached the live console `/register`, where the email field and 3-credit trial notice were visible. No email, captcha answer or registration form was submitted.
+- Desktop/mobile offer screenshots were visually reviewed. New captures and the browser results are under ignored `studio/output/promotions/`. Historical screenshots were preserved.
+
+The preview is running at `http://localhost:4322` with live reload disabled. To restart: `cd /workspace/project/www && PORT=4322 LIVE_RELOAD=0 node serve.mjs`. These changes are local, uncommitted and unpublished. Current verification used Chromium; no new Firefox, WebKit or physical-device result is claimed for this revision.
+
+## Homepage readability revision — 2026-10-26
+
+The installed-app desktop and phone illustrations now have equal 530px heights when displayed side by side. The replay heading stays on one line at desktop widths; narrower screens retain readable wrapping. The shared header has a single Sign in / Sign up button. The hero offer is a contrasting banner with a large trial-credit amount and a direct link to eligibility details.
+
+The workspace feature grid is now four illustrated sections covering sessions and persistence, browser/SSH/ports, desktop/containers/snapshots, and machine choices. Existing capability boundaries remain in the copy. Diagram labels use the site's content module; the illustrations need no JavaScript.
+
+Validation: static checks passed for all 16 pages, formatting and whitespace checks passed. Three Chromium regression cases passed (desktop keyboard/disclosures, mobile navigation/device walkthrough, and no-script positioning). Browser interactions checked the offer disclosure and anchor at 320, 390, 768, 1024 and 1440px with no horizontal overflow; desktop device heights and a single-line heading were measured. Light and dark axe WCAG checks passed. Screenshots under ignored `studio/output/layout-refresh/` were visually reviewed. The preview remains at http://localhost:4322; restart with `cd /workspace/project/www && PORT=4322 LIVE_RELOAD=0 node serve.mjs` after building. No commit or deployment was made.
+
+## Workspace configurations — 2026-10-26
+
+Added the owner-confirmed 32 CPU / 64 GB size highlight and configuration guidance to the homepage machine section, plus a six-row comparison table in the workspace guide. Re-read current product `b7ccaed3`; code sources and the provenance of the numeric offer are recorded in `docs/claims.md`.
+
+`npm run check` passed for 16 routes; formatting and diff whitespace checks passed. Chromium exercised homepage → configuration guide → homepage at 320, 390, 768 and 1440px, checked the six table rows and absence of horizontal overflow, and passed scoped axe WCAG 2/2.1 A/AA checks on both changed sections in light and dark themes. Desktop/mobile screenshots were visually inspected and are under ignored `studio/output/configurations/`. Preview: http://localhost:4322/#workspace-machines. Changes remain uncommitted and unpublished.
+
+### Workspace-choice correction
+
+Removed the numerical maximum-size emphasis after the owner's clarification. Container/virtual-machine comparison now comes first, with configuration differences below it. Homepage and guide no longer advertise 32 CPU / 64 GB. Rebuilt all 16 routes successfully; Chromium again passed homepage/guide navigation and overflow checks at 320, 390, 768 and 1440px, plus scoped light/dark accessibility checks. Updated desktop capture was visually reviewed.
+
+### Consolidated workbench section
+
+Grouped Changes, Git graph, Files, Terminal and Ports into one homepage Workbench section, using one overview diagram and shared layout explanation. SSH and local port forwarding are a single supporting paragraph. The Workspace navigation now calls this section “Workbench & tools”; the existing anchor remains valid. Product evidence: `docs/features.md`, Workbench, at `b7ccaed3`.
+
+Build/static checks passed for all 16 routes, as did formatting and whitespace checks. Chromium verified the five panel labels and homepage-to-tools-guide navigation at 320/390/768/1440px without overflow. Scoped light/dark axe checks passed. Desktop/mobile screenshots under ignored `studio/output/workbench/` were visually reviewed. Preview remains http://localhost:4322/#workspace-tools.
+
+### Session continuity and ongoing-work revision
+
+Rebuilt the first narrative section around per-session agent/model choices, independent worktrees, cross-agent record handoff, workspace moves, forks and imports. Replaced the generic app-building section with recurring schedules, live intervention and recovery. Both have new diagrams and linked guide sections with transfer/rollback boundaries; navigation labels match the new sections. Container runtime details remain with workspace environment choices.
+
+All 16 built routes passed static checks; formatting and whitespace checks passed. Chromium exercised both homepage → guide → homepage flows at 320, 390, 768 and 1440px, including absence of horizontal overflow and removal of the old generic heading. Fixed a narrow-screen diagram overflow found during verification. Scoped axe checks passed for both homepage sections and both guide sections in light/dark themes. Desktop and mobile captures under ignored `studio/output/session-stories/` were visually inspected. No production publishing or live agent-operation tests were performed.
+
+### Homepage focus and visual hierarchy
+
+Replaced the verbose session narrative with a local-computer → Bring them over → Benchyard diagram and explicit Continue elsewhere choices for moving the same session or continuing with another agent. Agent/model selection, worktrees and forks remain a short supporting line; detailed transfer boundaries remain in the guide. The workbench heading now names chat and project tools directly. Removed the inherited top border from figure headings inside the workspace stories. Ongoing work is three short visual steps. Replaced repeated machine/configuration paragraphs with container and VM illustrations plus four capability icons.
+
+All 16 routes passed build/static checks; formatting and whitespace checks passed. Chromium verified import/continuation labels, five workbench panels, two machine illustrations, a computed zero-width top border on the workbench figure heading, all four guide links and no overflow at 320/390/768/1440px. Scoped light/dark axe checks passed. Desktop/mobile and dark workbench screenshots under ignored `studio/output/focused-stories/` were visually reviewed. The preview remains http://localhost:4322/#workspace-context; changes are uncommitted and unpublished.
+
+### Decorative separator cleanup
+
+Removed repeated top dividers from captions, feature sections, card text, secondary notes and setup content, and bottom dividers from workbench descriptions, FAQ rows and guide sections. Spacing and enclosing card/illustration borders remain. Chromium checked zero-width decorative borders at 390/1440px in light/dark themes, exercised FAQ disclosure and configuration-guide navigation, and confirmed guide reflow. The dark desktop device illustration was visually inspected under `studio/output/dividers/`. All 16 routes passed static checks and diff whitespace checks passed.
+
+## Pricing and latest product screenshots — 2026-10-26
+
+Added Pricing to the shared header/navigation and separated Personal (credits or personal plans), Team (plans/seats) and Business (custom proposal). The trial/referral offers now have their own `#offers` anchor inside the pricing section. Removed installation-admin configuration framing from customer-facing feature explanations. Paid prices are linked to Billing rather than inferred from product defaults.
+
+Built product main `b7ccaed3d212664d032eb036acab9459b126b6cb` in an isolated worktree and recaptured all 17 `src-img` assets, including light/dark desktop and phone UI, the hero crop and social artwork. The normal fictional account connected the local test agents, created sessions, approved the command from the phone viewport, ran four passing fixture tests and exercised all three preview filters. Updated `content/demo.json` from that run. No real model call or production account mutation was involved. The disposable capture container was removed afterwards.
+
+`npm run check` passed for all 16 routes. Formatting and diff whitespace checks passed. Chromium checked Pricing navigation from guides at 390/1280/1440px, offer expansion, team Billing and business contact targets; four existing navigation/contact/no-script regression cases passed. Final homepage checks at 320/390/768/1440px confirmed no horizontal overflow, successful decoding of all images (including disclosed settings), a single header account button, equal desktop/phone illustration heights when side by side and a single-line desktop replay heading. Full-homepage light/dark axe WCAG 2/2.1 A/AA checks passed. The capture images, responsive homepage sections and social card were visually reviewed; local review captures are under ignored `studio/output/`.
+
+Preview: http://localhost:4322 (Pricing: /#pricing). After a workspace restart, run `cd /workspace/project/www && PORT=4322 LIVE_RELOAD=0 node serve.mjs`; run `npm run build` first if the source changed. Changes remain uncommitted and unpublished.
+
+The four replay/cache regression cases also passed in Chromium: desktop and phone approval/denial/retry, Changes/Files/Terminal/Ports interactions, the preview's filters, keyboard/reduced-motion behavior and served script/cache headers.

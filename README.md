@@ -51,15 +51,17 @@ What is real: `content/demo.json` holds the diff, the files and the output of `n
 The capture needs: a checkout of the product at a commit on its main branch, with `web/` dependencies installed; Go matching its go.mod; Docker with `node:22-bookworm`; Playwright Chromium. The product checkout in use by others is never built in: add a worktree of your own and remove it afterwards.
 
 ```sh
-git -C ../hestia worktree add --detach "$PWD/.cache/benchyard" main
+git -C ../benchyard worktree add --detach "$PWD/.cache/benchyard" main
 npm --prefix .cache/benchyard/web ci
-npm run demo:capture        # container, capture, container removed
+bash studio/record.sh       # container, capture, container removed
 npm run card                # the social card's artwork, from the new screenshot
 npm run check
-git -C ../hestia worktree remove "$PWD/.cache/benchyard"
+git -C ../benchyard worktree remove "$PWD/.cache/benchyard"
 ```
 
 `BENCHYARD_SOURCE` names another checkout; `KEEP_DEMO=1` leaves the container (`benchyard-www-demo`, port 18080 on loopback only) for a look. Container data is disposable and the studio mount is read-only. Generated binaries and reference pictures are ignored under `studio/output/`.
+
+Capture signs in as a fictional ordinary user; a separate bootstrap administrator is used only to initialize the disposable installation. The build runs with limited Go parallelism for small workspaces.
 
 The capture writes desktop screenshots at 4× (5760×3600), phone screenshots at 3× (1170×2220), the small-screen hero as a crop of the desktop diff at that same density, and `content/demo.json`. `src/pictures.mjs` shares the responsive pixel widths with the HTML and publishes only widths the source covers, so a 1× original stays at half and full size and a denser one also feeds 2× and 3×. Nothing is upscaled. The social card is drawn at 2×. Look at every picture and at `content/demo.json` before committing: fictional data only. The screenshots in `src-img/` stay the last capture until this script is run again.
 
@@ -78,7 +80,7 @@ Production must serve `.js` as JavaScript and support direct navigation to every
 
 ## Publishing and search
 
-GitHub Pages publishes `dist/` from `main`. The Pages hostname is `www.benchyard.com`; `benchyard.com` redirects there. Before treating the site as launched, verify `hello@benchyard.com` is monitored and confirm which environments and features are enabled in the hosted console. Public copy qualifies deployment/account availability. The product can support registration when configured; invitation access is the chosen marketing flow, not a claim that sign-up code is absent.
+GitHub Pages publishes `dist/` from `main`. The Pages hostname is `www.benchyard.com`; `benchyard.com` redirects there. Before treating the site as launched, verify `hello@benchyard.com` is monitored and confirm which environments and features are enabled in the hosted console. Public copy qualifies deployment/account availability. Registration is open: shared Sign up links lead directly to `https://console.benchyard.com/register`. The homepage highlights the hosted service's trial and referral offers, checked against `/api/public`; review the displayed amounts and expiry periods when the hosted promotions change. Other rewards are conditional on the account's offers in Billing.
 
 The canonical site is `https://www.benchyard.com`; the console is `https://console.benchyard.com`. Previews require a separate origin and their domain is not printed on the homepage. Preserve host redirects to the canonical site.
 

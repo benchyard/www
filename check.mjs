@@ -68,7 +68,14 @@ for (const [route, { name, html }] of pages) {
         say("unexpected mail address");
       continue;
     }
-    if (href === consoleAddress) continue;
+    if (
+      [
+        consoleAddress,
+        `${consoleAddress}/register`,
+        `${consoleAddress}/billing`,
+      ].includes(href)
+    )
+      continue;
     const url = new URL(href, site + route);
     if (url.origin !== site) {
       // A legal page may cite the official instrument it names. Marketing

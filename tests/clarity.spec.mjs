@@ -43,7 +43,7 @@ test("desktop disclosures support hover, focus, Escape and cross-page anchors", 
     .withTags(["wcag2a", "wcag2aa", "wcag21aa"])
     .analyze();
   expect(results.violations).toEqual([]);
-  await page.locator(".top-actions .signin").focus();
+  await page.locator(".top-actions .account-entry").focus();
   await expect(
     nav.getByRole("button", { name: "Security links" }),
   ).toHaveAttribute("aria-expanded", "false");
@@ -135,7 +135,7 @@ test("positioning, section order and no-script setup remain accurate", async ({
     page
       .getByRole("navigation", { name: "Main navigation", exact: true })
       .getByRole("link"),
-  ).toHaveCount(5);
+  ).toHaveCount(6);
   await context.close();
 });
 

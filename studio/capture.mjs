@@ -1,10 +1,11 @@
 // Runs the fictional task in the real application and takes from it what the
 // site shows: the screenshots in src-img/ and the replay's data in
 // content/demo.json. Needs the demo container of start.sh.
-import { chromium, expect } from "@playwright/test";
+import { chromium, expect as baseExpect } from "@playwright/test";
 import { execFileSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { cropHeroDetails } from "./crop-hero.mjs";
+const expect = baseExpect.configure({ timeout: 30000 });
 const baseURL = process.env.DEMO_URL || "http://localhost:18080";
 const container = process.env.DEMO_CONTAINER || "benchyard-www-demo";
 const out = new URL("./output/", import.meta.url).pathname;
@@ -40,7 +41,7 @@ async function login(p, device) {
   await p.goto("/");
   await p.getByLabel("Username").fill("alice");
   await p.getByLabel("Password").fill("demo-password");
-  await p.getByLabel("Name this device").fill(device);
+  await p.locator('input[name="device-label"]').fill(device);
   await p.getByRole("button", { name: "Sign in", exact: true }).click();
   await expect(
     p.getByRole("button", { name: "Sign in", exact: true }),
@@ -54,6 +55,7 @@ async function choose(p, id, val) {
   await p.getByTestId(`${id}-option-${val}`).click();
 }
 async function themed(p, name, folder = images) {
+  await p.evaluate(() => document.fonts.ready);
   for (const theme of ["light", "dark"]) {
     await p.evaluate(
       (t) => (document.documentElement.dataset.theme = t),
@@ -93,6 +95,21 @@ try {
   const wsURL = await card
     .getByRole("link", { name: "issue-board", exact: true })
     .getAttribute("href");
+  // Connect the fictional agents through the same flow a customer uses.
+  // These test keys are consumed only by local test binaries.
+  await page.goto("/settings/agents");
+  const accounts = page.getByTestId("own-accounts");
+  await expect(accounts).toHaveAttribute("aria-busy", "false");
+  for (const agent of ["claude", "codex", "cursor", "gemini"]) {
+    const row = accounts.getByTestId(`account-${agent}`);
+    await row.getByTestId(`connect-${agent}`).click();
+    await page.getByTestId("connect-key").click();
+    await page.getByTestId("api-key").fill(`sk-test-${agent}`);
+    await page.getByTestId("save-key").click();
+    await expect(page.getByTestId("connected")).toBeVisible();
+    await expect(page.getByTestId("connect-dialog")).toBeHidden();
+    await expect(row.getByText("Connected", { exact: true })).toBeVisible();
+  }
   // Seed distinct sessions; no claim that the agents collaborate on this task.
   for (const [agent, prompt, title] of [
     ["claude", "Review the API error handling.", "Review API error handling"],
@@ -135,6 +152,7 @@ try {
     page.getByText("Four filter tests passed", { exact: false }),
   ).toBeVisible();
   await themed(phone, "phone-done", reference);
+  await page.getByTestId("turn-fold").filter({ hasText: "Worked for" }).click();
   const replies = await page.getByTestId("msg-assistant").allInnerTexts();
   const shell = page.getByTestId("tool-card").filter({ hasText: "npm test" });
   if (!(await shell.locator("pre").last().isVisible()))
