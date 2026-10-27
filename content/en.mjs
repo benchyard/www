@@ -10,7 +10,6 @@ export default {
     title: "Secure cloud workspaces for agents and teams.",
     tagline: "",
     lead: "Run your agents in persistent workspaces. Get notified when they need you or finish a task, then review and act from any device.",
-    note: "Registration is open. Bring a supported agent subscription or API key. Provider charges are separate.",
   },
   nav: [
     ["workspace", "Workspace"],
