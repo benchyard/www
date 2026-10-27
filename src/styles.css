@@ -164,6 +164,9 @@ ul {
 section {
   padding: 88px 0;
 }
+main > section:not(.lede) {
+  padding-block: 64px;
+}
 .band {
   background: var(--surface);
   border-block: 1px solid var(--line);
@@ -1234,6 +1237,9 @@ figcaption {
   section {
     padding: 58px 0;
   }
+  main > section:not(.lede) {
+    padding-block: 44px;
+  }
   h2 {
     font-size: 34px;
   }
@@ -1547,7 +1553,7 @@ figcaption {
 .lede-stage {
   width: min(1360px, 100% - 32px);
   margin: clamp(40px, 5vw, 72px) auto 0;
-  padding-bottom: clamp(56px, 7vw, 96px);
+  padding-bottom: clamp(32px, 4vw, 56px);
   scroll-margin-top: 96px;
 }
 /* The window settles into place as it is scrolled to (site.js sets --p from
@@ -2056,7 +2062,7 @@ button:focus-visible {
   transform: none;
 }
 .lede-stage {
-  margin-top: 65px;
+  margin-top: 48px;
 }
 .lede-play > h2 {
   max-width: 800px;
@@ -2647,7 +2653,24 @@ button:focus-visible {
 
 /* The workspace story pairs short explanations with diagrams. */
 .workspace-stories {
-  margin-top: 64px;
+  margin-top: 40px;
+}
+.workspace-stories > section {
+  padding-block: 44px;
+}
+.workspace-stories > section:first-child {
+  padding-top: 0;
+}
+.workspace-stories > section:last-child {
+  padding-bottom: 0;
+}
+@media (max-width: 700px) {
+  .workspace-stories {
+    margin-top: 28px;
+  }
+  .workspace-stories > section {
+    padding-block: 32px;
+  }
 }
 .workspace-story {
   display: grid;
@@ -3460,7 +3483,7 @@ button:focus-visible {
 }
 .pricing-usage,
 .pricing #offers {
-  margin-top: 56px;
+  margin-top: 40px;
 }
 .pricing-usage > h3,
 .pricing #offers > h3 {
