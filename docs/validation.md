@@ -238,3 +238,9 @@ Built product main `b7ccaed3d212664d032eb036acab9459b126b6cb` in an isolated wor
 Preview: http://localhost:4322 (Pricing: /#pricing). After a workspace restart, run `cd /workspace/project/www && PORT=4322 LIVE_RELOAD=0 node serve.mjs`; run `npm run build` first if the source changed. Changes remain uncommitted and unpublished.
 
 The four replay/cache regression cases also passed in Chromium: desktop and phone approval/denial/retry, Changes/Files/Terminal/Ports interactions, the preview's filters, keyboard/reduced-motion behavior and served script/cache headers.
+
+## Composer agent and model — 2026-10-27
+
+Recaptured the homepage product images against Benchyard `b9ffce2618984cdfc4cb9fb3be618d6c4de89034` (v0.9.2). The scripted Codex fixture displays GPT-6-Astra, and the desktop chat panel is wide enough to show the selected agent. Ask first remains consistent with the pictured approval request. The interactive replay uses the same recorded agent/model metadata inside its composer. Capture assertions check both labels; the disposable capture container and isolated product worktree were removed.
+
+`npm run check` passed for all 16 routes. Chromium verified composer labels, approval interaction and absence of horizontal overflow at 320/390/1440px; scoped light/dark axe checks passed. Fixed the replay's light-theme added-line contrast found during these checks. All four existing replay/cache regression tests passed, covering desktop/phone approval, denial/retry, project panels, preview filters, keyboard/reduced-motion behavior and cache headers. Formatting and diff whitespace checks passed. Product captures and responsive composer screenshots were visually reviewed. Preview: http://localhost:4322. This change has not been committed or published.

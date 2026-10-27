@@ -139,6 +139,16 @@ try {
   await page.getByTestId("session-title-input").fill("Add a status filter");
   await page.getByTestId("session-title-input").press("Enter");
   await expect(page.getByTestId("diff-view")).toBeVisible();
+  // Use the product's resize control so the composer has room for its agent.
+  const resize = page.getByTestId("dock-resize");
+  await resize.focus();
+  for (let i = 0; i < 5; i++) await resize.press("ArrowRight");
+  await expect(resize).toHaveAttribute("aria-valuenow", "480");
+  await resize.evaluate((el) => el.blur());
+  await expect(
+    page.getByTestId("session-meta").getByText("Codex", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByTestId("model-picker")).toContainText("GPT-6-Astra");
   await themed(page, "session-approval");
   await phone.goto(session);
   await expect(phone.getByTestId("approve")).toBeVisible();
@@ -152,6 +162,7 @@ try {
     page.getByText("Four filter tests passed", { exact: false }),
   ).toBeVisible();
   await themed(phone, "phone-done", reference);
+  await mobile.close();
   await page.getByTestId("turn-fold").filter({ hasText: "Worked for" }).click();
   const replies = await page.getByTestId("msg-assistant").allInnerTexts();
   const shell = page.getByTestId("tool-card").filter({ hasText: "npm test" });
@@ -202,7 +213,7 @@ try {
   await themed(page, "security");
   // The small-screen hero picture is a piece of the real desktop diff,
   // at the same density as that capture.
-  await cropHeroDetails();
+  await cropHeroDetails({ dockWidth: 480 });
 
   // What the replay on the site shows comes from this run, not from a copy
   // written by hand.
@@ -212,6 +223,12 @@ try {
   const demo = {
     source: { commit: source.commit, recorded: source.recorded },
     prompt,
+    agent: {
+      id: "codex",
+      name: "Codex",
+      model: "GPT-6-Astra",
+      mode: "Ask first",
+    },
     replies,
     project,
     changes: names.map((name) => {
@@ -247,10 +264,13 @@ try {
     "Captured the real UI, tried the filters, and wrote content/demo.json.",
   );
 } catch (e) {
-  await page.screenshot({ path: `${out}/capture-error.png` });
+  await page.screenshot({ path: `${out}/capture-error.png` }).catch(() => {});
   await writeFile(
     `${out}/capture-error.txt`,
-    await page.locator("body").innerText(),
+    await page
+      .locator("body")
+      .innerText()
+      .catch(() => String(e)),
   );
   throw e;
 } finally {

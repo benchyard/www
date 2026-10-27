@@ -1,7 +1,7 @@
 /* The replay: a drawn copy of the app's session screen. Colours are the
    app's own tokens; the ones the site's pages don't use are named here. */
 .rp {
-  --ok: #2f7d4f;
+  --ok: #24653e;
   --ok-soft: #ddefe3;
   --warn-line: #b5791f;
   --crit: #b3261e;
@@ -207,13 +207,6 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.rp-sub {
-  color: var(--muted);
-  font-size: 12px;
-}
-.rp-sub span {
-  margin: 0 5px 0 12px;
 }
 .rp-pill {
   display: inline-flex;
@@ -464,15 +457,37 @@
 }
 .rp-composer {
   padding: 12px 18px 14px;
-  background: var(--surface);
+  background: var(--bg);
   border-top: 1px solid var(--line);
 }
-.rp-composer p {
-  padding: 10px 12px;
+.rp-composer-box {
   border: 1px solid var(--line-strong);
-  border-radius: 8px;
+  border-radius: 14px;
+  background: var(--surface);
+}
+.rp-composer p {
+  min-height: 58px;
+  padding: 12px;
   color: var(--muted);
   font-size: 14px;
+}
+.rp-composer-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 0 12px 12px;
+  color: var(--muted);
+  font-size: 12.5px;
+}
+.rp-composer-meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.rp-composer-meta .agent-mark {
+  width: 17px;
+  height: 17px;
 }
 .rp-composer p.rp-typed {
   color: var(--fg);

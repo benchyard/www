@@ -171,7 +171,7 @@ export function demo(boardHref) {
   return `<div class="rp" data-replay data-dock="changes" data-view="chat" data-board="${boardHref}">
  <div class="rp-window" role="group" aria-label="Replay of a Benchyard session with demo data">
   <div class="rp-side" aria-hidden="true"><p class="rp-who"><span class="rp-avatar">A</span><span><b>alice</b><small>Benchyard</small></span>${icons.bell}</p><p class="rp-search">${icons.search}Search sessions</p><p class="rp-new">${icons.edit}New session</p><p class="rp-page">${icons.clock}Schedules</p><p class="rp-page">${icons.book}Rules, skills &amp; tools</p><p class="rp-page">${icons.key}Secrets</p><p class="rp-label">Workspaces</p><p class="rp-ws">issue-board<i></i></p><ul>${sessions.map(([agent, title, current]) => `<li${current ? ' class="rp-current"' : ""}>${agentMark(agent)}<span>${title}</span></li>`).join("")}</ul></div>
-  <div class="rp-head"><span class="rp-agent">${agentMark("codex")}</span><div><p class="rp-title">Add a status filter</p><p class="rp-sub">Ask first<span>Model</span>Demo model</p></div><span class="rp-pill" data-pill data-kind="idle">Idle</span></div>
+  <div class="rp-head"><span class="rp-agent">${agentMark("codex")}</span><div><p class="rp-title">Add a status filter</p></div><span class="rp-pill" data-pill data-kind="idle">Idle</span></div>
   <div class="rp-tabs" role="tablist" aria-label="Parts of the session">${tabs}</div>
   <div class="rp-chat" id="rp-panel-chat" role="tabpanel" aria-labelledby="rp-tab-chat">
    <div class="rp-scroll" data-scroll>
@@ -186,7 +186,7 @@ export function demo(boardHref) {
     </div>
    </div>
    ${approval("desktop")}
-   <div class="rp-composer"><p data-composer data-idle="Tell the agent what to do" data-busy="Queue a follow-up, or steer">Tell the agent what to do</p></div>
+   <div class="rp-composer"><div class="rp-composer-box"><p data-composer data-idle="Tell the agent what to do" data-busy="Queue a follow-up, or steer">Tell the agent what to do</p><div class="rp-composer-meta"><span>${agentMark(data.agent.id)}${esc(data.agent.name)}</span><span>${esc(data.agent.mode)}<span aria-hidden="true">⌄</span></span><span>${esc(data.agent.model)}<span aria-hidden="true">⌄</span></span></div></div></div>
    <button type="button" class="rp-start" data-start hidden>${icons.play}<span>Play the task</span></button>
   </div>
   <div class="rp-dock">

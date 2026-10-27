@@ -42,7 +42,8 @@ go = go.replace(
 );
 go = go
   .replaceAll("GPT-Fake mini", "Demo mini")
-  .replaceAll("GPT-Fake", "Demo model");
+  .replaceAll("GPT-Fake", "GPT-6-Astra")
+  .replaceAll('"gpt-fake"', '"gpt-6-astra"');
 await writeFile(`${root}/studio/output/democodex.go`, go);
 execFileSync(
   "go",
