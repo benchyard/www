@@ -4,6 +4,7 @@ import AxeBuilder from "@axe-core/playwright";
 test("desktop disclosures support hover, focus, Escape and cross-page anchors", async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/guides/");
   const nav = page.getByRole("navigation", {

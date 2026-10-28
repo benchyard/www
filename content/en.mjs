@@ -19,6 +19,7 @@ export default {
     ["business", "For Business"],
     ["pricing", "Pricing"],
   ],
+  cloudFooterLabel: "Cloud Computers for Agents",
   access: {
     label: "Sign up",
     accountLabel: "Sign in / Sign up",

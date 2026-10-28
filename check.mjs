@@ -81,6 +81,21 @@ for (const [route, { name, html }] of pages) {
       // A legal page may cite the official instrument it names. Marketing
       // pages stay on this site, the console, and the contact address.
       if (route.startsWith("/legal/") && url.protocol === "https:") continue;
+      if (
+        route === "/cloud-computers/" &&
+        [
+          "https://docs.orgo.ai/introduction",
+          "https://docs.shardflux.dev/",
+          "https://www.orgo.ai/about",
+          "https://www.ycombinator.com/companies/orgo",
+          "https://shardflux.dev/",
+          "https://shardflux.dev/privacy",
+          "https://www.daytona.io/dotfiles/daytona-raises-24m-series-a-to-give-every-agent-a-computer",
+          "https://blog.exe.dev/series-a",
+          "https://www.grandviewresearch.com/industry-analysis/ai-agents-market-report",
+        ].includes(href)
+      )
+        continue;
       say(`external link ${href}`);
       continue;
     }
@@ -168,6 +183,14 @@ for (const [route, { name, html }] of pages) {
       say("unexpected homepage scripts");
     for (const [, href] of html.matchAll(/\sdata-board="([^"]+)"/g))
       await asset(href.slice(1), say);
+  } else if (route === "/cloud-computers/") {
+    if (
+      scripts.length !== 2 ||
+      !/^<script defer src="\/assets\/cloud-computers\.[0-9a-f]{8}\.js">$/.test(
+        scripts[1],
+      )
+    )
+      say("unexpected Agent Cloud scripts");
   } else if (scripts.length !== 1) say("unexpected content-page scripts");
   if (/github\.com|\u2026/i.test(html)) say("forbidden public text");
   // People are not told which cloud a machine is at, and a person's own

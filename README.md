@@ -89,3 +89,31 @@ Robots policy is unchanged. Search-bot access and model-training policy are sepa
 Use `docs/geo-review.md` for manual post-launch checks at days 14 and 30. No automation or analytics tracker is installed.
 
 The simulated iPhone lock screen is `src/lock-screen.mjs` and `src/lock-screen.css`. The illustration uses original CSS wallpaper and SVG indicators; it is not a native push-delivery recording. Layout reference: [Apple’s notification guide](https://support.apple.com/guide/iphone/view-and-respond-to-notifications-iph6534c01bc/ios).
+
+## Agent Cloud product vision
+
+`/cloud-computers/` is reached through the last link in the shared footer’s Product column. Its copy is
+in `content/cloud-computers.mjs`; renderer, scoped styling and local-only concept
+controls are `src/cloud-computers.{mjs,css,js}`. The desktop illustration is drawn in HTML/SVG and does not connect to real
+computers. It supports app launchers, draggable windows (Alt + arrow keys for
+keyboard movement), file previews, a local allowlisted demo terminal and a
+simulated pause/resume state. Mobile uses one foreground window at a time.
+Desktop copy and markup are `content/cloud-desktop.mjs` and `src/cloud-desktop.mjs`.
+
+The page distinguishes current foundations, environment-dependent behavior and
+planned developer capabilities. Builder ($19/month + usage) and Platform
+($99/month + usage) are **proposed launch packaging**, not current offers or
+purchasable prices. Competitor comparisons link to the reviewed official sources;
+“Not established” does not mean a competitor lacks a feature. The route checker
+allows the explicit competitor and research source links on this page.
+
+Local preview: `PORT=4321 LIVE_RELOAD=0 node serve.mjs` after `npm run build`.
+The server ends when the workspace stops; run that command again to resume.
+
+The Market section uses `content/cloud-market.mjs` for sourced competitor
+funding and adoption context. Unknown funding and valuation are stated as
+unverified; adjacent funding rounds distinguish round amounts from cumulative
+funding. Broad AI market forecasts and workspace spending assumptions are
+visibly separated from observed agent-computer market size. Reviewed 2026-10-28.
+
+The Agent Cloud hero leads with direct agent control. “Watch agent work” plays a local scripted terminal/files/browser sequence; manual desktop interaction or pausing cancels playback. API, CLI and MCP interfaces remain labeled as planned.

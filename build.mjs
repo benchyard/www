@@ -29,6 +29,7 @@ import {
   renderGuideIndex,
   site,
 } from "./src/page.mjs";
+import { renderCloud } from "./src/cloud-computers.mjs";
 import { pictures } from "./src/pictures.mjs";
 import { guides } from "./content/guides.mjs";
 import { policies } from "./content/legal.mjs";
@@ -78,6 +79,10 @@ for (const { path, bytes } of await pictures()) {
 }
 // The homepage's script, and the issue board that the replay's Ports panel
 // opens: the page of the recorded run, in a frame.
+await publish(
+  "cloud-computers.js",
+  await readFile(here("./src/cloud-computers.js")),
+);
 await publish("navigation.js", await readFile(here("./src/navigation.js")));
 await publish("site.js", await readFile(here("./src/site.js")));
 await publish("fx.js", await readFile(here("./src/fx.js")));
@@ -89,7 +94,9 @@ const css = (
   "\n" +
   (await readFile(here("./src/lock-screen.css"), "utf8")) +
   "\n" +
-  (await readFile(here("./src/demo.css"), "utf8"))
+  (await readFile(here("./src/demo.css"), "utf8")) +
+  "\n" +
+  (await readFile(here("./src/cloud-computers.css"), "utf8"))
 ).replace(
   /url\("([^"]+)"\)/g,
   (_, name) => `url("${asset(name).slice("assets/".length)}")`,
@@ -117,6 +124,12 @@ for (const [i, code] of languages.entries()) {
 }
 
 const english = (await import("./content/en.mjs")).default;
+await mkdir(new URL("cloud-computers/", out), { recursive: true });
+await writeFile(
+  new URL("cloud-computers/index.html", out),
+  renderCloud(english, { asset }),
+);
+pages.push("/cloud-computers/");
 await mkdir(new URL("guides/", out), { recursive: true });
 await writeFile(
   new URL("guides/index.html", out),
