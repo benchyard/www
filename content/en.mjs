@@ -22,7 +22,7 @@ export default {
   cloudFooterLabel: "Cloud Computers for Agents",
   access: {
     label: "Sign up",
-    accountLabel: "Sign in / Sign up",
+    accountLabel: "Console",
     path: "/register",
   },
   pricing: {
