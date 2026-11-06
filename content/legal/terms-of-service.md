@@ -1,6 +1,6 @@
 # Benchyard Terms of Service
 
-Version: 0.2 | Last updated: October 10, 2026
+Version: 0.3 | Last updated: November 6, 2026
 
 These Terms of Service govern your use of **Benchyard** ("Benchyard," "we," "us," or "our"). You accept these Terms by affirmatively agreeing to them when creating an account or accepting an order that incorporates them. If you act for an organization, you represent that you have authority to bind it; references to "you" then include that organization and its authorized users as the context requires.
 
@@ -120,7 +120,7 @@ We will notify you promptly, provide reasonable cooperation at your expense, and
 
 ## 15. Governing law and disputes
 
-Unless a separately accepted agreement lawfully specifies otherwise, applicable conflict-of-laws rules determine the governing law, and proceedings may be brought before a court with competent jurisdiction. These Terms do not select an exclusive forum.
+Unless a separately accepted agreement lawfully specifies otherwise, these Terms are governed by and construed in accordance with the laws of the Hong Kong Special Administrative Region, without regard to its conflict-of-laws rules. Proceedings may be brought before a court with competent jurisdiction. These Terms do not select an exclusive forum.
 
 Contact hello@benchyard.com to seek an informal resolution. Neither party must delay urgent relief, a regulatory complaint, or a filing needed to preserve legal rights. No mandatory arbitration or class-action waiver is imposed by these Terms. Consumers retain mandatory protections and any right to bring proceedings in their place of residence.
 
