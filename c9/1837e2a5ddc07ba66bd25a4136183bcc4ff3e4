@@ -1,0 +1,68 @@
+content/en.mjs
+  s_546a3df95a6e1e::t_99e75657883d60 199
+  s_546a3df95a6e1e::t_288234c2c4c079 410-413,416-444
+  s_546a3df95a6e1e::t_b5e20bfe2954cb 414-415
+docs/validation/performance.json
+  s_546a3df95a6e1e::t_51e5f656ab530e 7-10,16-19,25-28,34-37,43-46,52-55
+content/cloud-computers.mjs
+  s_546a3df95a6e1e::t_99e75657883d60 148,268-269,315
+  s_546a3df95a6e1e::t_b5e20bfe2954cb 21-22,352
+studio/prepare.mjs
+  s_546a3df95a6e1e::t_79f4334585c848 16-23,74-139,150
+  s_546a3df95a6e1e::t_0793d0d4031058 140-149
+studio/start.sh
+  s_546a3df95a6e1e::t_79f4334585c848 17
+src/page.mjs
+  s_546a3df95a6e1e::t_288234c2c4c079 122
+  s_546a3df95a6e1e::t_39eef9ace91343 142
+docs/validation.md
+  s_546a3df95a6e1e::t_51e5f656ab530e 142-148,245-251
+studio/capture.mjs
+  s_546a3df95a6e1e::t_fe09310320819e 222-238,242,245-249,255-266,270,273-277,280-284
+  s_546a3df95a6e1e::t_51661ba54d4ef4 267-269
+  s_546a3df95a6e1e::t_5581d1879bc107 167-175
+  s_546a3df95a6e1e::t_84073190d2d77c 243-244,271-272,278-279
+  s_546a3df95a6e1e::t_54df17148c1409 239-241,250-254
+content/demo.json
+  h_76bed1ff857b95 3-4
+  s_dbb84385241f80::t_38f1ccd1f3bdb6 19,50
+studio/record.sh
+  s_546a3df95a6e1e::t_79f4334585c848 7,9-13,18
+content/guides.mjs
+  s_546a3df95a6e1e::t_288234c2c4c079 137-152,163-175,183,191-198,205,369
+  s_546a3df95a6e1e::t_39eef9ace91343 153-162
+  s_546a3df95a6e1e::t_b5e20bfe2954cb 176-182,184-190
+docs/claims.md
+  s_546a3df95a6e1e::t_b5e20bfe2954cb 5-6,32,123-140
+tests/clarity.spec.mjs
+  s_546a3df95a6e1e::t_5581d1879bc107 121
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "c91837e2a5ddc07ba66bd25a4136183bcc4ff3e4",
+  "prompts": {},
+  "humans": {
+    "h_76bed1ff857b95": {
+      "author": "Benchyard Agent <agent@benchyard.invalid>"
+    }
+  },
+  "sessions": {
+    "s_546a3df95a6e1e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "33667ba6-6a0a-4eb1-afd7-e42328541e59",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Benchyard Agent <agent@benchyard.invalid>"
+    },
+    "s_dbb84385241f80": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "030f8808-82c9-45d0-a25c-e3abad524406",
+        "model": "claude-opus-5-5"
+      },
+      "human_author": "Benchyard Agent <agent@benchyard.invalid>"
+    }
+  }
+}
