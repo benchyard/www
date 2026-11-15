@@ -18,7 +18,8 @@ export default {
   lead: "Benchyard gives AI a place to work: a secure, persistent cloud computer for AI employees, coding agents and autonomous workflows. Agents operate it directly. People collaborate, approve decisions and take over whenever needed.",
   cta: "Build with us",
   secondary: "Explore the platform",
-  preview: "Product vision · API, CLI and MCP control planned",
+  preview:
+    "Product vision · API and CLI control planned · MCP tools available today",
   subnav: [
     ["platform", "Platform"],
     ["possibilities", "Use cases"],
@@ -144,7 +145,7 @@ export default {
       [
         "07",
         "A computer from your agent",
-        "Create and operate computers through a unified developer API, SDKs and MCP, with scoped access.",
+        "Create and operate computers through a unified developer API and SDKs, with scoped access.",
         2,
         "api",
       ],
@@ -264,7 +265,8 @@ export default {
       {
         name: "Developer platform",
         rows: [
-          ["Public computer API, SDKs & MCP", "planned", "yes", "yes"],
+          ["Public computer API & SDKs", "planned", "yes", "yes"],
+          ["MCP tools for your own agents", "yes", "unknown", "unknown"],
           ["Embedded customer computer experience", "planned", "yes", "yes"],
           ["Fork with running memory & processes", "planned", "unknown", "yes"],
         ],
@@ -310,7 +312,7 @@ export default {
         period: "/ month + usage",
         features: [
           "Everything in Builder",
-          "Planned API, SDK & MCP access",
+          "Planned API & SDK access",
           "Planned customer-scoped computers",
           "Planned embedded human handoff",
         ],
@@ -347,7 +349,7 @@ export default {
       ],
       [
         "Will it work with my own agent?",
-        "The developer platform is intended to let you bring your own agent loop through API, SDK and MCP access. Today, supported agents run through the Benchyard workbench; a unified public computer interface is planned.",
+        "Partly, today. With a token from Settings, MCP tokens, an agent on your own computer can use Benchyard's MCP tools to list, start, stop, resize and snapshot your workspaces and to start and message sessions in them. Inside a workspace, every supported agent has those tools with nothing to set up. A public API and SDKs for bringing your own agent loop are planned.",
       ],
       [
         "Are the plans available to buy?",

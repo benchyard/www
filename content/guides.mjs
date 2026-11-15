@@ -134,15 +134,75 @@ export const guides = [
         id: "steering",
         title: "Can I change direction while an agent is working?",
         paragraphs: [
-          "Codex can take a new instruction while it is working. With the other agents you stop what it is doing and send a new message.",
-          "One device drives a session at a time, and your other signed-in devices can watch and approve. Sending a message from another device takes the session over. Separate sessions, each with its own copy of the code if you like, keep tasks apart. Agents in different sessions do not coordinate with each other by themselves.",
+          "Claude Code and Codex can take a new instruction while they work. With Cursor and Gemini CLI, steering stops the turn and sends your message.",
+          "One device drives a session at a time, and your other signed-in devices can watch and approve. Sending a message from another device takes the session over. Separate sessions, each with its own copy of the code if you like, keep tasks apart. Agents in different sessions work together only when you or an agent asks; see below.",
+        ],
+      },
+      {
+        id: "working-together",
+        title: "Can agents work with each other?",
+        paragraphs: [
+          "Yes, when you or an agent asks. Every supported agent has Benchyard's own tools in every workspace, with nothing to set up. With them an agent can send a message to another of your sessions, whichever agent runs it: a Claude Code session can ask a Codex session to check something, and the other way round. The message arrives in that session, says which session sent it and how to answer, and waits behind whatever that session is doing.",
+          "An agent can also read the last messages of another session without interrupting it, and start a new session with a task. In the same workspace it can ask for the answer to come back to it when the new session has finished.",
+          "This reaches only your sessions in the same space: your personal workspaces, or the workspaces of one team. If the other session's workspace is stopped, starting it spends credits, so the agent asks you first. A message to a session that asks before more than the sender does goes only with your approval.",
+        ],
+      },
+      {
+        id: "agent-tools",
+        title: "What else can an agent do with Benchyard?",
+        shots: [
+          [
+            "agent-question",
+            "A Claude Code session in Full auto asking which database the reporting service should use, with PostgreSQL and SQLite to choose from.",
+          ],
+          [
+            "agent-secret",
+            "The agent asking for SENTRY_AUTH_TOKEN in a form: the value is saved to the person's secrets and sent only in requests to sentry.io.",
+          ],
+        ],
+        paragraphs: [
+          "Ask you a question with choices. It waits for your answer in every mode, Full auto included, and reaches your devices as a notification where you have turned them on.",
+          "Ask for a key in a form. You type the value into the form, it is saved to your secrets for that workspace, and it never enters the conversation. When the agent names the service the key is for, the workspace holds only a stand-in and the credential keeper adds the real value on the way out; when it names none, the key is an ordinary variable that programs in the workspace can read.",
+          "Ask to be woken later instead of waiting in a turn: after some minutes, when a process ends, when a web address answers or when a file changes. It also can show you a preview of an app it is running, offer a file to download, and send you a notification.",
+          "Set up recurring work, and start, stop, resize, snapshot or create your workspaces. Anything that spends credits (starting, creating, resizing, growing a disk, a snapshot, a schedule) is asked of you first, even in Full auto, and is not done if you decline or do not answer. A workspace gets these tools, and this asking, once its Benchyard software has updated.",
+        ],
+      },
+      {
+        id: "session-controls",
+        title: "What can I do with a session?",
+        table: {
+          head: ["Feature", "Claude Code", "Codex", "Cursor", "Gemini CLI"],
+          rows: [
+            [
+              "Go back to before a message",
+              "Yes",
+              "Yes",
+              "Last message, as a fork",
+              "Last message, as a fork",
+            ],
+            ["Fork from a message", "Yes", "Yes", "Yes", "Yes"],
+            [
+              "Steer the running turn",
+              "Yes",
+              "Yes",
+              "Stops, then sends",
+              "Stops, then sends",
+            ],
+            ["Effort and compacting", "Yes", "Yes", "No", "No"],
+            ["How full the context is", "Yes", "Yes", "No", "No"],
+            ["Side questions (/btw)", "Yes", "No", "No", "No"],
+            ["Plan usage in Settings", "Yes", "Yes", "Yes", "No"],
+          ],
+        },
+        paragraphs: [
+          "Go back to before one of your messages to change it, and choose whether the files go back as they were too. Fork a session from any message into a new one, leaving the original as it is. Queue a follow-up while the agent works, or steer the turn that is running. Sort sessions into folders, pin the ones you use most, and archive the rest; these follow you on every device.",
         ],
       },
       {
         id: "credentials",
         title: "Where do the credentials come from?",
         paragraphs: [
-          "Use your own subscription or API key for the agent, or a sign-in your team provides. Benchyard does not include an agent subscription.",
+          "Use your own subscription or API key for the agent, or a sign-in your team provides. Benchyard does not include an agent subscription. For a Claude, ChatGPT or Cursor subscription, Settings, Agent accounts shows how much of your plan you have used, as of the last time an agent used that sign-in.",
           "Agent sign-ins for Claude Code, Codex and Cursor, API keys for the services Benchyard knows, and secrets you tie to a service's address are held by credential keepers outside the workspace, so the agent uses them without seeing them. They are stored encrypted. Benchyard is not end-to-end encrypted; the security guide says what that means before you choose how to provide secrets.",
         ],
         link: ["/guides/security/", "Read the security and credentials guide"],
@@ -306,7 +366,7 @@ export const guides = [
         title: "How do I continue on my phone?",
         paragraphs: [
           "Sign in on the other device and open the same workspace and session. One device drives a session at a time, and the others can watch and approve. To carry on from another device, just send a message there: that device takes the session over, and a line in the session says which device is driving.",
-          "On an iPhone, add Benchyard to the Home Screen before turning on notifications. You turn them on for each device, and the device asks your permission. A notification opens the session, where you look at the request and approve it.",
+          "On an iPhone, add Benchyard to the Home Screen before turning on notifications. You turn them on for each device, and the device asks your permission. A notification that needs a decision stays on screen until you tap it; it opens the session, where you look at the request and approve it. On a phone the terminal has a row of keys under it, with Ctrl, Esc, Tab, the arrows and Paste.",
         ],
       },
       {

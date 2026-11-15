@@ -164,7 +164,15 @@ try {
   await themed(phone, "phone-done", reference);
   await mobile.close();
   await page.getByTestId("turn-fold").filter({ hasText: "Worked for" }).click();
-  const replies = await page.getByTestId("msg-assistant").allInnerTexts();
+  // Replies folded under "Worked for" are read too: textContent, not what is
+  // drawn.
+  const replies = (
+    await page
+      .getByTestId("msg-assistant")
+      .evaluateAll((els) => els.map((el) => el.innerText || el.textContent))
+  ).map((text) => text.trim());
+  if (replies.some((text) => !text))
+    throw new Error("an agent reply was read as empty");
   const shell = page.getByTestId("tool-card").filter({ hasText: "npm test" });
   if (!(await shell.locator("pre").last().isVisible()))
     await shell.getByRole("button").first().click();
@@ -211,6 +219,69 @@ try {
   await page.goto("/settings/security");
   await page.getByRole("heading", { name: "Password", exact: true }).waitFor();
   await themed(page, "security");
+  // Benchyard's own tools, called for real by the agent through the
+  // workspace's benchyard-workspace server (studio/prepare.mjs): a question
+  // for the person, a message to the Codex session, and a form for a key.
+  await writeFile(
+    `${out}/codex-session.txt`,
+    new URL(session).pathname.split("/").filter(Boolean).at(-1),
+  );
+  await page.goto(wsURL);
+  await choose(page, "agent-select", "claude");
+  await page
+    .getByTestId("new-prompt")
+    .fill("Which database should the reporting service use? Ask me.");
+  await page.getByTestId("create-session").click();
+  const bar = page.getByTestId("question-bar");
+  await expect(bar).toContainText("A question for you", { timeout: 60000 });
+  const planning = page.url();
+  await page.getByTestId("session-title-rename").click();
+  await page
+    .getByTestId("session-title-input")
+    .fill("Plan the reporting service");
+  await page.getByTestId("session-title-input").press("Enter");
+  await page.getByTestId("layout-chat").check({ force: true });
+  await themed(page, "agent-question");
+  await bar
+    .getByTestId("question-option")
+    .filter({ hasText: "PostgreSQL" })
+    .click();
+  await bar.getByTestId("question-send").click();
+  await expect(page.getByText("I will plan the reporting service")).toBeVisible(
+    {
+      timeout: 60000,
+    },
+  );
+  // To another agent's session: the message names who sent it.
+  const say = async (text) => {
+    await page.getByTestId("composer").fill(text);
+    await page.getByTestId("send").click();
+  };
+  await say("Ask the Codex session to run the filter tests again.");
+  await expect(
+    page.getByText("It answers in its own session", { exact: false }),
+  ).toBeVisible({ timeout: 60000 });
+  await themed(page, "agent-message-sent", reference);
+  await page.goto(session);
+  await expect(
+    page
+      .getByTestId("msg-assistant")
+      .filter({ hasText: "the four filter tests still pass" }),
+  ).toBeVisible({ timeout: 90000 });
+  await page.getByTestId("layout-chat").check({ force: true });
+  await themed(page, "agents-together");
+  // A key is asked for in a form, never in the conversation.
+  await page.goto(planning);
+  await say("Send the issue board's errors to Sentry.");
+  const form = page.getByTestId("secret-request");
+  await expect(form).toBeVisible({ timeout: 60000 });
+  await page.getByTestId("layout-chat").check({ force: true });
+  await themed(page, "agent-secret");
+  await form.getByTestId("secret-request-refuse").click();
+  await expect(form).toHaveCount(0);
+  // Where sessions from a person's own computer are brought over.
+  await page.goto(wsURL);
+  await themed(page, "bring-over", reference);
   // The small-screen hero picture is a piece of the real desktop diff,
   // at the same density as that capture.
   await cropHeroDetails({ dockWidth: 480 });

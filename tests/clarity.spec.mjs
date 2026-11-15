@@ -118,6 +118,7 @@ test("positioning, section order and no-script setup remain accurate", async ({
     "workspace",
     "notifications",
     "agents",
+    "together",
     "security",
     "teams",
     "business",

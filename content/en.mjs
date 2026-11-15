@@ -196,7 +196,7 @@ export default {
   workspace: {
     continuity: {
       title: "Bring your local sessions. Continue in Benchyard.",
-      lead: "Import Claude Code or Codex sessions from your computer, including their conversation records. Pick up the work in a persistent workspace.",
+      lead: "Paste one prompt into Claude Code or Codex on your computer. It lists your sessions and sends the ones you pick, with their conversation records, to a workspace, where you pick up the work.",
       local: "Your computer",
       localDetail: "Claude Code / Codex",
       transfer: "Bring them over",
@@ -406,6 +406,41 @@ export default {
       ],
       ["kimi", "Kimi", "Connect with a Kimi For Coding or Moonshot API key."],
     ],
+  },
+  together: {
+    title: "Agents that work together.",
+    lead: "Your agents can use Benchyard themselves. One can send a message to another of your sessions, even one that a different agent runs, hand it a task and hear back, ask you a question, or ask to be woken when something is ready.",
+    alt: "A Codex session receiving a message from a Claude Code session in the same workspace, and answering that the four filter tests still pass.",
+    caption:
+      "A Claude Code session asked the Codex session to run the tests again. The real interface with demo data; the agents' replies are scripted.",
+    items: [
+      [
+        "Message any of your sessions",
+        "An agent can send a message to another of your sessions, whichever agent runs it, and read what that session said. The message names who sent it. If the other session's workspace is stopped, the agent asks you before starting it.",
+      ],
+      [
+        "Hand off and hear back",
+        "An agent can start a new session in the same workspace with a task, and the answer comes back to it when that session has finished.",
+      ],
+      [
+        "Wait without watching",
+        "An agent can ask to be woken after some minutes, when a build ends, when a server answers or when a file changes, instead of waiting in a turn.",
+      ],
+      [
+        "Ask you, not guess",
+        "A question with choices waits for your answer in every mode, and reaches your devices as a notification where you have turned them on.",
+      ],
+      [
+        "Keys through a form",
+        "An agent asks for a key in a form, so the value never enters the conversation. When the agent names the service the key is for, the workspace holds only a stand-in.",
+      ],
+      [
+        "Within the limits you set",
+        "Agents can start, resize or snapshot your workspaces and set up recurring work. Anything that spends credits is asked of you first, even in Full auto. They reach only the workspaces of the same personal or team space.",
+      ],
+    ],
+    note: "Every supported agent has these tools in every workspace, with nothing to set up. A workspace gets them once its Benchyard software has updated.",
+    link: "What agents can do in Benchyard",
   },
   teams: {
     title: "Shared ways of working. Space for every teammate.",

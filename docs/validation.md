@@ -139,13 +139,13 @@ The historical product review date remains unchanged because this website revisi
 
 `npm run measure` passed all six cold-context samples after adding the 1120px image candidate. Local Chromium, 150 ms network latency, 1.6 Mbps download and 4× CPU throttling:
 
-| Metric | Mobile (390px) | Desktop (1280px) |
-| --- | --- | --- |
-| LCP samples | 1476 / 1452 / 1440 ms | 1548 / 1572 / 1564 ms |
-| CLS | 0.0135 | 0.0027 |
-| Initial uncompressed resource bytes | 263,735 | 341,845 |
-| Selected page image bytes | 194,256 | 293,864 |
-| Preview board fetched before opening | No | No |
+| Metric                               | Mobile (390px)        | Desktop (1280px)      |
+| ------------------------------------ | --------------------- | --------------------- |
+| LCP samples                          | 1476 / 1452 / 1440 ms | 1548 / 1572 / 1564 ms |
+| CLS                                  | 0.0135                | 0.0027                |
+| Initial uncompressed resource bytes  | 263,735               | 341,845               |
+| Selected page image bytes            | 194,256               | 293,864               |
+| Preview board fetched before opening | No                    | No                    |
 
 These are lab measurements, not field p75 or INP. `studio/measure.mjs` now enforces the planned LCP ≤ 2.5 seconds and CLS < 0.1 thresholds as well as the existing resource budgets. The earlier desktop measurement of roughly 2.8 seconds failed the new budget and was corrected by image sizing, not by loosening the threshold. The source report is `docs/validation/performance.json`.
 
@@ -154,7 +154,6 @@ A final six-case run passed desktop disclosures and actual emulated touch events
 ### Notification presentation restored — 2026-10-18
 
 At the owner's request, restored the phone push-notification and email illustrations, replacing the installed Mac/Home Screen scene. The secondary setup walkthrough remains. No Dock is shown in the hero. Removed the unused app-experience renderer and styles. All 16 routes pass build checks; Chromium dark-theme mobile (390px) and desktop (1440px) layout and accessibility checks pass. Earlier installed-device visual notes describe a superseded design.
-
 
 ## Workspace feature sync — 2026-10-26
 
@@ -170,7 +169,6 @@ Reviewed against product main `b7ccaed3` (v0.9.0). Both repositories' `origin/ma
 - WebKit could not start with the available runtime libraries, so no WebKit result is claimed. No physical-device, live product-runtime or production-host verification was performed.
 
 New local browser captures are under ignored `studio/output/workspace-refresh/`; historical tracked screenshots were preserved. Changes remain uncommitted and unpublished. Local acceptance preview: `http://localhost:4322`; restart with `cd /workspace/project/www && PORT=4322 LIVE_RELOAD=0 node serve.mjs` after building.
-
 
 ## Open registration and promotions — 2026-10-26
 
@@ -244,3 +242,10 @@ The four replay/cache regression cases also passed in Chromium: desktop and phon
 Recaptured the homepage product images against Benchyard `b9ffce2618984cdfc4cb9fb3be618d6c4de89034` (v0.9.2). The scripted Codex fixture displays GPT-6-Astra, and the desktop chat panel is wide enough to show the selected agent. Ask first remains consistent with the pictured approval request. The interactive replay uses the same recorded agent/model metadata inside its composer. Capture assertions check both labels; the disposable capture container and isolated product worktree were removed.
 
 `npm run check` passed for all 16 routes. Chromium verified composer labels, approval interaction and absence of horizontal overflow at 320/390/1440px; scoped light/dark axe checks passed. Fixed the replay's light-theme added-line contrast found during these checks. All four existing replay/cache regression tests passed, covering desktop/phone approval, denial/retry, project panels, preview filters, keyboard/reduced-motion behavior and cache headers. Formatting and diff whitespace checks passed. Product captures and responsive composer screenshots were visually reviewed. Preview: http://localhost:4322. This change has not been committed or published.
+
+## Agents that work together — 2026-11-15
+
+- **Capture.** `DEMO_NAME=benchyard-www-capture DEMO_PORT=18090 bash studio/record.sh` ran at product `8ab68159` (v0.10.4), from a detached worktree removed afterwards, in a container of its own name and port so as not to meet other runs on the machine; the script removed it. A scripted Claude (studio/prepare.mjs) called Benchyard's real tools through the workspace's benchyard-workspace server: `ask_person` (answered PostgreSQL), `sessions_message` to the Codex session, which ran `npm test` for real and answered, and `request_secret` (declined). The screenshots `agents-together`, `agent-question` and `agent-secret`, and the rest of `src-img/` and `content/demo.json`, are from that run. Every picture was looked at: fictional data only; the session ids shown are the demo container's.
+- **The capture now fails on an empty reply.** A first run read the replies folded under "Worked for" as empty and the homepage's replay broke; three replay tests caught it.
+- **Checks.** `npm run check`: 17 pages. `npm test`: 53 passed, 1 skipped (WebKit, by design), in Chromium, Firefox and WebKit, run with two workers at low priority.
+- **Not verified:** the MCP tools from a person's own computer with real clients, and sessions brought over resumed by the real Claude Code and Codex: both on the product's "Not checked for real" list (docs/claims.md says how the site words them).
